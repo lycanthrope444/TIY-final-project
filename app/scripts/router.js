@@ -2,17 +2,23 @@ var Backbone = require('backbone');
 var React = require('react');
 var ReactDOM = require('react-dom');
 
+var parse = require('./setup');
 var landing = require('./components/landing.jsx').LandingContainer;
 var login = require('./components/login.jsx').LoginContainer;
 var profile = require('./components/profile.jsx').ProfileContainer;
 
 var AppRouter = Backbone.Router.extend({
+  initialize:function(){
+    parse.setup({
+      BASE_API_URL: 'https://lycanthrope.herokuapp.com/'
+    });
+  },
   routes : {
     '':'index',
     'index': 'index',
     'login':'login',
     'profile':'profile',
-    'character': 'character'
+    'collection':'collection'
   },
   index: function(){
     ReactDOM.render(
@@ -32,9 +38,9 @@ var AppRouter = Backbone.Router.extend({
       document.getElementById('app')
     );
   },
-  character: function(){
+  collection: function(){
     ReactDOM.render(
-      React.createElement(),
+      React.createElement(collection),
       document.getElementById('app')
     );
   }
