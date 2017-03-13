@@ -6,6 +6,7 @@ var parse = require('./setup');
 var landing = require('./components/landing.jsx').LandingContainer;
 var login = require('./components/login.jsx').LoginContainer;
 var profile = require('./components/profile.jsx').ProfileContainer;
+var collection = require('./components/coll-manager.jsx').CollectionContainer;
 
 var AppRouter = Backbone.Router.extend({
   initialize:function(){

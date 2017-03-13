@@ -16,13 +16,11 @@ class LoginContainer extends React.Component{
     }
   }
   loginUser(creds){
-    console.log('button clicked', creds);
     User.login(creds, function(user){
       Backbone.history.navigate('profile', {trigger:true});
     });
   }
   createUser(creds){
-    console.log('button clicked', this);
     var user = new User(creds);
     user.save().then(function(data){
       localStorage.setItem('username', JSON.stringify(data));
@@ -63,7 +61,6 @@ class LoginForm extends React.Component{
     this.setState({password:e.target.value});
   }
   handleSubmit(e){
-    console.log('clicked');
     e.preventDefault();
     this.props.action(this.state);
   }

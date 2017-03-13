@@ -4,7 +4,14 @@ class SearchBar extends React.Component{
   render(){
     return(
       <div>
-        SearchBar Placeholder
+        <form>
+          <div className="input-group">
+            <input className="form-control"/>
+            <span className="input-group-btn">
+              <input type="submit" className ="btn" value="Search" />
+            </span>
+          </div>
+        </form>
       </div>
     )
   }

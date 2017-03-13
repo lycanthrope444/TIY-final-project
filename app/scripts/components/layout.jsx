@@ -10,7 +10,11 @@ class LayoutContainer extends React.Component{
     return(
       <div>
         <NavBarHeader />
-        {this.props.children}
+          <div className="container">
+            <div className="row">
+              {this.props.children}
+            </div>
+          </div>
         <NavBarFooter />
       </div>
     )
@@ -20,7 +24,7 @@ class LayoutContainer extends React.Component{
 class NavBarHeader extends React.Component{
   render(){
     return(
-      <div>
+      <div className="container-fluid">
         <a href="#index">Home</a>
         <SearchBar />
         Nav Bar Header
@@ -35,7 +39,7 @@ class NavBarHeader extends React.Component{
 class NavBarFooter extends React.Component{
   render(){
     return(
-      <div>
+      <div className="container-fluid">
         Nav Bar Footer
       </div>
     )
