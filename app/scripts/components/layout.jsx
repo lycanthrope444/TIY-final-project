@@ -25,6 +25,7 @@ class NavBarHeader extends React.Component{
   render(){
     return(
       <div className="container-fluid">
+        Marvel Logo Placeholder
         <a href="#index">Home</a>
         <SearchBar />
         Nav Bar Header
@@ -41,6 +42,7 @@ class NavBarFooter extends React.Component{
     return(
       <div className="container-fluid">
         Nav Bar Footer
+        "Data provided by Marvel. © 2014 Marvel"
       </div>
     )
   }

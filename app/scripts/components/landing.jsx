@@ -9,8 +9,29 @@ class LandingContainer extends React.Component{
   render(){
     return(
       <LayoutContainer>
-        Landing Container Placeholder
+        <Banner />
+        <StarterInfo />
       </LayoutContainer>
+    )
+  }
+}
+
+class Banner extends React.Component{
+  render(){
+    return(
+      <div>
+        Banner Place Holder
+      </div>
+    )
+  }
+}
+
+class StarterInfo extends React.Component{
+  render(){
+    return(
+      <div>
+        Here is some info to get started!
+      </div>
     )
   }
 }
