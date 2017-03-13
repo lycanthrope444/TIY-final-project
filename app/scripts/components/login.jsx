@@ -1,4 +1,5 @@
 var React = require('react');
+var Backbone = require('backbone');
 
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
 var User = require('../models/user').User;
@@ -15,12 +16,13 @@ class LoginContainer extends React.Component{
     }
   }
   loginUser(creds){
-    console.log('button clicked', this.state.user, this.state.password);
+    console.log('button clicked', this.state);
     User.login(creds, function(user){
       Backbone.history.navigate('profile', {trigger:true});
     });
   }
   createUser(creds){
+    console.log('button clicked', this);
     var user = new User(creds);
     user.save().then(function(data){
       localStorage.setItem('user', JSON.stringify(data));
@@ -28,6 +30,7 @@ class LoginContainer extends React.Component{
     });
   }
   render(){
+    console.log(User);
     return(
       <LayoutContainer>
         <div className="col-md-6">
@@ -50,8 +53,8 @@ class LoginForm extends React.Component{
     this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
-      username: "username",
-      password: "password"
+      username: '',
+      password: ''
     }
   }
   handleUserLogin(e){
@@ -61,14 +64,15 @@ class LoginForm extends React.Component{
     this.setState({password:e.target.value});
   }
   handleSubmit(e){
+    console.log('clicked');
     e.preventDefault();
     this.props.action(this.state);
   }
   render(){
     return(
-      <form>
+      <form onSubmit={this.handleSubmit}>
         <div className ="form-group">
-          <label htmlFor ="username-login" >username</label>
+          <label htmlFor ="username-login" >Username</label>
           <input className = "form-control" onChange={this.handleUserLogin}
             id="username-login" placeholder="Username"
           />

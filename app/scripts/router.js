@@ -10,7 +10,7 @@ var profile = require('./components/profile.jsx').ProfileContainer;
 var AppRouter = Backbone.Router.extend({
   initialize:function(){
     parse.setup({
-      BASE_API_URL: 'https://lycanthrope.herokuapp.com/'
+      BASE_API_URL: 'https://lycanthrope.herokuapp.com'
     });
   },
   routes : {

@@ -46,4 +46,6 @@ var User = Backbone.Model.extend({
   }
 });
 
-module.exports = User;
+module.exports = {
+  User:User
+};
