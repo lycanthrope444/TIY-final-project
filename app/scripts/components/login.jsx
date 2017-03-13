@@ -16,7 +16,7 @@ class LoginContainer extends React.Component{
     }
   }
   loginUser(creds){
-    console.log('button clicked', this.state);
+    console.log('button clicked', creds);
     User.login(creds, function(user){
       Backbone.history.navigate('profile', {trigger:true});
     });
@@ -25,12 +25,11 @@ class LoginContainer extends React.Component{
     console.log('button clicked', this);
     var user = new User(creds);
     user.save().then(function(data){
-      localStorage.setItem('user', JSON.stringify(data));
+      localStorage.setItem('username', JSON.stringify(data));
       Backbone.history.navigate('profile', {trigger: true});
     });
   }
   render(){
-    console.log(User);
     return(
       <LayoutContainer>
         <div className="col-md-6">
@@ -58,7 +57,7 @@ class LoginForm extends React.Component{
     }
   }
   handleUserLogin(e){
-    this.setState({user:e.target.value});
+    this.setState({username:e.target.value});
   }
   handlePasswordLogin(e){
     this.setState({password:e.target.value});

@@ -25,10 +25,10 @@ var User = Backbone.Model.extend({
     return newUser;
   },
   store: function(user){
-    localStorage.setItem('user', JSON.stringify(user.toJSON()));
+    localStorage.setItem('username', JSON.stringify(user.toJSON()));
   },
   current: function(){
-    var user = localStorage.getItem('user');
+    var user = localStorage.getItem('username');
 
     // if no user in local storage, bail
     if(!user){
