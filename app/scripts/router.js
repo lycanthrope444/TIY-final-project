@@ -2,7 +2,7 @@ var Backbone = require('backbone');
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-var parse = require('./setup');
+var parse = require('./setup').parse;
 var landing = require('./components/landing.jsx').LandingContainer;
 var login = require('./components/login.jsx').LoginContainer;
 var profile = require('./components/profile.jsx').ProfileContainer;
@@ -12,7 +12,7 @@ var itemView = require('./components/itemview.jsx').ItemContainer;
 var AppRouter = Backbone.Router.extend({
   initialize:function(){
     parse.setup({
-      BASE_API_URL: 'https://lycanthrope.herokuapp.com'
+      BASE_API_URL: 'https://lycanthrope.herokuapp.com/'
     });
   },
   routes : {
