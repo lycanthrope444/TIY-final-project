@@ -25,13 +25,16 @@ class NavBarHeader extends React.Component{
   render(){
     return(
       <div className="container-fluid">
-        Marvel Logo Placeholder
-        <a href="#index">Home</a>
-        <SearchBar />
-        Nav Bar Header
-        <a href="#profile">Profile</a>
-        <a href="#collection">My Collection</a>
-        <a href="#login">Login</a>
+        <div className="row">
+          Marvel Logo Placeholder
+          <a href="#index">Home</a>
+          <SearchBar />
+          <a href="#profile">Profile</a>|
+          <a href="#collection">My Collection</a>|
+          <a href="#login">Login</a>|
+          <a href="#itemview">Item View-Remove Me</a>|
+          Avatar Pic Placeholder
+        </div>
       </div>
     )
   }
@@ -41,8 +44,9 @@ class NavBarFooter extends React.Component{
   render(){
     return(
       <div className="container-fluid">
-        Nav Bar Footer
-        "Data provided by Marvel. © 2014 Marvel"
+        <div className="row">
+          "Data provided by Marvel. © 2014 Marvel"
+        </div>
       </div>
     )
   }

@@ -1,5 +1,6 @@
 var $ = require('jquery');
 
+//Info to connect with the parse server to handle Users and Collections
 var parse = {
   BASE_API_URL: '',
   setup: function(config){

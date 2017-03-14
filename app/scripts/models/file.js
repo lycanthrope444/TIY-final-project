@@ -1,0 +1,10 @@
+var Backbone = require('backbone');
+
+//used to store Avatar Pics
+var ParseFile = Backbone.Model.extend({
+  urlRoot: function(){
+    return 'https://tiny-parse-server.herokuapp.com/files/' + this.get('name');
+  }
+});
+
+module.exports = ParseFile;

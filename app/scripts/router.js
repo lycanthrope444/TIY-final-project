@@ -7,6 +7,7 @@ var landing = require('./components/landing.jsx').LandingContainer;
 var login = require('./components/login.jsx').LoginContainer;
 var profile = require('./components/profile.jsx').ProfileContainer;
 var collection = require('./components/coll-manager.jsx').CollectionContainer;
+var itemView = require('./components/itemview.jsx').ItemContainer;
 
 var AppRouter = Backbone.Router.extend({
   initialize:function(){
@@ -19,7 +20,8 @@ var AppRouter = Backbone.Router.extend({
     'index': 'index',
     'login':'login',
     'profile':'profile',
-    'collection':'collection'
+    'collection':'collection',
+    'itemview':'itemView'
   },
   index: function(){
     ReactDOM.render(
@@ -42,6 +44,12 @@ var AppRouter = Backbone.Router.extend({
   collection: function(){
     ReactDOM.render(
       React.createElement(collection),
+      document.getElementById('app')
+    );
+  },
+  itemView: function(){
+    ReactDOM.render(
+      React.createElement(itemView),
       document.getElementById('app')
     );
   }
