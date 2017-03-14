@@ -24,18 +24,20 @@ class LayoutContainer extends React.Component{
 class NavBarHeader extends React.Component{
   render(){
     return(
-      <div className="container-fluid">
-        <div className="row">
-          Marvel Logo Placeholder
-          <a href="#index">Home</a>
-          <SearchBar />
-          <a href="#profile">Profile</a>|
-          <a href="#collection">My Collection</a>|
-          <a href="#login">Login</a>|
-          <a href="#itemview">Item View-Remove Me</a>|
-          Avatar Pic Placeholder
+      <nav className="navbar navbar-inverse">
+        <div className="container-fluid">
+          <div className="navbar-header">
+            Marvel Logo Placeholder
+            <a href="#index">Home</a>
+          </div>
+            <SearchBar />
+            <a href="#profile">Profile</a>|
+            <a href="#collection">My Collection</a>|
+            <a href="#login">Login</a>|
+            <a href="#itemview">Item View-Remove Me</a>|
+            Avatar Pic Placeholder
         </div>
-      </div>
+      </nav>
     )
   }
 }

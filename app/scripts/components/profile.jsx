@@ -58,6 +58,7 @@ class AvatarPic extends React.Component{
     image.set({name: imageData.name});
 
     // step 3: ajax request to save image to the server
+    console.log(imageData);
     image.save({}, {
       data: imageData,
       contentType: imageData.type
