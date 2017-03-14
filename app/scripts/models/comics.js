@@ -1,5 +1,9 @@
 var Backbone = require('backbone');
 
+var setup = require('../setup');
+
+
+
 var SeriesModel = Backbone.Model.extend({
 
 });

@@ -9,4 +9,6 @@ var ParseFile = Backbone.Model.extend({
   }
 });
 
-module.exports = {ParseFile};
+module.exports = {
+  ParseFile:ParseFile
+};

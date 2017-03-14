@@ -11,7 +11,7 @@ var itemView = require('./components/itemview.jsx').ItemContainer;
 
 var AppRouter = Backbone.Router.extend({
   initialize:function(){
-    parse.setup({
+    parse.initialize({
       BASE_API_URL: 'https://lycanthrope.herokuapp.com/'
     });
   },

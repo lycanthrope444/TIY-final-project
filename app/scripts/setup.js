@@ -4,7 +4,9 @@ var Backbone = require('backbone');
 //Info to connect with the parse server to handle Users and Collections
 var parse = {
   BASE_API_URL: '',
-  setup: function(config){
+  initialize: function(config){
+    config = config || {};
+
     if(config.BASE_API_URL){
       this.BASE_API_URL = config.BASE_API_URL;
     }
