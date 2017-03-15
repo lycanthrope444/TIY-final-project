@@ -1,19 +1,23 @@
 var Backbone = require('backbone');
 
-var setup = require('../setup');
+var ParseModel = require('./parse').ParseModel;
+var ParseCollection = require('./parse').ParseCollection;
 
-
-
-var SeriesModel = Backbone.Model.extend({
+var Comic = ParseModel.extend({
 
 });
 
-var ComicCollection = Backbone.Collection.extend({
+var SeriesModel = ParseModel.extend({
 
+});
+
+var ComicCollection = ParseCollection.extend({
+  model: Comic
 });
 
 
 module.exports = {
+  Comic:Comic,
   SeriesModel: SeriesModel,
   ComicCollection:ComicCollection
 };

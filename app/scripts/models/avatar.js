@@ -3,6 +3,7 @@ var Backbone = require('backbone');
 
 var parse = require('../setup').parse;
 var ParseModel = require('./parse').ParseModel;
+var ParseCollection = require('./parse').ParseCollection;
 
 var Avatar = ParseModel.extend({
   urlRoot: function(){
@@ -10,6 +11,14 @@ var Avatar = ParseModel.extend({
   }
 });
 
+var AvatarCollection = ParseCollection.extend({
+  model: Avatar,
+  url: function(){
+    return parse.BASE_API_URL +'classes/user_info';
+  }
+});
+
 module.exports ={
-  Avatar:Avatar
+  Avatar:Avatar,
+  AvatarCollection:AvatarCollection
 };

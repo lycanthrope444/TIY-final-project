@@ -5,6 +5,7 @@ var LayoutContainer = require('./layout.jsx').LayoutContainer;
 var User = require('../models/user.js');
 var ParseFile = require('../models/parse.js').ParseFile;
 var Avatar = require('../models/avatar.js').Avatar;
+var AvatarCollection = require('../models/avatar.js').AvatarCollection;
 
 class ProfileContainer extends React.Component{
   constructor(props){
@@ -23,7 +24,15 @@ class ProfileContainer extends React.Component{
   componentWillMount(){
     var local = JSON.parse(localStorage.getItem('username'));
     this.setState({username:local.username});
-    this.setState({username:local.objectId});
+    this.setState({userID:local.objectId});
+
+    var avatarCollection = new AvatarCollection();
+
+    avatarCollection.fetch().done(function(){
+      var avatarpic = avatarCollection.parseWhere();
+      console.log(avatarCollection);
+    });
+
   }
   handleImageChange(imageData){
     var reader = new FileReader();
@@ -47,7 +56,7 @@ class ProfileContainer extends React.Component{
 
       var avatarInfo = new Avatar();
 
-      avatarInfo.setPointer('user_info', '_User', this.state.userID);
+      avatarInfo.setPointer('User', '_User', this.state.userID);
 
       avatarInfo.set({
         pic: {
@@ -59,15 +68,11 @@ class ProfileContainer extends React.Component{
         console.log(avatarInfo);
       });
 
-      console.log('master submit worked 2');
-      //Make sure that Parse has the endpoints for the object
-
       //This is also a good time to navigate away after the AJAX request finishes
-
-      console.log(response);
     });
   }
   render(){
+    console.log(this.state);
     return(
       <LayoutContainer>
         <AccountOptions />
@@ -113,7 +118,6 @@ class AvatarPic extends React.Component{
   }
   handleSubmit(e){
     e.preventDefault();
-    console.log('dummy worked');
     this.props.handleSubmit();
   }
   render(){
