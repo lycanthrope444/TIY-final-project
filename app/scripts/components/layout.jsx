@@ -28,7 +28,7 @@ class NavBarHeader extends React.Component{
         <div className="container-fluid">
           <div className="navbar-header">
             Marvel Logo Placeholder
-            <a href="#index">Home</a>
+            <a href="#">Home</a>
           </div>
             <SearchBar />
             <a href="#profile">Profile</a>|
