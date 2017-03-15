@@ -21,6 +21,15 @@ var parse = {
         }
       }
     });
+  },
+  deinitialize: function(){
+    $.ajaxSetup({
+      beforeSend: function(xhr){
+        xhr.setRequestHeader("X-Parse-Application-Id", null);
+        xhr.setRequestHeader("X-Parse-REST-API-Key", null);
+        xhr.setRequestHeader("X-Parse-Session-Token", null);
+      }
+    });
   }
 };
 

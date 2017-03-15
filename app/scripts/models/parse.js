@@ -10,7 +10,7 @@ var ParseModel = Backbone.Model.extend({
     var user = User.current();
 
     if(user){
-      parse.initialize({sessionId: user.get('sessionToken')});
+      parse.initialize({sessionToken: user.get('sessionToken')});
     }else{
       parse.initialize();
     }
@@ -75,7 +75,7 @@ var ParseCollection = Backbone.Collection.extend({
     var user = User.current();
 
     if(user){
-      parse.initialize({sessionId: user.get('sessionToken')});
+      parse.initialize({sessionToken: user.get('sessionToken')});
     }else{
       parse.initialize();
     }
