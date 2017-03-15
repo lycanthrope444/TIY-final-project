@@ -3,7 +3,7 @@ var React = require('react');
 
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
 var User = require('../models/user.js');
-var ParseFile = require('../models/file.js').ParseFile;
+var ParseFile = require('../models/parse.js').ParseFile;
 
 class ProfileContainer extends React.Component{
   constructor(props){
@@ -46,14 +46,18 @@ class AvatarPic extends React.Component{
   constructor(props){
     super(props);
 
+    this.handleSubmit= this.handleSubmit.bind(this);
+
     this.state ={
-      image: this.props.image,
+      avatar: this.props.image,
       preview: this.props.preview
     }
   }
   handleImageChange(e){
     // step 1: get the file object from the form
     var imageData = e.target.files[0];
+    this.setState({avatar: image});
+
     var reader = new FileReader();
     reader.onloadend= ()=>{
       this.setState({preview: reader.result})
@@ -61,13 +65,17 @@ class AvatarPic extends React.Component{
 
     reader.readAsDataURL(imageData);
     // step 2: new parse model with the name set
-    var image = new ParseFile();
-    image.set({name: imageData.name});
+
 
     // step 3: ajax request to save image to the server
     console.log(imageData);
 
-    //this may need to be in a separate function
+  }
+  handleSubmit(){
+    var image = this.state.avatar;
+    var avatar = new ParseFile(image);
+    image.set({name: imageData.name});
+
     image.save({}, {
       data: imageData,
       contentType: imageData.type
@@ -84,13 +92,13 @@ class AvatarPic extends React.Component{
       //This is also a good time to navigate away after the AJAX request finishes
 
       console.log(response);
-      this.setState({image: image});
+
     });
   }
   render(){
     return(
       <div className="col-md-6">
-        <form encType="multipart/form-data">
+        <form encType="multipart/form-data" onSumbit={this.handleSubmit}>
           <img src={this.state.preview} />
           <div className="form-group">
             <label htmlFor="image">Upload your Avatar!</label>
@@ -98,6 +106,7 @@ class AvatarPic extends React.Component{
               className="form-control" name="image" type="file"
               placeholder="Avatar!" />
           </div>
+          <button type="submit" className="btn"> Submit </button>
         </form>
       </div>
     )

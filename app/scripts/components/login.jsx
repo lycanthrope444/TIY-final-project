@@ -2,7 +2,7 @@ var React = require('react');
 var Backbone = require('backbone');
 
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
-var User = require('../models/user').User;
+var User = require('../models/user.js').User;
 
 class LoginContainer extends React.Component{
   constructor(props){

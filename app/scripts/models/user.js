@@ -2,11 +2,11 @@ var $ = require('jquery');
 var Backbone = require('backbone');
 
 var parse = require('../setup').parse;
-var setup = require('../setup');
+var ParseModel = require('./parse').ParseModel;
 
-var User = setup.ParseModel.extend({
+var User = ParseModel.extend({
   idAttribute:'objectId',
-  
+
   urlRoot: function(){
     return parse.BASE_API_URL + 'users';
   }
