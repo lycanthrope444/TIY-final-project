@@ -64,8 +64,7 @@ class CollectionContainer extends React.Component{
     this.state={
       seriesList:seriesCollDemo,
       selectedSeries: null,
-      selectedSeriesIssues: null,
-      selectedComic: null
+      selectedSeriesIssues: null
     }
   }
   selectSeries(id){
@@ -76,18 +75,22 @@ class CollectionContainer extends React.Component{
     var issues = series.get('comics');
     this.setState({selectedSeriesIssues: issues})
   }
-  selectComic(){
-
-  }
   showSeries(){
     $('.seriesList').slideToggle();
+  }
+  addComic(comic){
+    console.log('add', comic);
+  }
+  deleteComic(comic){
+    console.log('delete', comic);
   }
   render(){
     return(
       <LayoutContainer>
         <button className="btn" onClick={this.showSeries}>Show Followed Series</button>
         <SeriesLayout seriesList={this.state.seriesList} selectSeries={this.selectSeries}/>
-        <ComicLayout comicList={this.state.selectedSeriesIssues}/>
+        <ComicLayout comicList={this.state.selectedSeriesIssues} addComic={this.addComic}
+          deleteComic={this.deleteComic}/>
       </LayoutContainer>
     )
   }
@@ -130,6 +133,12 @@ class ComicLayout extends React.Component{
   constructor(props){
     super(props);
   }
+  addComic(comic){
+    this.props.addComic(comic);
+  }
+  deleteComic(comic){
+    this.props.deleteComic(comic);
+  }
   render(){
     console.log(this.props);
     var comicList;
@@ -137,9 +146,17 @@ class ComicLayout extends React.Component{
       comicList = this.props.comicList.items.map((item, key)=>{
         return(
           <div key={key}>
-            <button className="btn">Add</button>
+            <button className="btn" onClick={(e)=>{
+                e.preventDefault();
+                this.addComic(item.name);
+                }}>
+              Add</button>
             {item.name}
-            <button className="btn">Delete</button>
+            <button className="btn" onClick={(e)=>{
+                e.preventDefault();
+                this.deleteComic(item.name);
+                }}>
+              Delete</button>
           </div>
         )
       });
