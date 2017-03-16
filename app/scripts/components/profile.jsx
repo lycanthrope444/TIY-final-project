@@ -74,7 +74,7 @@ class ProfileContainer extends React.Component{
   render(){
     console.log(this.state);
     return(
-      <LayoutContainer>
+      <LayoutContainer username={this.state.username}>
         <AccountOptions />
         <AvatarPic image={this.state.image} preview={this.state.preview}
           handleImageChange={this.handleImageChange}
@@ -91,7 +91,10 @@ class AccountOptions extends React.Component{
   render(){
     return(
       <div className="col-md-6">
-        Account Options
+        <h1>Account Options</h1>
+        <ul>
+          <li>Change Email</li>
+        </ul>
       </div>
     )
   }

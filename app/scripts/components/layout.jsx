@@ -5,6 +5,10 @@ var SearchBar = require('./searchbar.jsx').SearchBar;
 class LayoutContainer extends React.Component{
   constructor(props){
     super(props);
+
+    this.state = {
+      username:this.props.username
+    }
   }
   render(){
     return(

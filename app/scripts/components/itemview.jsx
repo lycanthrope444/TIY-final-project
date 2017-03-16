@@ -4,10 +4,12 @@ var LayoutContainer = require('./layout.jsx').LayoutContainer;
 var Comic = require('../models/comics.js').Comic;
 
 var demoData = {
-  name: 'The Incredible Hulk',
-  number: 181,
+  title: 'The Incredible Hulk #181',
+  issueNumber: 181,
   description: 'Hulk fights Wolverine',
   pic: 'https://unsplash.it/200/300',
+  creators: [],
+  characters:[],
   collectible: true
 };
 
@@ -17,22 +19,44 @@ class ItemContainer extends React.Component{
   constructor(props){
     super(props);
     //Call Model Here - populate
-    var name = demoComic.get('name');
+    var title = demoComic.get('title');
     var desc = demoComic.get('description');
     var pic = demoComic.get('pic');
+    var collectible = demoComic.get('collectible');
+
+    this.updateCollection=this.updateCollection.bind(this);
+    this.updateRating = this.updateRating.bind(this);
+
+    //Rating will be pulled from the data on my server, this is dummy data for now
 
     this.state ={
-      name:name,
+      title:title,
       desc:desc,
-      pic:pic
+      pic:pic,
+      collectible:collectible,
+      userRating: 3,
+      averageRating: 5
     }
+  }
+  updateCollection(){
+    console.log('click');
+  }
+  updateRating(rating){
+
+    console.log('rating', rating);
+    this.setState({userRating:rating});
   }
   render(){
     console.log(this.state);
     return(
       <LayoutContainer>
-        <ItemInfo desc={this.state.desc} name={this.state.name} />
-        <ItemPhoto pic={this.state.pic}/>
+        <div className="col-md-6">
+          <ItemInfo desc={this.state.desc} name={this.state.title} />
+          <CollectionInfo updateCollection={this.updateCollection} />
+          <ItemRating userRating={this.state.userRating}
+            updateRating ={this.updateRating} />
+        </div>
+        <ItemPhoto pic={this.state.pic} averageRating={this.state.averageRating}/>
         <QuickLinks />
       </LayoutContainer>
     )
@@ -40,11 +64,62 @@ class ItemContainer extends React.Component{
 }
 
 class ItemInfo extends React.Component{
+  constructor(props){
+    super(props);
+  }
   render(){
     return(
-      <div className="col-md-6">
+      <div>
         <h1>{this.props.name}</h1>
         <p>{this.props.desc}</p>
+
+      </div>
+    )
+  }
+}
+
+class CollectionInfo extends React.Component{
+  constructor(props){
+    super(props);
+
+    this.updateCollection = this.updateCollection.bind(this);
+  }
+  updateCollection(e){
+    e.preventDefault();
+    this.props.updateCollection();
+  }
+  render(){
+    return(
+      <div>
+        Collection Info Here
+        <button className="btn" onClick={this.updateCollection}>
+          Add to Collection
+        </button>
+      </div>
+    )
+  }
+}
+
+class ItemRating extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
+    return(
+      <div>
+        Rate this item
+        <div className="btn-group">
+          <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {this.props.userRating} <span className="caret"></span>
+          </button>
+          <ul className="dropdown-menu">
+            <li><a onClick={()=>{this.props.updateRating(5)}} role="button">5 Stars</a></li>
+            <li><a onClick={()=>{this.props.updateRating(4)}} role="button">4 Stars</a></li>
+            <li><a onClick={()=>{this.props.updateRating(3)}} role="button">3 Stars</a></li>
+            <li><a onClick={()=>{this.props.updateRating(2)}} role="button">2 Stars</a></li>
+            <li><a onClick={()=>{this.props.updateRating(1)}} role="button">1 Stars</a></li>
+          </ul>
+        </div>
       </div>
     )
   }
@@ -52,7 +127,6 @@ class ItemInfo extends React.Component{
 
 class ItemPhoto extends React.Component{
   render(){
-    console.log(this);
     return(
       <div className="col-md-6">
         <img src={this.props.pic}/>
