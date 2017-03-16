@@ -6,4 +6,4 @@ var proxy = {
   PROXY_API_URL:'https://lycanthrope-proxy.herokuapp.com/'
 };
 
-module.exports = parse;
+module.exports = proxy;

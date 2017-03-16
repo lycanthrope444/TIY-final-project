@@ -21,6 +21,7 @@ var AppRouter = Backbone.Router.extend({
     'login':'login',
     'profile':'profile',
     'collection':'collection',
+    'itemview/:id':'itemView',
     'itemview':'itemView'
   },
   index: function(){
@@ -47,9 +48,9 @@ var AppRouter = Backbone.Router.extend({
       document.getElementById('app')
     );
   },
-  itemView: function(){
+  itemView: function(id){
     ReactDOM.render(
-      React.createElement(itemView),
+      React.createElement(itemView, id),
       document.getElementById('app')
     );
   }

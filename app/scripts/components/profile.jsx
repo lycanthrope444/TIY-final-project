@@ -72,7 +72,6 @@ class ProfileContainer extends React.Component{
     });
   }
   render(){
-    console.log(this.state);
     return(
       <LayoutContainer username={this.state.username}>
         <AccountOptions />
@@ -94,6 +93,7 @@ class AccountOptions extends React.Component{
         <h1>Account Options</h1>
         <ul>
           <li>Change Email</li>
+          <li>View my Collection</li>
         </ul>
       </div>
     )

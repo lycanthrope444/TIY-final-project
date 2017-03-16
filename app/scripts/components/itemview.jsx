@@ -13,12 +13,14 @@ var demoData = {
   collectible: true
 };
 
-var demoComic = new Comic(demoData);
-
 class ItemContainer extends React.Component{
   constructor(props){
     super(props);
+    //The proxy server needs to be contacted here to get the ProxyModel
+
     //Call Model Here - populate
+    var demoComic = new Comic(demoData);
+    //pulling relevant data into state
     var title = demoComic.get('title');
     var desc = demoComic.get('description');
     var pic = demoComic.get('pic');
@@ -27,9 +29,12 @@ class ItemContainer extends React.Component{
     this.updateCollection=this.updateCollection.bind(this);
     this.updateRating = this.updateRating.bind(this);
 
+    //If the comic is in the collection pull that data here
+
     //Rating will be pulled from the data on my server, this is dummy data for now
 
     this.state ={
+      item: demoComic,
       title:title,
       desc:desc,
       pic:pic,
@@ -42,8 +47,9 @@ class ItemContainer extends React.Component{
     console.log('click');
   }
   updateRating(rating){
-
-    console.log('rating', rating);
+    var comic = new Comic(this.state.demoComic);
+    comic.updateRating(rating);
+    console.log(comic, rating);
     this.setState({userRating:rating});
   }
   render(){
@@ -56,7 +62,10 @@ class ItemContainer extends React.Component{
           <ItemRating userRating={this.state.userRating}
             updateRating ={this.updateRating} />
         </div>
-        <ItemPhoto pic={this.state.pic} averageRating={this.state.averageRating}/>
+        <div className="col-md-6">
+          <ItemPhoto pic={this.state.pic} />
+          <AverageRating averageRating={this.state.averageRating} />
+        </div>
         <QuickLinks />
       </LayoutContainer>
     )
@@ -126,10 +135,24 @@ class ItemRating extends React.Component{
 }
 
 class ItemPhoto extends React.Component{
+  constructor(props){
+    super(props);
+  }
   render(){
     return(
-      <div className="col-md-6">
-        <img src={this.props.pic}/>
+      <img src={this.props.pic}/>
+    )
+  }
+}
+
+class AverageRating extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
+    return(
+      <div>
+        <h3>The community gives this {this.props.averageRating} stars!</h3>
       </div>
     )
   }
