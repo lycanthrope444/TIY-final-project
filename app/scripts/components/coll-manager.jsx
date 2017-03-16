@@ -1,3 +1,4 @@
+var $ = require('jquery');
 var React = require('react');
 
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
@@ -7,23 +8,27 @@ var SeriesCollection = require('../models/comics.js').SeriesCollection;
 
 //Demo Data to structure Components///////////////////////
 var seriesDemo1 = {
+  id: 465,
   title: 'The Incredible Hulk',
   thumbnail: 'https://unsplash.it/200/300',
   creators:{},
   characters:{},
   comics:{
-    available: 119
+    available: 119,
+    items:[{name:"Hulk Issue 1"}, {name:"Issue 2"},{name:"Issue 3"}]
   },
   events:{}
 };
 
 var seriesDemo2 = {
+  id: 466,
   title: 'The Incredible Bulk',
   thumbnail: 'https://unsplash.it/200/300',
   creators:{},
   characters:{},
   comics:{
-    available: 100
+    available: 100,
+    items:[{name:"Bulk Issue 1"}, {name:"Issue 2"},{name:"Issue 3"}]
   },
   events:{}
 };
@@ -53,25 +58,36 @@ class CollectionContainer extends React.Component{
 
     // A comparison of the user data and the series data will need to be made
 
+    this.selectSeries=this.selectSeries.bind(this);
+    this.showSeries=this.showSeries.bind(this);
+
     this.state={
       seriesList:seriesCollDemo,
       selectedSeries: null,
+      selectedSeriesIssues: null,
       selectedComic: null
     }
   }
-  selectSeries(){
-
+  selectSeries(id){
+    this.setState({selectedSeries:id});
+    $('.seriesList').slideToggle();
+    var series = this.state.seriesList.find({'id':id});
+    console.log('component', series);
+    var issues = series.get('comics');
+    this.setState({selectedSeriesIssues: issues})
   }
   selectComic(){
 
   }
+  showSeries(){
+    $('.seriesList').slideToggle();
+  }
   render(){
-    console.log(seriesCollDemo);
     return(
       <LayoutContainer>
-        Collection Container
-        <SeriesLayout seriesList={this.state.seriesList}/>
-        <ComicLayout />
+        <button className="btn" onClick={this.showSeries}>Show Followed Series</button>
+        <SeriesLayout seriesList={this.state.seriesList} selectSeries={this.selectSeries}/>
+        <ComicLayout comicList={this.state.selectedSeriesIssues}/>
       </LayoutContainer>
     )
   }
@@ -83,22 +99,28 @@ class SeriesLayout extends React.Component{
 
     this.selectSeries = this.selectSeries.bind(this);
   }
-  selectSeries(){
-
+  selectSeries(id){
+    this.props.selectSeries(id);
   }
   render(){
-    var seriesList = this.props.seriesList.map(function(item, key){
+    var seriesList = this.props.seriesList.map((item, key)=>{
       return(
-        <div className="col-md-4" key={key}>
+        <div className="col-md-4" key={item.get('id')}>
           {item.get('title')}
+          <button className="btn" onClick={(e)=>{
+              e.preventDefault();
+              this.selectSeries(item.get('id'))}}>
+            View Collection</button>
           <img src={item.get('thumbnail')} />
         </div>
       )
     });
 
     return(
-      <div>
-        {seriesList}
+      <div className="col-md-12">
+        <div className="seriesList">
+          {seriesList}
+        </div>
       </div>
     )
   }
@@ -109,9 +131,24 @@ class ComicLayout extends React.Component{
     super(props);
   }
   render(){
+    console.log(this.props);
+    var comicList;
+    if (this.props.comicList){
+      comicList = this.props.comicList.items.map((item, key)=>{
+        return(
+          <div key={key}>
+            <button className="btn">Add</button>
+            {item.name}
+            <button className="btn">Delete</button>
+          </div>
+        )
+      });
+    }
+
     return(
-      <div>
+      <div className="comicList">
         Comic Section
+        {comicList}
       </div>
     )
   }
