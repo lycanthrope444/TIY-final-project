@@ -50,7 +50,7 @@ var demoData = {
 //End of demo data ///////////////////////
 
 
-class CollectionContainer extends React.Component{
+class SeriesContainer extends React.Component{
   constructor(props){
     super(props);
     //This pulls down the user data from parse
@@ -175,4 +175,4 @@ class ComicLayout extends React.Component{
   }
 }
 
-module.exports ={CollectionContainer};
+module.exports ={SeriesContainer};

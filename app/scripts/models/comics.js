@@ -21,7 +21,6 @@ var Comic = ParseModel.extend({
     console.log('method called', rating);
   },
   addToCollection: function(){
-    //Used to add to the User's Collection
     var thisComic = this;
     this.save().then(function(){
       var objectId = User.current().get('objectId');
@@ -38,11 +37,24 @@ var Comic = ParseModel.extend({
       });
     });
 
-      //This is also a good time to navigate away after the AJAX request finishes
-
   },
   removeFromCollection: function(){
     //Used to remove from the User's Collection
+    var thisComic = this;
+    this.save().then(function(){
+      var objectId = User.current().get('objectId');
+      console.log('add to collection');
+      thisComic.set({'collectors' : {
+        "__op":"AddRelation",
+        "objects":[
+          {"__type":"Pointer", "className":"_User", "objectId":objectId}
+        ]
+      }});
+
+      thisComic.save().then(function(){
+        console.log('add to collection');
+      });
+    });
   }
 });
 

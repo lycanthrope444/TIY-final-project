@@ -6,8 +6,9 @@ var parse = require('./setup').parse;
 var landing = require('./components/landing.jsx').LandingContainer;
 var login = require('./components/login.jsx').LoginContainer;
 var profile = require('./components/profile.jsx').ProfileContainer;
-var collection = require('./components/coll-manager.jsx').CollectionContainer;
+var collection = require('./components/collectionview.jsx').CollectionContainer;
 var itemView = require('./components/itemview.jsx').ItemContainer;
+var seriesView = require('./components/seriesview.jsx').SeriesContainer;
 
 var AppRouter = Backbone.Router.extend({
   initialize:function(){
@@ -22,7 +23,9 @@ var AppRouter = Backbone.Router.extend({
     'profile':'profile',
     'collection':'collection',
     'itemview/:id':'itemView',
-    'itemview':'itemView'
+    'itemview':'itemView',
+    'series/:id':'seriesView',
+    'series':'seriesView'
   },
   index: function(){
     ReactDOM.render(
@@ -51,6 +54,12 @@ var AppRouter = Backbone.Router.extend({
   itemView: function(id){
     ReactDOM.render(
       React.createElement(itemView, id),
+      document.getElementById('app')
+    );
+  },
+  series: function(id){
+    ReactDOM.render(
+      React.createElement(seriesView, id),
       document.getElementById('app')
     );
   }

@@ -39,6 +39,7 @@ class NavBarHeader extends React.Component{
             <a href="#collection">My Collection</a>|
             <a href="#login">Login</a>|
             <a href="#itemview">Item View-Remove Me</a>|
+              <a href="#series">Series View-Remove Me</a>|
             Avatar Pic Placeholder
         </div>
       </nav>
