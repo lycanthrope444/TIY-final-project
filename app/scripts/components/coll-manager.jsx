@@ -79,10 +79,14 @@ class CollectionContainer extends React.Component{
     $('.seriesList').slideToggle();
   }
   addComic(comic){
+    //Needs to get information on this comic from Parse
+    var comicToAdd = new Comic();
     console.log('add', comic);
+    comicToAdd.addToCollection();
   }
   deleteComic(comic){
     console.log('delete', comic);
+
   }
   render(){
     return(

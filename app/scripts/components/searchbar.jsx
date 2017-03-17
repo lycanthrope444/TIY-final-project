@@ -1,5 +1,8 @@
 var React = require('react');
 
+var SearchRequest = require('../models/proxy-models.js').SearchRequest;
+var Results = require('../models/proxy-models.js').Results;
+
 class SearchBar extends React.Component{
   constructor(props){
     super(props);
@@ -23,9 +26,11 @@ class SearchBar extends React.Component{
   }
   handleSubmit(e){
     e.preventDefault();
+    
     var smartSearch = this.state.searchTerm;
+    var newSearch = new SearchRequest();
 
-    console.log(smartSearch);
+    newSearch.sendSearch(this.state.searchType, smartSearch);
   }
   render(){
     return(
@@ -50,7 +55,8 @@ class SearchButton extends React.Component{
   render(){
     return(
       <div className="btn-group">
-        <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button type="button" className="btn btn-default dropdown-toggle"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {this.props.searchType} <span className="caret"></span>
         </button>
         <ul className="dropdown-menu">

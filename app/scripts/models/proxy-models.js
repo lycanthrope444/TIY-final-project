@@ -12,7 +12,21 @@ var ProxyCollection = Backbone.Collection.extend({
 
 });
 
+var SearchRequest = ProxyModel.extend({
+  sendSearch: function(category, searchTerm){
+    console.log(category, searchTerm);
+  }
+});
+
+var Results = ProxyModel.extend({
+  displayResults: function(){
+    Backbone.history.navigate('results', {trigger: true});
+  }
+});
+
 module.exports={
   ProxyModel : ProxyModel,
-  ProxyCollection : ProxyCollection
+  ProxyCollection : ProxyCollection,
+  SearchRequest: SearchRequest,
+  Results:Results
 };
