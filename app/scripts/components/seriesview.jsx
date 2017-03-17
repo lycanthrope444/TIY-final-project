@@ -86,7 +86,8 @@ class SeriesContainer extends React.Component{
   }
   deleteComic(comic){
     console.log('delete', comic);
-
+    var comicToAdd = new Comic();
+    comicToAdd.removeFromCollection();
   }
   render(){
     return(

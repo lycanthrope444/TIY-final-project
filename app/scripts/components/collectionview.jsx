@@ -7,6 +7,13 @@ var Series = require('../models/comics.js').Series;
 var SeriesCollection = require('../models/comics.js').SeriesCollection;
 
 class CollectionContainer extends React.Component{
+  constructor(props){
+    super(props);
+
+    this.state ={
+      
+    }
+  }
   render(){
     return(
       <LayoutContainer>

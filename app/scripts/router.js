@@ -3,6 +3,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 
 var parse = require('./setup').parse;
+var User = require('./models/user').User;
 var landing = require('./components/landing.jsx').LandingContainer;
 var login = require('./components/login.jsx').LoginContainer;
 var profile = require('./components/profile.jsx').ProfileContainer;
@@ -26,6 +27,20 @@ var AppRouter = Backbone.Router.extend({
     'itemview':'itemView',
     'series/:id':'seriesView',
     'series':'seriesView'
+  },
+  execute: function(callback, args, name) {
+    var user = User.current()
+    if (!user && name != 'login') {
+      this.navigate('', {trigger: true});
+      return false;
+    }
+
+    if(user && name == 'login'){
+      this.navigate('/profile', {trigger: true});
+      return false;
+    }
+
+    return Backbone.Router.prototype.execute.apply(this, arguments);
   },
   index: function(){
     ReactDOM.render(
@@ -57,7 +72,7 @@ var AppRouter = Backbone.Router.extend({
       document.getElementById('app')
     );
   },
-  series: function(id){
+  seriesView: function(id){
     ReactDOM.render(
       React.createElement(seriesView, id),
       document.getElementById('app')

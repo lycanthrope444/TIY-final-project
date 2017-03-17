@@ -43,9 +43,9 @@ var Comic = ParseModel.extend({
     var thisComic = this;
     this.save().then(function(){
       var objectId = User.current().get('objectId');
-      console.log('add to collection');
+      console.log('remove to collection');
       thisComic.set({'collectors' : {
-        "__op":"AddRelation",
+        "__op":"RemoveRelation",
         "objects":[
           {"__type":"Pointer", "className":"_User", "objectId":objectId}
         ]
