@@ -45,9 +45,10 @@ class ItemContainer extends React.Component{
   }
   updateCollection(){
     console.log('click');
+    this.state.item.addToCollection();
   }
   updateRating(rating){
-    var comic = new Comic(this.state.demoComic);
+    var comic = new Comic(this.state.item);
     comic.updateRating(rating);
     console.log(comic, rating);
     this.setState({userRating:rating});
