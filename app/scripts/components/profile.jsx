@@ -29,8 +29,8 @@ class ProfileContainer extends React.Component{
     var avatarCollection = new AvatarCollection();
 
     avatarCollection.fetch().done(function(){
-      var avatarpic = avatarCollection.parseWhere();
-      console.log(avatarCollection);
+      var avatarpic = avatarCollection.parseWhere("objectId", "_User", local.objectId);
+      console.log(avatarCollection, avatarpic);
     });
 
   }

@@ -16,6 +16,7 @@ var Comic = ParseModel.extend({
   },
   getRating: function(){
     //Used to calculate rating
+    
   },
   updateRating: function(rating){
     console.log('method called', rating);

@@ -34,6 +34,7 @@ var User = ParseModel.extend({
       localStorage.removeItem('username');
       Backbone.history.navigate('/login', {trigger: true});
     });
+    localStorage.removeItem('username');
   },
   store: function(user){
     localStorage.setItem('username', JSON.stringify(user.toJSON()));

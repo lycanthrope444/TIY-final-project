@@ -2,6 +2,7 @@ var React = require('react');
 
 var SearchRequest = require('../models/proxy-models.js').SearchRequest;
 var Results = require('../models/proxy-models.js').Results;
+var proxy = require('../proxy.js');
 
 class SearchBar extends React.Component{
   constructor(props){
@@ -26,7 +27,7 @@ class SearchBar extends React.Component{
   }
   handleSubmit(e){
     e.preventDefault();
-    
+
     var smartSearch = this.state.searchTerm;
     var newSearch = new SearchRequest();
 

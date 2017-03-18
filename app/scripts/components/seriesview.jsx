@@ -156,12 +156,15 @@ class ComicLayout extends React.Component{
                 this.addComic(item.name);
                 }}>
               Add</button>
-            {item.name}
+            <a href="#itemview">
+              {item.name}
+            </a>
             <button className="btn" onClick={(e)=>{
                 e.preventDefault();
                 this.deleteComic(item.name);
                 }}>
-              Delete</button>
+              Delete
+            </button>
           </div>
         )
       });

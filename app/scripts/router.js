@@ -36,7 +36,7 @@ var AppRouter = Backbone.Router.extend({
     }
 
     if(user && name == 'login'){
-      this.navigate('/profile', {trigger: true});
+      this.navigate('/login', {trigger: true});
       return false;
     }
 

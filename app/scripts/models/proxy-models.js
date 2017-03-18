@@ -13,8 +13,16 @@ var ProxyCollection = Backbone.Collection.extend({
 });
 
 var SearchRequest = ProxyModel.extend({
+  urlRoot:function(){
+    return proxy.PROXY_API_URL;
+  },
   sendSearch: function(category, searchTerm){
     console.log(category, searchTerm);
+    //Clean out any previously saved searches in local storage
+
+    //Keep track of what was searched in local storage, so that it can be referred to LayoutContainer
+
+    //Send the info to the proxy server
   }
 });
 
