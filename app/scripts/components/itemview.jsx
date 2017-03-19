@@ -3,6 +3,8 @@ var React = require('react');
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
 var Comic = require('../models/comics.js').Comic;
 
+var demoJSON = require('../demodata');
+
 var demoData = {
   title: 'The Incredible Hulk #181',
   issueNumber: 181,

@@ -10,6 +10,7 @@ var profile = require('./components/profile.jsx').ProfileContainer;
 var collection = require('./components/collectionview.jsx').CollectionContainer;
 var itemView = require('./components/itemview.jsx').ItemContainer;
 var seriesView = require('./components/seriesview.jsx').SeriesContainer;
+var resultsView = require('./components/results.jsx').ResultsContainer;
 
 var AppRouter = Backbone.Router.extend({
   initialize:function(){
@@ -26,7 +27,8 @@ var AppRouter = Backbone.Router.extend({
     'itemview/:id':'itemView',
     'itemview':'itemView',
     'series/:id':'seriesView',
-    'series':'seriesView'
+    'series':'seriesView',
+    'results':'results'
   },
   execute: function(callback, args, name) {
     var user = User.current()
@@ -75,6 +77,12 @@ var AppRouter = Backbone.Router.extend({
   seriesView: function(id){
     ReactDOM.render(
       React.createElement(seriesView, id),
+      document.getElementById('app')
+    );
+  },
+  results:function(){
+    ReactDOM.render(
+      React.createElement(resultsView),
       document.getElementById('app')
     );
   }

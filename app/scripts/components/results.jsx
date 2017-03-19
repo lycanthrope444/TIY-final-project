@@ -1,9 +1,27 @@
+var $ = require('jquery');
 var React = require('react');
 
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
+var apiKey = require('../marvelapi.js').apikey;
+var demoJSON = require('../demodata');
+var demoSeries = require('../demoseries');
 
 class ResultsContainer extends React.Component{
+  constructor(props){
+    super(props);
+    this.sampleApiCall =this.sampleApiCall.bind(this);
+  }
+  sampleApiCall(input){
+    var baseUrl = 'https://gateway.marvel.com/v1/public/comics';
+
+    $.ajax(baseUrl + '?' + apiKey).done(display);
+
+    function display(ajaxResults){
+      console.log(ajaxResults);
+    }
+  }
   render(){
+    console.log(demoJSON);
     return(
       <LayoutContainer>
         <ResultsHeader />
@@ -30,11 +48,14 @@ class ResultsDisplay extends React.Component{
         <div className="row">
           <div className="col-sm-6 col-md-4">
             <div className="thumbnail">
-              <img src="..." alt="...">
+              <img src="https://unsplash.it/200/300" />
               <div className="caption">
                 <h3>Thumbnail label</h3>
                 <p>...</p>
-                <p><a href="#" className="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                <p>
+                  <a className="btn btn-primary" role="button">Button</a>
+                  <a className="btn btn-default" role="button">Button</a>
+                </p>
               </div>
             </div>
           </div>
