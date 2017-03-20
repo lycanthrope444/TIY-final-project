@@ -32,18 +32,20 @@ class SearchBar extends React.Component{
 
     var searchTerm = this.state.searchTerm;
     var searchType = this.state.searchType;
+    
+    // var NewSearch = SearchRequest.extend({
+    //   urlRoot: function(){
+    //     console.log(proxy.PROXY_API_URL+searchType);
+    //     return proxy.PROXY_API_URL+searchType
+    //   }
+    // });
+    //
+    //
+    // var newSearch = new NewSearch();
+    //
+    // newSearch.sendSearch(searchType, searchTerm);
 
-    var NewSearch = SearchRequest.extend({
-      urlRoot: function(){
-        console.log(proxy.PROXY_API_URL+searchType);
-        return proxy.PROXY_API_URL+searchType
-      }
-    });
-
-
-    var newSearch = new NewSearch();
-
-    newSearch.sendSearch(searchType, searchTerm);
+    this.props.handleSubmit(searchType, searchTerm);
   }
   render(){
     return(

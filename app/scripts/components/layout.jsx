@@ -42,8 +42,8 @@ class NavBarHeader extends React.Component{
           <div className="navbar-header">
             Marvel Logo Placeholder
             <a href="#">Home</a>
-          </div>
-            <SearchBar />
+
+
             <a href="#profile">Profile</a>|
             <a href="#collection">My Collection</a>|
             <a href="#login">Login</a>|
@@ -52,6 +52,7 @@ class NavBarHeader extends React.Component{
             <a href="#results">Results-Remove Me</a>|
             Avatar Pic Placeholder
             <button className="btn" onClick={this.props.logout}>Log Out</button>
+          </div>
         </div>
       </nav>
     )
