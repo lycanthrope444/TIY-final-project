@@ -1,6 +1,7 @@
 var $ = require('jquery');
 var React = require('react');
 
+var parse = require('../setup').parse;
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
 var apiKey = require('../marvelapi.js').apikey;
 var demoJSON = require('../demodata');
@@ -12,18 +13,21 @@ class ResultsContainer extends React.Component{
     this.sampleApiCall =this.sampleApiCall.bind(this);
   }
   sampleApiCall(input){
-    var baseUrl = 'https://gateway.marvel.com/v1/public/comics';
-
-    $.ajax(baseUrl + '?' + apiKey).done(display);
-
-    function display(ajaxResults){
-      console.log(ajaxResults);
-    }
+    // var baseUrl = 'https://gateway.marvel.com/v1/public/comics';
+    //
+    // // parse.deinitialize();
+    //
+    // $.ajax(baseUrl + '?' + apiKey).done(display);
+    //
+    // function display(ajaxResults){
+    //   console.log(ajaxResults);
+    // }
   }
   render(){
     console.log(demoJSON);
     return(
       <LayoutContainer>
+        {this.sampleApiCall()}
         <ResultsHeader />
         <ResultsDisplay />
       </LayoutContainer>

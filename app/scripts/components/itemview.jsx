@@ -5,23 +5,13 @@ var Comic = require('../models/comics.js').Comic;
 
 var demoJSON = require('../demodata');
 
-var demoData = {
-  title: 'The Incredible Hulk #181',
-  issueNumber: 181,
-  description: 'Hulk fights Wolverine',
-  pic: 'https://unsplash.it/200/300',
-  creators: [],
-  characters:[],
-  collectible: true
-};
-
 class ItemContainer extends React.Component{
   constructor(props){
     super(props);
     //The proxy server needs to be contacted here to get the ProxyModel
 
     //Call Model Here - populate
-    var demoComic = new Comic(demoData);
+    var demoComic = new Comic(demoJSON);
     //pulling relevant data into state
     var title = demoComic.get('title');
     var desc = demoComic.get('description');

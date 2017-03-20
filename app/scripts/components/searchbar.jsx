@@ -31,6 +31,9 @@ class SearchBar extends React.Component{
     var smartSearch = this.state.searchTerm;
     var newSearch = new SearchRequest();
 
+    newSearch.get('data');
+
+
     newSearch.sendSearch(this.state.searchType, smartSearch);
   }
   render(){
