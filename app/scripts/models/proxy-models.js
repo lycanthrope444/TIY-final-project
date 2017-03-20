@@ -15,9 +15,9 @@ var ProxyCollection = Backbone.Collection.extend({
 
 var SearchRequest = ProxyModel.extend({
   sendSearch: function(category, searchTerm, callback){
-    var searchString = proxy.PROXY_API_URL + category;
+    var searchString = proxy.PROXY_API_URL + category+searchTerm;
     console.log(searchString);
-    
+
     this.fetch().done(function(){
       callback();
     });

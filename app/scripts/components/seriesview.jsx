@@ -37,15 +37,6 @@ var seriesCollDemo = new SeriesCollection();
 seriesCollDemo.add(seriesDemo1);
 seriesCollDemo.add(seriesDemo2);
 
-var demoData = {
-  title: 'The Incredible Hulk #181',
-  issueNumber: 181,
-  description: 'Hulk fights Wolverine',
-  pic: 'https://unsplash.it/200/300',
-  creators: [],
-  characters:[],
-  collectible: true
-};
 //
 //End of demo data ///////////////////////
 

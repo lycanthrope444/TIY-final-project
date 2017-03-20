@@ -21,15 +21,34 @@ class ResultsContainer extends React.Component{
     this.handleResults=this.handleResults.bind(this);
 
     this.state = {
-      searchResults:null
+      searchResults:null,
+      pages: null
     }
   }
   handleResults(){
+
     if (this.state.searchResults){
       var displayedResults = this.state.searchResults.map(function(item, index){
         return(
           <div key={index}>
-            {item.name || item.title}
+            <div className="col-sm-6 col-md-4">
+              <div className="thumbnail">
+                <img src ={item.thumbnail.path+'.'+item.thumbnail.extension} alt="https://unsplash.it/200/300" />
+                <div className="caption">
+                  <h3>{item.name || item.title}</h3>
+                  <p>{item.description}</p>
+                  <p>
+                    <a className="btn btn-primary" role="button">
+                      Item View
+                    </a>
+                    <a className="btn btn-default" role="button">
+                      Add to Collection
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </div>
+
           </div>
         )
       });
@@ -41,7 +60,6 @@ class ResultsContainer extends React.Component{
     }else{
       return(
         <div>
-          Display
         </div>
       )
     }
@@ -50,8 +68,14 @@ class ResultsContainer extends React.Component{
 
     var NewSearch = SearchRequest.extend({
       urlRoot: function(){
-        console.log(proxy.PROXY_API_URL+searchType);
-        return proxy.PROXY_API_URL+searchType
+        var search;
+        if (!searchTerm){
+          search = '';
+        } else {
+          search=searchTerm;
+        }
+        console.log(proxy.PROXY_API_URL+searchType+'?'+search);
+        return proxy.PROXY_API_URL+searchType+'?'+search+'&';
       }
     });
 
@@ -89,55 +113,5 @@ class ResultsHeader extends React.Component{
     )
   }
 }
-
-// Handled under another component
-
-// class ResultsDisplay extends React.Component{
-//
-//   // <ResultsDisplay searchResults={this.searchResults} />
-//
-//   // constructor(props){
-//   //   super(props);
-//   // }
-//   // componentWillReceiveProps(){
-//   //   console.log('props clicked');
-//   // }
-//   render(){
-//   //   console.log(this.props);
-//   //   var displayedResults;
-//   //   if (this.props.searchResults){
-//   //     var displayedResults = this.props.searchResults.map(function(item, index){
-//   //       return(
-//   //         <div key={index}>
-//   //           {item.title}
-//   //         </div>
-//   //       )
-//   //     });
-//   //   }
-//
-//     //Thumbnail Layour for search Results
-//     // <div className="col-sm-6 col-md-4">
-//     //   <div className="thumbnail">
-//     //     <img src="https://unsplash.it/200/300" />
-//     //     <div className="caption">
-//     //       <h3>Thumbnail label</h3>
-//     //       <p>...</p>
-//     //       <p>
-//     //         <a className="btn btn-primary" role="button">Button</a>
-//     //         <a className="btn btn-default" role="button">Button</a>
-//     //       </p>
-//     //     </div>
-//     //   </div>
-//     // </div>
-//     return(
-//
-//       <div>
-//         <div className="row">
-//
-//         </div>
-//       </div>
-//     )
-//   }
-// }
 
 module.exports = {ResultsContainer};
