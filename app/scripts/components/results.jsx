@@ -22,11 +22,18 @@ class ResultsContainer extends React.Component{
 
     this.state = {
       searchResults:null,
+      results: null,
       pages: null
     }
   }
+  itemView(){
+    return(
+      <div>
+        Item View
+      </div>
+    )
+  }
   handleResults(){
-
     if (this.state.searchResults){
       var displayedResults = this.state.searchResults.map(function(item, index){
         return(
@@ -48,7 +55,6 @@ class ResultsContainer extends React.Component{
                 </div>
               </div>
             </div>
-
           </div>
         )
       });
@@ -86,7 +92,11 @@ class ResultsContainer extends React.Component{
     newSearch.sendSearch(searchType, searchTerm, function(){
       console.log(newSearch);
       var searchResults = newSearch.get('data')
-      self.setState({searchResults:searchResults.results});
+      self.setState({
+        searchResults:searchResults.results,
+        results: searchResults.total,
+        pages: Math.ceil(searchResults.total/20)
+      });
       console.log(self.state);
       self.handleResults();
     });
@@ -98,6 +108,7 @@ class ResultsContainer extends React.Component{
           <SearchBar handleSubmit={this.handleSubmit}/>
         </div>
         <ResultsHeader />
+        {this.itemView()}
         {this.handleResults()}
       </LayoutContainer>
     )
