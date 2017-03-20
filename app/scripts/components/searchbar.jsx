@@ -1,6 +1,8 @@
+var Backbone = require('backbone');
 var React = require('react');
 
 var SearchRequest = require('../models/proxy-models.js').SearchRequest;
+var Results = require('../models/proxy-models.js').Results;
 var Results = require('../models/proxy-models.js').Results;
 var proxy = require('../proxy.js');
 
@@ -13,7 +15,7 @@ class SearchBar extends React.Component{
     this.changeSearchType = this.changeSearchType.bind(this);
 
     this.state ={
-      searchType:'Character',
+      searchType:'characters',
       searchTerm:''
     }
   }
@@ -28,13 +30,20 @@ class SearchBar extends React.Component{
   handleSubmit(e){
     e.preventDefault();
 
-    var smartSearch = this.state.searchTerm;
-    var newSearch = new SearchRequest();
+    var searchTerm = this.state.searchTerm;
+    var searchType = this.state.searchType;
 
-    newSearch.get('data');
+    var NewSearch = SearchRequest.extend({
+      urlRoot: function(){
+        console.log(proxy.PROXY_API_URL+searchType);
+        return proxy.PROXY_API_URL+searchType
+      }
+    });
 
 
-    newSearch.sendSearch(this.state.searchType, smartSearch);
+    var newSearch = new NewSearch();
+
+    newSearch.sendSearch(searchType, searchTerm);
   }
   render(){
     return(
@@ -64,12 +73,12 @@ class SearchButton extends React.Component{
           {this.props.searchType} <span className="caret"></span>
         </button>
         <ul className="dropdown-menu">
-          <li><a onClick={()=>{this.props.changeSearchType('Character')}} role="button">Character</a></li>
-          <li><a onClick={()=>{this.props.changeSearchType('Comics')}} role="button">Comics</a></li>
-          <li><a onClick={()=>{this.props.changeSearchType('Creators')}} role="button">Creators</a></li>
-          <li><a onClick={()=>{this.props.changeSearchType('Events')}} role="button">Events</a></li>
-          <li><a onClick={()=>{this.props.changeSearchType('Series')}} role="button">Series</a></li>
-          <li><a onClick={()=>{this.props.changeSearchType('Stories')}} role="button">Stories</a></li>
+          <li><a onClick={()=>{this.props.changeSearchType('characters')}} role="button">Character</a></li>
+          <li><a onClick={()=>{this.props.changeSearchType('comics')}} role="button">Comics</a></li>
+          <li><a onClick={()=>{this.props.changeSearchType('creators')}} role="button">Creators</a></li>
+          <li><a onClick={()=>{this.props.changeSearchType('events')}} role="button">Events</a></li>
+          <li><a onClick={()=>{this.props.changeSearchType('series')}} role="button">Series</a></li>
+          <li><a onClick={()=>{this.props.changeSearchType('stories')}} role="button">Stories</a></li>
         </ul>
       </div>
     )

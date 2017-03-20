@@ -10,24 +10,11 @@ var demoSeries = require('../demoseries');
 class ResultsContainer extends React.Component{
   constructor(props){
     super(props);
-    this.sampleApiCall =this.sampleApiCall.bind(this);
-  }
-  sampleApiCall(input){
-    // var baseUrl = 'https://gateway.marvel.com/v1/public/comics';
-    //
-    // // parse.deinitialize();
-    //
-    // $.ajax(baseUrl + '?' + apiKey).done(display);
-    //
-    // function display(ajaxResults){
-    //   console.log(ajaxResults);
-    // }
   }
   render(){
-    console.log(demoJSON);
+    // console.log(demoJSON);
     return(
       <LayoutContainer>
-        {this.sampleApiCall()}
         <ResultsHeader />
         <ResultsDisplay />
       </LayoutContainer>
