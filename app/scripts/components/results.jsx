@@ -18,9 +18,32 @@ class ResultsContainer extends React.Component{
     super(props);
 
     this.handleSubmit=this.handleSubmit.bind(this);
+    this.handleResults=this.handleResults.bind(this);
 
     this.state = {
-
+      searchResults:null
+    }
+  }
+  handleResults(){
+    if (this.state.searchResults){
+      var displayedResults = this.state.searchResults.map(function(item, index){
+        return(
+          <div key={index}>
+            {item.name || item.title}
+          </div>
+        )
+      });
+      return(
+        <div>
+          {displayedResults}
+        </div>
+      )
+    }else{
+      return(
+        <div>
+          Display
+        </div>
+      )
     }
   }
   handleSubmit(searchType, searchTerm){
@@ -38,12 +61,11 @@ class ResultsContainer extends React.Component{
 
     newSearch.sendSearch(searchType, searchTerm, function(){
       console.log(newSearch);
-      self.setState({searchResults:newSearch.get('data')});
-      console.log(self.state.searchResults.results);
+      var searchResults = newSearch.get('data')
+      self.setState({searchResults:searchResults.results});
+      console.log(self.state);
+      self.handleResults();
     });
-
-
-
   }
   render(){
     return(
@@ -52,7 +74,7 @@ class ResultsContainer extends React.Component{
           <SearchBar handleSubmit={this.handleSubmit}/>
         </div>
         <ResultsHeader />
-        <ResultsDisplay />
+        {this.handleResults()}
       </LayoutContainer>
     )
   }
@@ -68,32 +90,54 @@ class ResultsHeader extends React.Component{
   }
 }
 
-class ResultsDisplay extends React.Component{
-  render(){
+// Handled under another component
 
-
-    //Thumbnail Layour for search Results
-    // <div className="col-sm-6 col-md-4">
-    //   <div className="thumbnail">
-    //     <img src="https://unsplash.it/200/300" />
-    //     <div className="caption">
-    //       <h3>Thumbnail label</h3>
-    //       <p>...</p>
-    //       <p>
-    //         <a className="btn btn-primary" role="button">Button</a>
-    //         <a className="btn btn-default" role="button">Button</a>
-    //       </p>
-    //     </div>
-    //   </div>
-    // </div>
-    return(
-      <div>
-        <div className="row">
-
-        </div>
-      </div>
-    )
-  }
-}
+// class ResultsDisplay extends React.Component{
+//
+//   // <ResultsDisplay searchResults={this.searchResults} />
+//
+//   // constructor(props){
+//   //   super(props);
+//   // }
+//   // componentWillReceiveProps(){
+//   //   console.log('props clicked');
+//   // }
+//   render(){
+//   //   console.log(this.props);
+//   //   var displayedResults;
+//   //   if (this.props.searchResults){
+//   //     var displayedResults = this.props.searchResults.map(function(item, index){
+//   //       return(
+//   //         <div key={index}>
+//   //           {item.title}
+//   //         </div>
+//   //       )
+//   //     });
+//   //   }
+//
+//     //Thumbnail Layour for search Results
+//     // <div className="col-sm-6 col-md-4">
+//     //   <div className="thumbnail">
+//     //     <img src="https://unsplash.it/200/300" />
+//     //     <div className="caption">
+//     //       <h3>Thumbnail label</h3>
+//     //       <p>...</p>
+//     //       <p>
+//     //         <a className="btn btn-primary" role="button">Button</a>
+//     //         <a className="btn btn-default" role="button">Button</a>
+//     //       </p>
+//     //     </div>
+//     //   </div>
+//     // </div>
+//     return(
+//
+//       <div>
+//         <div className="row">
+//
+//         </div>
+//       </div>
+//     )
+//   }
+// }
 
 module.exports = {ResultsContainer};

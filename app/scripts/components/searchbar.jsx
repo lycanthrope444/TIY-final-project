@@ -32,7 +32,7 @@ class SearchBar extends React.Component{
 
     var searchTerm = this.state.searchTerm;
     var searchType = this.state.searchType;
-    
+
     // var NewSearch = SearchRequest.extend({
     //   urlRoot: function(){
     //     console.log(proxy.PROXY_API_URL+searchType);
@@ -80,7 +80,6 @@ class SearchButton extends React.Component{
           <li><a onClick={()=>{this.props.changeSearchType('creators')}} role="button">Creators</a></li>
           <li><a onClick={()=>{this.props.changeSearchType('events')}} role="button">Events</a></li>
           <li><a onClick={()=>{this.props.changeSearchType('series')}} role="button">Series</a></li>
-          <li><a onClick={()=>{this.props.changeSearchType('stories')}} role="button">Stories</a></li>
         </ul>
       </div>
     )
