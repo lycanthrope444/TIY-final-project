@@ -1,6 +1,8 @@
+var $ = require('jquery');
 var Backbone = require('backbone');
 
 var parse = require('../setup.js').parse;
+var User = require('./user.js').User;
 
 //Parse Model - cribbing from notes on 9.1
 var ParseModel = Backbone.Model.extend({
@@ -47,24 +49,23 @@ var ParseCollection = Backbone.Collection.extend({
     // If an objectId is passed in then we are building a pointer where
     if(objectId){
       value = {
-        field: field,
+        '__type': 'Pointer',
         className: value,
-        objectId: objectId,
-        '__type': 'Pointer'
+        objectId: objectId
       };
     }
     this.whereClause[field] = value;
-
+    console.log(this.whereClause);
     return this;
   },
   url: function(){
-    var url = this.baseUrl;
+    var url = parse.BASE_API_URL+this.baseUrl;
 
     if(Object.keys(this.whereClause).length > 0){
       url += '?where=' + JSON.stringify(this.whereClause);
       this.whereClause = {};
     }
-
+    console.log(url);
     return url;
   },
   parse: function(data){

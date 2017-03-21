@@ -3,6 +3,8 @@ var React = require('react');
 
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
 var User = require('../models/user.js');
+var parse = require('../setup.js').parse;
+var ParseModel = require('../models/parse.js').ParseModel;
 var ParseFile = require('../models/parse.js').ParseFile;
 var Avatar = require('../models/avatar.js').Avatar;
 var AvatarCollection = require('../models/avatar.js').AvatarCollection;
@@ -23,16 +25,18 @@ class ProfileContainer extends React.Component{
   }
   componentWillMount(){
     var local = JSON.parse(localStorage.getItem('username'));
+
     this.setState({username:local.username});
     this.setState({userID:local.objectId});
 
     var avatarCollection = new AvatarCollection();
-
-    avatarCollection.fetch().done(function(){
-      var avatarpic = avatarCollection.parseWhere("objectId", "_User", local.objectId);
-      console.log(avatarCollection, avatarpic);
+    avatarCollection.fetch().then(function(){
+      var search = avatarCollection.parseWhere('User','_User' ,'zSiiwwkEpI');
+      console.log('1',search);
+      search.fetch().then(function(){
+        console.log(search);
+      });
     });
-
   }
   handleImageChange(imageData){
     var reader = new FileReader();

@@ -7,15 +7,14 @@ var ParseCollection = require('./parse').ParseCollection;
 
 var Avatar = ParseModel.extend({
   urlRoot: function(){
-    return parse.BASE_API_URL +'classes/user_info';
+    return parse.BASE_API_URL +'classes/user_info/';
   }
 });
 
 var AvatarCollection = ParseCollection.extend({
   model: Avatar,
-  url: function(){
-    return parse.BASE_API_URL +'classes/user_info';
-  }
+  baseUrl: 'classes/user_info/'
+
 });
 
 module.exports ={

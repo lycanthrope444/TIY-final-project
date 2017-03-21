@@ -20,6 +20,7 @@ class CollectionContainer extends React.Component{
     }
   }
   render(){
+    console.log(this.state);
     return(
       <LayoutContainer>
 

@@ -97,11 +97,10 @@ class ResultsContainer extends React.Component{
       }
     });
 
-
     var newSearch = new NewSearch();
     var self = this;
 
-    newSearch.sendSearch(searchType, searchTerm, function(){
+    newSearch.sendSearch(function(){
       console.log(newSearch);
       var searchResults = newSearch.get('data')
       self.setState({
@@ -123,7 +122,7 @@ class ResultsContainer extends React.Component{
     return(
       <LayoutContainer>
         <div className ="row">
-          <SearchBar changeSearchType={this.changeSearchType} 
+          <SearchBar changeSearchType={this.changeSearchType}
             handleSubmit={this.handleSubmit}/>
         </div>
         <ResultsHeader prevOffset={this.prevOffset}
