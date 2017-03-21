@@ -20,9 +20,9 @@ class SearchBar extends React.Component{
     }
   }
   changeSearchType(term){
-    console.log('clicked', term);
+
+    this.props.changeSearchType(term);
     this.setState({searchType:term});
-    console.log(this.state);
   }
   handleSearch(e){
     this.setState({ searchTerm : e.target.value });

@@ -19,12 +19,22 @@ class ResultsContainer extends React.Component{
 
     this.handleSubmit=this.handleSubmit.bind(this);
     this.handleResults=this.handleResults.bind(this);
+    this.prevOffset=this.prevOffset.bind(this);
+    this.nextOffset=this.nextOffset.bind(this);
+    this.changeSearchType=this.changeSearchType.bind(this);
 
     this.state = {
+      searchType:'characters',
       searchResults:null,
       results: null,
+      currentOffset: 0,
       pages: null
     }
+  }
+  changeSearchType(term){
+    console.log('clicked', term);
+    this.setState({searchType:term});
+    console.log(this.state);
   }
   itemView(){
     return(
@@ -65,13 +75,15 @@ class ResultsContainer extends React.Component{
       )
     }else{
       return(
-        <div>
-        </div>
+        <div></div>
       )
     }
   }
-  handleSubmit(searchType, searchTerm){
-
+  handleSubmit(searchType, searchTerm, offset){
+    var currOffset=this.state.currentOffset;
+    if (offset){
+      currOffset=offset;
+    }
     var NewSearch = SearchRequest.extend({
       urlRoot: function(){
         var search;
@@ -80,8 +92,8 @@ class ResultsContainer extends React.Component{
         } else {
           search=searchTerm;
         }
-        console.log(proxy.PROXY_API_URL+searchType+'?'+search);
-        return proxy.PROXY_API_URL+searchType+'?'+search+'&';
+        console.log(proxy.PROXY_API_URL+searchType+'?'+search+'&offset='+currOffset+'&');
+        return proxy.PROXY_API_URL+searchType+'?'+search+'&offset='+currOffset+'&';
       }
     });
 
@@ -101,13 +113,21 @@ class ResultsContainer extends React.Component{
       self.handleResults();
     });
   }
+  prevOffset(){
+    console.log('prev clicked');
+  }
+  nextOffset(){
+    console.log('next clicked');
+  }
   render(){
     return(
       <LayoutContainer>
         <div className ="row">
-          <SearchBar handleSubmit={this.handleSubmit}/>
+          <SearchBar changeSearchType={this.changeSearchType} 
+            handleSubmit={this.handleSubmit}/>
         </div>
-        <ResultsHeader />
+        <ResultsHeader prevOffset={this.prevOffset}
+          nextOffset={this.nextOffset}/>
         {this.itemView()}
         {this.handleResults()}
       </LayoutContainer>
@@ -119,7 +139,12 @@ class ResultsHeader extends React.Component{
   render(){
     return(
       <div>
-
+        <nav aria-label="...">
+          <ul className="pager">
+            <li><a onClick={this.props.prevOffset}>Previous</a></li>
+            <li><a onClick={this.props.nextOffset}>Next</a></li>
+          </ul>
+        </nav>
       </div>
     )
   }
