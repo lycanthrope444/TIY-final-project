@@ -16,11 +16,10 @@ class CollectionContainer extends React.Component{
     var userId = user.get('objectId');
     var local = JSON.parse(localStorage.getItem('username'));
     var comicCollection = new ComicCollection();
-
-
-
-    comicCollection.isRealated('_User',"zSiiwwkEpI", 'collectors').fetch().then(function(){
+    var self = this;
+    comicCollection.parseWhere('collectors', '_User', userId).fetch().done(function(){
       console.log(comicCollection);
+      self.setState({collection:comicCollection});
     });
 
     this.addToCollection=this.addToCollection.bind(this);
@@ -29,7 +28,7 @@ class CollectionContainer extends React.Component{
     this.state ={
       user:user,
       userId:userId,
-      collection:null
+      collection:comicCollection
     }
   }
   addToCollection(){
@@ -50,12 +49,22 @@ class CollectionContainer extends React.Component{
 
 class MyCollection extends React.Component{
     constructor(props){
-    super(props);
+      super(props);
+
     }
     render(){
+      var collection = this.props.collection;
+      var displayCollection = collection.map(function(item, index){
+        return(
+          <div key={index}>
+            {item.get('title')}
+          </div>
+        )
+      });
+
       return(
         <div>
-
+          {displayCollection}
         </div>
       )
     }
