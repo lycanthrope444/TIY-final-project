@@ -107,6 +107,7 @@ class AccountOptions extends React.Component{
         <ul>
           <li>Change Email</li>
           <li>View my Collection</li>
+          <li>Things I'm following</li>
         </ul>
       </div>
     )

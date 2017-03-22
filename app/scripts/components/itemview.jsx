@@ -46,7 +46,6 @@ class ItemContainer extends React.Component{
       title:null,
       desc:null,
       pic:null,
-      collectible:null,
       userRating: 3,
       averageRating: 5
     }
@@ -55,8 +54,12 @@ class ItemContainer extends React.Component{
     console.log(this.state);
   }
   updateCollection(){
-    console.log('click');
-    this.state.item.addToCollection();
+
+    var data = this.state.item;
+    var comic = new Comic(data);
+    console.log(data);
+    console.log(comic);
+    comic.addToCollection();
   }
   updateRating(rating){
     var comic = new Comic(this.state.item);
@@ -79,6 +82,7 @@ class ItemContainer extends React.Component{
           <AverageRating averageRating={this.state.averageRating} />
         </div>
         <QuickLinks />
+        <DigitalMarketplace />
       </LayoutContainer>
     )
   }
@@ -175,6 +179,20 @@ class QuickLinks extends React.Component{
     return(
       <div className="col-xs-12">
         <h2>You might also enjoy:</h2>
+      </div>
+    )
+  }
+}
+
+class DigitalMarketplace extends React.Component{
+  render(){
+    return(
+      <div className="col-xs-12">
+        <h2>Find Merch:</h2>
+        <a>Local Stores</a>
+        <a>Marvel Digital</a>
+        <a>Ebay</a>
+        <a>Amazon</a>
       </div>
     )
   }

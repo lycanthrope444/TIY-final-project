@@ -106,8 +106,6 @@ class FlexButton extends React.Component{
             title:'Starts With',
             action: 'nameStartsWith='
           })}} role="button">Starts With</a></li>
-          <li><a onClick={()=>{this.props.changeModType('events')}} role="button">Events</a></li>
-          <li><a onClick={()=>{this.props.changeModType('series')}} role="button">Series</a></li>
         </ul>
       </div>
     )

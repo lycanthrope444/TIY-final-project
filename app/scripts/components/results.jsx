@@ -59,7 +59,7 @@ class ResultsContainer extends React.Component{
                   <p>
                     <a className="btn btn-primary" role="button"
                       href={"#itemview/"+self.state.searchType+'/'+item.id}>
-                      Detail Item View
+                      View/Rate
                     </a>
                     <a className="btn btn-default" role="button"
                       data-toggle="tooltip" data-placement="left" title="Tooltip on left"
@@ -67,7 +67,7 @@ class ResultsContainer extends React.Component{
                         e.preventDefault();
                         console.log('clicked');
                       }}>
-                      Add to Collection
+                      Collect/Follow
                     </a>
                   </p>
                 </div>
