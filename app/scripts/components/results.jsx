@@ -22,9 +22,11 @@ class ResultsContainer extends React.Component{
     this.prevOffset=this.prevOffset.bind(this);
     this.nextOffset=this.nextOffset.bind(this);
     this.changeSearchType=this.changeSearchType.bind(this);
+    this.changeModType=this.changeModType.bind(this);
 
     this.state = {
       searchType:'characters',
+      searchMod:'name=',
       searchResults:null,
       results: null,
       currentOffset: 0,
@@ -37,12 +39,10 @@ class ResultsContainer extends React.Component{
     this.setState({searchType:term, currentOffset: 0});
     console.log(this.state);
   }
-  itemView(){
-    return(
-      <div>
-        Item View
-      </div>
-    )
+  changeModType(modObject){
+    console.log('clicked', modObject);
+    this.setState({searchType:modObject.title, currentOffset: 0});
+    console.log(this.state);
   }
   handleResults(){
     var self=this;
@@ -91,7 +91,7 @@ class ResultsContainer extends React.Component{
       )
     }
   }
-  handleSubmit(searchType, searchTerm, offset){
+  handleSubmit(searchType, searchTerm, searchMod, offset){
     var currOffset=this.state.currentOffset;
     if (offset){
       currOffset=offset;
@@ -99,12 +99,16 @@ class ResultsContainer extends React.Component{
     var NewSearch = SearchRequest.extend({
       urlRoot: function(){
         var search;
+        var mod;
         if (!searchTerm){
           search = '';
+          mod = '';
         } else {
           search=searchTerm;
+          mod = searchMod;
         }
-        return proxy.PROXY_API_URL+searchType+'?'+search+'&offset='+currOffset+'&';
+        console.log(proxy.PROXY_API_URL+searchType+'?'+mod+search+'&offset='+currOffset+'&');
+        return proxy.PROXY_API_URL+searchType+'?'+mod+search+'&offset='+currOffset+'&';
       }
     });
 
@@ -129,7 +133,7 @@ class ResultsContainer extends React.Component{
     console.log('prev clicked');
     var newOffset= this.state.currentOffset - 20;
     this.setState({currentOffset: newOffset});
-    this.handleSubmit(self.state.searchType, self.state.searchTerm, newOffset);
+    this.handleSubmit(self.state.searchType, self.state.searchTerm, this.state.searchMod, newOffset);
   }
   nextOffset(){
     var self = this;
@@ -137,16 +141,16 @@ class ResultsContainer extends React.Component{
     var newOffset= this.state.currentOffset + 20;
     this.setState({currentOffset: newOffset});
     console.log(this.state);
-    this.handleSubmit(self.state.searchType, self.state.searchTerm, newOffset);
+    this.handleSubmit(self.state.searchType, self.state.searchTerm, this.state.searchMod, newOffset);
   }
   render(){
     return(
       <LayoutContainer>
         <div className ="row">
           <SearchBar changeSearchType={this.changeSearchType}
+            changeModType = {this.changeModType}
             handleSubmit={this.handleSubmit}/>
         </div>
-        {this.itemView()}
         {this.handleResults()}
 
       </LayoutContainer>
