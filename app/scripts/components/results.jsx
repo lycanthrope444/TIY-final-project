@@ -1,5 +1,6 @@
 var $ = require('jquery');
 var React = require('react');
+var Backbone = require('react');
 
 var SearchBar = require('./searchbar.jsx').SearchBar;
 
@@ -9,7 +10,6 @@ var Results = require('../models/proxy-models.js').Results;
 var proxy = require('../proxy.js');
 var parse = require('../setup').parse;
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
-var apiKey = require('../marvelapi.js').apikey;
 var demoJSON = require('../demodata');
 var demoSeries = require('../demoseries');
 
@@ -45,7 +45,7 @@ class ResultsContainer extends React.Component{
     )
   }
   handleResults(){
-
+    var self=this;
     if (this.state.searchResults){
       var displayedResults = this.state.searchResults.map(function(item, index){
         return(
@@ -54,17 +54,15 @@ class ResultsContainer extends React.Component{
               <div className="thumbnail">
                 <img src ={item.thumbnail.path+'.'+item.thumbnail.extension} alt="https://unsplash.it/200/300" />
                 <div className="caption">
-                  <h3>{item.name || item.title}</h3>
+                  <h3>{item.name || item.title || item.fullName}</h3>
                   <p>{item.description}</p>
                   <p>
                     <a className="btn btn-primary" role="button"
-                      onClick={(e)=>{
-                      e.preventDefault();
-                      console.log('clicked');
-                    }}>
+                      href={"#itemview/"+self.state.searchType+'/'+item.id}>
                       Detail Item View
                     </a>
                     <a className="btn btn-default" role="button"
+                      data-toggle="tooltip" data-placement="left" title="Tooltip on left"
                       onClick={(e)=>{
                         e.preventDefault();
                         console.log('clicked');
@@ -111,6 +109,7 @@ class ResultsContainer extends React.Component{
     });
 
     var newSearch = new NewSearch();
+
     var self = this;
 
     newSearch.sendSearch(function(){

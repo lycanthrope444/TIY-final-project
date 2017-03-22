@@ -14,13 +14,28 @@ var ProxyCollection = Backbone.Collection.extend({
 });
 
 var SearchRequest = ProxyModel.extend({
-  sendSearch: function(callback){
+  // searchTerm: '',
+  // searchType:'',
+  // currOffset:0,
+  changeSearch: function(){
 
+  },
+  sendSearch: function(callback){
+    console.log('sending');
     this.fetch().done(function(){
       callback();
     });
-
-  }
+  },
+  // urlRoot: function(){
+  //   var search;
+  //   if (!this.searchTerm){
+  //     search = '';
+  //   } else {
+  //     search=searchTerm;
+  //   }
+  //   console.log(proxy.PROXY_API_URL+this.searchType+'?'+search+'&offset='+this.currOffset+'&');
+  //   return proxy.PROXY_API_URL+this.searchType+'?'+search+'&offset='+this.currOffset+'&';
+  // }
 });
 
 // var SearchRequestColl = ProxyCollection.extend({

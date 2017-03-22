@@ -2,6 +2,8 @@ var React = require('react');
 
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
 var Comic = require('../models/comics.js').Comic;
+var proxy = require('../proxy.js');
+var SearchRequest = require('../models/proxy-models.js').SearchRequest;
 
 var demoJSON = require('../demodata');
 
@@ -9,14 +11,28 @@ class ItemContainer extends React.Component{
   constructor(props){
     super(props);
     //The proxy server needs to be contacted here to get the ProxyModel
+    var searchType = this.props.searchType;
+    var searchId = this.props.id;
 
-    //Call Model Here - populate
-    var demoComic = new Comic(demoJSON);
-    //pulling relevant data into state
-    var title = demoComic.get('title');
-    var desc = demoComic.get('description');
-    var pic = demoComic.get('pic');
-    var collectible = demoComic.get('collectible');
+    var NewSearch = SearchRequest.extend({
+      urlRoot: function(){
+
+        return proxy.PROXY_API_URL+searchType+'/'+searchId+'?';
+      }
+    });
+
+    var newSearch = new NewSearch();
+    var self =this;
+    newSearch.sendSearch(function(){
+      var searchResults = newSearch.get('data');
+      var item = searchResults.results[0];
+      self.setState({
+        item: item,
+        title:item.name||item.title,
+        desc: item.description,
+        pic: item.thumbnail.path + "."+item.thumbnail.extension
+      });
+    });
 
     this.updateCollection=this.updateCollection.bind(this);
     this.updateRating = this.updateRating.bind(this);
@@ -26,14 +42,17 @@ class ItemContainer extends React.Component{
     //Rating will be pulled from the data on my server, this is dummy data for now
 
     this.state ={
-      item: demoComic,
-      title:title,
-      desc:desc,
-      pic:pic,
-      collectible:collectible,
+      item: null,
+      title:null,
+      desc:null,
+      pic:null,
+      collectible:null,
       userRating: 3,
       averageRating: 5
     }
+  }
+  componentWillMount(){
+    console.log(this.state);
   }
   updateCollection(){
     console.log('click');
