@@ -11,33 +11,29 @@ var ProxyCollection = require('./proxy-models').ProxyCollection;
 //Comics will be referred to by their Marvel id#
 
 var Comic = ParseModel.extend({
-  urlRoot: function(){
-    return parse.BASE_API_URL +'classes/comics';
+  url:function(){
+    return parse.BASE_API_URL + 'classes/comics';
   },
   getRating: function(){
     //Used to calculate rating
-    
+
   },
   updateRating: function(rating){
     console.log('method called', rating);
   },
   addToCollection: function(){
     var thisComic = this;
-    this.save().then(function(){
-      var objectId = User.current().get('objectId');
-      console.log('add to collection');
-      thisComic.set({'collectors' : {
-        "__op":"AddRelation",
-        "objects":[
-          {"__type":"Pointer", "className":"_User", "objectId":objectId}
-        ]
-      }});
-
-      thisComic.save().then(function(){
-        console.log('add to collection');
-      });
+    var objectId = User.current().get('objectId');
+    thisComic.set({'collectors' : {
+      "__op":"AddRelation",
+      "objects":[
+        {"__type":"Pointer", "className":"_User", "objectId":objectId}
+      ]}
     });
-
+    thisComic.save().then(function(){
+      console.log('add to collection 1');
+      console.log(thisComic);
+    });
   },
   removeFromCollection: function(){
     //Used to remove from the User's Collection
@@ -71,9 +67,7 @@ var SeriesCollection = ParseCollection.extend({
 
 var ComicCollection = ParseCollection.extend({
   model: Comic,
-  urlRoot: function(){
-    return parse.BASE_API_URL +'classes/comics';
-  }
+  baseUrl: 'classes/comics'
 });
 
 var ProxyComic = ProxyModel.extend({

@@ -28,12 +28,13 @@ class ResultsContainer extends React.Component{
       searchResults:null,
       results: null,
       currentOffset: 0,
-      pages: null
+      pages: null,
+      buttonState: 'disabled'
     }
   }
   changeSearchType(term){
     console.log('clicked', term);
-    this.setState({searchType:term});
+    this.setState({searchType:term, currentOffset: 0});
     console.log(this.state);
   }
   itemView(){
@@ -44,6 +45,7 @@ class ResultsContainer extends React.Component{
     )
   }
   handleResults(){
+
     if (this.state.searchResults){
       var displayedResults = this.state.searchResults.map(function(item, index){
         return(
@@ -55,10 +57,18 @@ class ResultsContainer extends React.Component{
                   <h3>{item.name || item.title}</h3>
                   <p>{item.description}</p>
                   <p>
-                    <a className="btn btn-primary" role="button">
-                      Item View
+                    <a className="btn btn-primary" role="button"
+                      onClick={(e)=>{
+                      e.preventDefault();
+                      console.log('clicked');
+                    }}>
+                      Detail Item View
                     </a>
-                    <a className="btn btn-default" role="button">
+                    <a className="btn btn-default" role="button"
+                      onClick={(e)=>{
+                        e.preventDefault();
+                        console.log('clicked');
+                      }}>
                       Add to Collection
                     </a>
                   </p>
@@ -70,7 +80,11 @@ class ResultsContainer extends React.Component{
       });
       return(
         <div>
+          <ResultsHeader disabled={this.state.buttonState} prevOffset={this.prevOffset}
+            nextOffset={this.nextOffset}/>
           {displayedResults}
+          <ResultsHeader prevOffset={this.prevOffset}
+            nextOffset={this.nextOffset}/>
         </div>
       )
     }else{
@@ -92,7 +106,6 @@ class ResultsContainer extends React.Component{
         } else {
           search=searchTerm;
         }
-        console.log(proxy.PROXY_API_URL+searchType+'?'+search+'&offset='+currOffset+'&');
         return proxy.PROXY_API_URL+searchType+'?'+search+'&offset='+currOffset+'&';
       }
     });
@@ -101,22 +114,31 @@ class ResultsContainer extends React.Component{
     var self = this;
 
     newSearch.sendSearch(function(){
-      console.log(newSearch);
       var searchResults = newSearch.get('data')
+      console.log(searchResults);
       self.setState({
         searchResults:searchResults.results,
         results: searchResults.total,
         pages: Math.ceil(searchResults.total/20)
       });
-      console.log(self.state);
+
       self.handleResults();
     });
   }
   prevOffset(){
+    var self = this;
     console.log('prev clicked');
+    var newOffset= this.state.currentOffset - 20;
+    this.setState({currentOffset: newOffset});
+    this.handleSubmit(self.state.searchType, self.state.searchTerm, newOffset);
   }
   nextOffset(){
+    var self = this;
     console.log('next clicked');
+    var newOffset= this.state.currentOffset + 20;
+    this.setState({currentOffset: newOffset});
+    console.log(this.state);
+    this.handleSubmit(self.state.searchType, self.state.searchTerm, newOffset);
   }
   render(){
     return(
@@ -125,10 +147,9 @@ class ResultsContainer extends React.Component{
           <SearchBar changeSearchType={this.changeSearchType}
             handleSubmit={this.handleSubmit}/>
         </div>
-        <ResultsHeader prevOffset={this.prevOffset}
-          nextOffset={this.nextOffset}/>
         {this.itemView()}
         {this.handleResults()}
+
       </LayoutContainer>
     )
   }
@@ -136,6 +157,7 @@ class ResultsContainer extends React.Component{
 
 class ResultsHeader extends React.Component{
   render(){
+    console.log(this.props);
     return(
       <div>
         <nav aria-label="...">

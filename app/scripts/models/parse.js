@@ -39,6 +39,18 @@ var ParseModel = Backbone.Model.extend({
     this.set(field, pointerObject);
 
     return this;
+  },
+  isRealated: function(field, value, objectId, relation){
+
+    value = {"$relatedTo":
+        {"object":
+          {"__type":"Pointer","className":value,"objectId":objectId},
+        "key":relation
+      }
+    };
+    this.whereClause = value;
+    console.log(this.whereClause);
+    return this;
   }
 });
 
@@ -55,6 +67,18 @@ var ParseCollection = Backbone.Collection.extend({
       };
     }
     this.whereClause[field] = value;
+    console.log(this.whereClause);
+    return this;
+  },
+  isRealated: function(value, objectId, relation){
+
+    value = {"$relatedTo":
+        {"object":
+          {"__type":"Pointer","className":value,"objectId":objectId},
+        "key":relation
+      }
+    };
+    this.whereClause = value;
     console.log(this.whereClause);
     return this;
   },

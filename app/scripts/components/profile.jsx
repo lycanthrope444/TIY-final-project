@@ -31,12 +31,21 @@ class ProfileContainer extends React.Component{
 
     var avatarCollection = new AvatarCollection();
     avatarCollection.fetch().then(function(){
-      var search = avatarCollection.parseWhere('User','_User' ,'zSiiwwkEpI');
-      console.log('1',search);
-      search.fetch().then(function(){
-        console.log(search);
-      });
+      console.log('2',avatarCollection);
     });
+
+    avatarCollection.parseWhere('User','_User' , local.objectId).fetch().then(function(){
+      // var search = avatarCollection.parseWhere('User','_User' ,'zSiiwwkEpI');
+
+      console.log('1',avatarCollection);
+
+      // search.fetch().then(function(){
+      //
+      //   console.log(search);
+      //
+      // });
+    });
+
   }
   handleImageChange(imageData){
     var reader = new FileReader();
