@@ -35,7 +35,6 @@ var ParseModel = Backbone.Model.extend({
       "className": parseClass,
       "objectId": objectId
     };
-
     this.set(field, pointerObject);
 
     return this;
@@ -72,7 +71,8 @@ var ParseCollection = Backbone.Collection.extend({
   },
   url: function(){
     var url = parse.BASE_API_URL+this.baseUrl;
-
+    console.log(url);
+    console.log(this.whereClause);
     if(Object.keys(this.whereClause).length > 0){
       url += '?where=' + JSON.stringify(this.whereClause);
       this.whereClause = {};

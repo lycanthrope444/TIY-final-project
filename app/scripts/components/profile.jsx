@@ -30,20 +30,10 @@ class ProfileContainer extends React.Component{
     this.setState({userID:local.objectId});
 
     var avatarCollection = new AvatarCollection();
-    avatarCollection.fetch().then(function(){
-      console.log('2',avatarCollection);
-    });
-
+    console.log(avatarCollection);
+    avatarCollection.whereClause = {};
     avatarCollection.parseWhere('User','_User' , local.objectId).fetch().then(function(){
-      // var search = avatarCollection.parseWhere('User','_User' ,'zSiiwwkEpI');
-
       console.log('1',avatarCollection);
-
-      // search.fetch().then(function(){
-      //
-      //   console.log(search);
-      //
-      // });
     });
 
   }

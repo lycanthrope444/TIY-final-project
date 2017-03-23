@@ -51,9 +51,15 @@ class MyCollection extends React.Component{
     constructor(props){
       super(props);
 
+      var collection = this.props.collection;
+
+      this.state={
+        collection: collection
+      }
+
     }
     render(){
-      var collection = this.props.collection;
+      var collection = this.state.collection;
       var displayCollection = collection.map(function(item, index){
         return(
           <div key={index}>

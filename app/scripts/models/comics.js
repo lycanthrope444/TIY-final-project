@@ -14,8 +14,9 @@ var ProxyCollection = require('./proxy-models').ProxyCollection;
 var Comic = ParseModel.extend({
   marvelId : '',
   url:function(){
-    console.log(parse.BASE_API_URL + 'classes/comics/'+this.marvelId);
-    return parse.BASE_API_URL + 'classes/comics/'+this.marvelId;
+    var url = parse.BASE_API_URL + 'classes/comics/';
+    console.log(url);
+    return url;
   },
   getRating: function(){
     //Used to calculate rating
@@ -48,9 +49,11 @@ var Comic = ParseModel.extend({
 
     this.set({'collectors' : {
       "__op":"RemoveRelation",
-      "objects":[
-        {"__type":"Pointer", "className":"_User", "objectId":objectId}
-      ]
+      "objects":[{
+        "__type":"Pointer",
+        "className":"_User",
+        "objectId":objectId
+      }]
     }});
 
     console.log(parse.BASE_API_URL + 'classes/comics/'+id);

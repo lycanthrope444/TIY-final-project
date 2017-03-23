@@ -54,7 +54,7 @@ class ItemContainer extends React.Component{
     console.log(this.state);
   }
   updateCollection(){
-
+    
     var data = this.state.item;
     var comic = new Comic(data);
     console.log(data);
