@@ -4,6 +4,7 @@ var React = require('react');
 var User = require('../models/user.js').User;
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
 var Comic = require('../models/comics.js').Comic;
+var ChangeComic = require('../models/comics.js').ChangeComic;
 var ComicCollection = require('../models/comics.js').ComicCollection;
 var Series = require('../models/comics.js').Series;
 var SeriesCollection = require('../models/comics.js').SeriesCollection;
@@ -71,8 +72,9 @@ class MyCollection extends React.Component{
               onClick={
                 e=>{
                   e.preventDefault();
-                  item.removeFromCollection();
-                  console.log('clicked', item);
+                  var comic = new ChangeComic(item);
+                  console.log('clicked', comic);
+                  comic.removeFromCollection();
                 }
               }>
               X

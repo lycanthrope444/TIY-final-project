@@ -57,18 +57,6 @@ var ParseCollection = Backbone.Collection.extend({
     console.log(this.whereClause);
     return this;
   },
-  isRealated: function(value, objectId, relation){
-
-    value = {"$relatedTo":
-        {"object":
-          {"__type":"Pointer","className":value,"objectId":objectId},
-        "key":relation
-      }
-    };
-    this.whereClause = value;
-    console.log(this.whereClause);
-    return this;
-  },
   url: function(){
     var url = parse.BASE_API_URL+this.baseUrl;
     console.log(url);
