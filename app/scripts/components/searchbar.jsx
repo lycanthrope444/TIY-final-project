@@ -9,18 +9,19 @@ var proxy = require('../proxy.js');
 class SearchBar extends React.Component{
   constructor(props){
     super(props);
-
+    var searchType = this.props.searchType;
     this.handleSearch = this.handleSearch.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.changeSearchType = this.changeSearchType.bind(this);
     this.changeModType = this.changeModType.bind(this);
 
     this.state ={
-      searchType:'characters',
+      searchType:searchType,
       searchTerm:'',
       searchMod:{
         title:'Exact Name',
-        action: 'name='
+        charAction: 'name=',
+        otherAction: 'title='
       }
     }
   }
@@ -30,9 +31,12 @@ class SearchBar extends React.Component{
     this.setState({searchType:term});
   }
   changeModType(termObject){
-    if (this.state.searchType = 'characters'){
+
+    if (this.state.searchType === 'characters'){
+      console.log('changeModType',termObject.charAction);
       this.props.changeModType(termObject.charAction);
     } else {
+      console.log('changeModType',termObject.otherAction);
       this.props.changeModType(termObject.otherAction);
     }
 
@@ -46,8 +50,8 @@ class SearchBar extends React.Component{
 
     var searchTerm = this.state.searchTerm;
     var searchType = this.state.searchType;
-    var searchMod
-    if (this.state.searchType = 'characters'){
+    var searchMod;
+    if (this.state.searchType === 'characters'){
       searchMod = this.state.searchMod.charAction;
     } else {
       searchMod = this.state.searchMod.otherAction;

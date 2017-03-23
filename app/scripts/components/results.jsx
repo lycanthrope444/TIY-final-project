@@ -149,7 +149,7 @@ class ResultsContainer extends React.Component{
         <div className ="row">
           <SearchBar changeSearchType={this.changeSearchType}
             changeModType = {this.changeModType}
-            handleSubmit={this.handleSubmit}/>
+            handleSubmit={this.handleSubmit} searchType={this.state.searchType}/>
         </div>
         {this.handleResults()}
 
