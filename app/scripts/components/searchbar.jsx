@@ -30,8 +30,12 @@ class SearchBar extends React.Component{
     this.setState({searchType:term});
   }
   changeModType(termObject){
+    if (this.state.searchType = 'characters'){
+      this.props.changeModType(termObject.charAction);
+    } else {
+      this.props.changeModType(termObject.otherAction);
+    }
 
-    this.props.changeModType(termObject.action);
     this.setState({searchMod:termObject});
   }
   handleSearch(e){
@@ -42,7 +46,13 @@ class SearchBar extends React.Component{
 
     var searchTerm = this.state.searchTerm;
     var searchType = this.state.searchType;
-    var searchMod = this.state.searchMod.action;
+    var searchMod
+    if (this.state.searchType = 'characters'){
+      searchMod = this.state.searchMod.charAction;
+    } else {
+      searchMod = this.state.searchMod.otherAction;
+    }
+
 
     this.props.handleSubmit(searchType, searchTerm, searchMod);
   }
@@ -100,11 +110,13 @@ class FlexButton extends React.Component{
         <ul className="dropdown-menu">
           <li><a onClick={()=>{this.props.changeModType({
             title:'Exact Name',
-            action: 'name='
+            charAction: 'name=',
+            otherAction: 'title='
           })}} role="button">Exact Name</a></li>
           <li><a onClick={()=>{this.props.changeModType({
             title:'Starts With',
-            action: 'nameStartsWith='
+            charAction: 'nameStartsWith=',
+            otherAction: 'titleStartsWith='
           })}} role="button">Starts With</a></li>
         </ul>
       </div>

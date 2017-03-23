@@ -5,8 +5,6 @@ var Comic = require('../models/comics.js').Comic;
 var proxy = require('../proxy.js');
 var SearchRequest = require('../models/proxy-models.js').SearchRequest;
 
-var demoJSON = require('../demodata');
-
 class ItemContainer extends React.Component{
   constructor(props){
     super(props);
@@ -54,7 +52,7 @@ class ItemContainer extends React.Component{
     console.log(this.state);
   }
   updateCollection(){
-    
+
     var data = this.state.item;
     var comic = new Comic(data);
     console.log(data);

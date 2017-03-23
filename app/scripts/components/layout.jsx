@@ -32,7 +32,6 @@ class LayoutContainer extends React.Component{
     User.logout();
   }
   render(){
-    console.log('state',this.state);
     return(
       <div>
         <NavBarHeader username={this.state.username} logout={this.logout}

@@ -41,7 +41,7 @@ class ResultsContainer extends React.Component{
   }
   changeModType(modObject){
     console.log('clicked', modObject);
-    this.setState({searchType:modObject.title, currentOffset: 0});
+    this.setState({searchMod:modObject, currentOffset: 0});
     console.log(this.state);
   }
   handleResults(){
