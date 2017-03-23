@@ -1,3 +1,4 @@
+var $ = require('jquery');
 var Backbone = require('backbone');
 
 var parse = require('../setup').parse;
@@ -11,8 +12,10 @@ var ProxyCollection = require('./proxy-models').ProxyCollection;
 //Comics will be referred to by their Marvel id#
 
 var Comic = ParseModel.extend({
+  marvelId : '',
   url:function(){
-    return parse.BASE_API_URL + 'classes/comics';
+    console.log(parse.BASE_API_URL + 'classes/comics/'+this.marvelId);
+    return parse.BASE_API_URL + 'classes/comics/'+this.marvelId;
   },
   getRating: function(){
     //Used to calculate rating
@@ -22,6 +25,7 @@ var Comic = ParseModel.extend({
     console.log('method called', rating);
   },
   addToCollection: function(){
+
     var thisComic = this;
     var objectId = User.current().get('objectId');
     thisComic.set({'collectors' : {
@@ -37,20 +41,22 @@ var Comic = ParseModel.extend({
   },
   removeFromCollection: function(){
     //Used to remove from the User's Collection
-    var thisComic = this;
-    this.save().then(function(){
-      var objectId = User.current().get('objectId');
-      console.log('remove to collection');
-      thisComic.set({'collectors' : {
-        "__op":"RemoveRelation",
-        "objects":[
-          {"__type":"Pointer", "className":"_User", "objectId":objectId}
-        ]
-      }});
 
-      thisComic.save().then(function(){
-        console.log('add to collection');
-      });
+    var thisComic = this;
+    var objectId = User.current();
+    var id = this.id;
+
+    this.set({'collectors' : {
+      "__op":"RemoveRelation",
+      "objects":[
+        {"__type":"Pointer", "className":"_User", "objectId":objectId}
+      ]
+    }});
+
+    console.log(parse.BASE_API_URL + 'classes/comics/'+id);
+    var url =parse.BASE_API_URL + 'classes/comics/'+id;
+    $.ajax(url, {'method': "PUT" }).done(function(){
+      console.log('removed');
     });
   }
 });

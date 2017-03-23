@@ -40,18 +40,6 @@ var ParseModel = Backbone.Model.extend({
 
     return this;
   },
-  isRealated: function(field, value, objectId, relation){
-
-    value = {"$relatedTo":
-        {"object":
-          {"__type":"Pointer","className":value,"objectId":objectId},
-        "key":relation
-      }
-    };
-    this.whereClause = value;
-    console.log(this.whereClause);
-    return this;
-  }
 });
 
 //Parse Collection - cribbing from notes on 9.1

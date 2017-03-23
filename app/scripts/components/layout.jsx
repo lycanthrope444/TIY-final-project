@@ -48,7 +48,6 @@ class NavBarHeader extends React.Component{
             <a href="#collection">My Collection</a>|
             <a href="#login">Login</a>|
             <a href="#results">Search</a>|
-            <a href="#itemview">Item-Remove Me</a>|
             <a href="#series">Series-Remove Me</a>|
             Avatar Pic Placeholder
             <button className="btn" onClick={this.props.logout}>Log Out</button>

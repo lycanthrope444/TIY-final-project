@@ -57,7 +57,20 @@ class MyCollection extends React.Component{
       var displayCollection = collection.map(function(item, index){
         return(
           <div key={index}>
-            {item.get('title')}
+            <a href={"#itemview/comics/"+ item.get('id')}>
+              {item.get('title')}
+            </a>
+            <button className="btn btn-danger" data-toggle="tooltip"
+              data-placement="left" title="Tooltip on left"
+              onClick={
+                e=>{
+                  e.preventDefault();
+                  item.removeFromCollection();
+                  console.log('clicked', item);
+                }
+              }>
+              X
+            </button>
           </div>
         )
       });
