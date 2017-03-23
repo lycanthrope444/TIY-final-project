@@ -9,17 +9,27 @@ class LayoutContainer extends React.Component{
     super(props);
     this.logout = this.logout.bind(this);
 
-    var username = User.current().get('username');
-    var userId = User.current().get('objectId');
-    var user = User.current();
+    var username;
+    var userId;
+    var user;
     var avatarCollection = new AvatarCollection();
     var self =this;
+
+    if(User.current()){
+      username = User.current().get('username');
+      userId = User.current().get('objectId');
+      user = User.current();
+    }
+
 
     avatarCollection.whereClause = {};
     avatarCollection.parseWhere('User','_User' , userId).fetch().then(function(){
       var avatar = avatarCollection.models[0];
-      var pic = avatar.get('pic');
-      self.setState({pic:pic.url});
+      var pic;
+      if (avatar){
+        pic= avatar.get('pic');
+        self.setState({pic:pic.url});
+      }
     });
 
     this.state = {

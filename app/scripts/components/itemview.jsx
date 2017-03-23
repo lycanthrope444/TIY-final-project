@@ -48,15 +48,10 @@ class ItemContainer extends React.Component{
       averageRating: 5
     }
   }
-  componentWillMount(){
-    console.log(this.state);
-  }
   updateCollection(){
 
     var data = this.state.item;
     var comic = new Comic(data);
-    console.log(data);
-    console.log(comic);
     comic.addToCollection();
   }
   updateRating(rating){

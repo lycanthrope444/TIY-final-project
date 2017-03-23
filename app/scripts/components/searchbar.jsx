@@ -32,7 +32,7 @@ class SearchBar extends React.Component{
   }
   changeModType(termObject){
 
-    if (this.state.searchType === 'characters'){
+    if (this.state.searchType === 'characters'||this.state.searchType === 'events'){
       console.log('changeModType',termObject.charAction);
       this.props.changeModType(termObject.charAction);
     } else {
@@ -51,7 +51,7 @@ class SearchBar extends React.Component{
     var searchTerm = this.state.searchTerm;
     var searchType = this.state.searchType;
     var searchMod;
-    if (this.state.searchType === 'characters'){
+    if (this.state.searchType === 'characters'||this.state.searchType === 'events'){
       searchMod = this.state.searchMod.charAction;
     } else {
       searchMod = this.state.searchMod.otherAction;

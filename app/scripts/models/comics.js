@@ -58,9 +58,12 @@ var Comic = ParseModel.extend({
 
     console.log(parse.BASE_API_URL + 'classes/comics/'+id);
     var url =parse.BASE_API_URL + 'classes/comics/'+id;
+    parse.initialize();
     $.ajax(url, {'method': "PUT" }).done(function(){
       console.log('removed');
+      parse.deinitialize();
     });
+
   }
 });
 

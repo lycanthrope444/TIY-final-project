@@ -6,7 +6,7 @@ var SearchBar = require('./searchbar.jsx').SearchBar;
 
 var SearchRequest = require('../models/proxy-models.js').SearchRequest;
 var Results = require('../models/proxy-models.js').Results;
-var Results = require('../models/proxy-models.js').Results;
+var Comic = require('../models/comics.js').Comic;
 var proxy = require('../proxy.js');
 var parse = require('../setup').parse;
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
@@ -31,7 +31,9 @@ class ResultsContainer extends React.Component{
       results: null,
       currentOffset: 0,
       pages: null,
-      buttonState: 'disabled'
+      currPage:1,
+      buttonState: 'disabled',
+      searchTerm:''
     }
   }
   changeSearchType(term){
@@ -65,6 +67,8 @@ class ResultsContainer extends React.Component{
                       data-toggle="tooltip" data-placement="left" title="Tooltip on left"
                       onClick={(e)=>{
                         e.preventDefault();
+                        var comic = new Comic(item);
+                        comic.addToCollection();
                         console.log('clicked');
                       }}>
                       Collect/Follow
@@ -78,10 +82,10 @@ class ResultsContainer extends React.Component{
       });
       return(
         <div>
-          <ResultsHeader disabled={this.state.buttonState} prevOffset={this.prevOffset}
+          <ResultsHeader currPage={this.state.currPage} prevOffset={this.prevOffset}
             nextOffset={this.nextOffset}/>
           {displayedResults}
-          <ResultsHeader prevOffset={this.prevOffset}
+          <ResultsHeader currPage={this.state.currPage} prevOffset={this.prevOffset}
             nextOffset={this.nextOffset}/>
         </div>
       )
@@ -92,6 +96,7 @@ class ResultsContainer extends React.Component{
     }
   }
   handleSubmit(searchType, searchTerm, searchMod, offset){
+    this.setState({searchTerm: searchTerm});
     var currOffset=this.state.currentOffset;
     if (offset){
       currOffset=offset;
@@ -130,18 +135,27 @@ class ResultsContainer extends React.Component{
   }
   prevOffset(){
     var self = this;
-    console.log('prev clicked');
+    var newPage = this.state.currPage - 1;
+    console.log(newPage);
     var newOffset= this.state.currentOffset - 20;
-    this.setState({currentOffset: newOffset});
-    this.handleSubmit(self.state.searchType, self.state.searchTerm, this.state.searchMod, newOffset);
+    this.setState({
+      currentOffset: newOffset,
+      currPage: newPage
+    });
+    this.handleSubmit(self.state.searchType, self.state.searchTerm, self.state.searchMod, newOffset);
   }
   nextOffset(){
     var self = this;
-    console.log('next clicked');
+    var newPage = this.state.currPage + 1;
+    console.log(newPage);
+    console.log('next clicked', self.state.searchType, self.state.searchTerm, self.state.searchMod);
     var newOffset= this.state.currentOffset + 20;
-    this.setState({currentOffset: newOffset});
+    this.setState({
+      currentOffset: newOffset,
+      currPage: newPage
+    });
     console.log(this.state);
-    this.handleSubmit(self.state.searchType, self.state.searchTerm, this.state.searchMod, newOffset);
+    this.handleSubmit(self.state.searchType, self.state.searchTerm, self.state.searchMod, newOffset);
   }
   render(){
     return(
@@ -159,8 +173,10 @@ class ResultsContainer extends React.Component{
 }
 
 class ResultsHeader extends React.Component{
+  constructor(props){
+    super(props);
+  }
   render(){
-    console.log(this.props);
     return(
       <div>
         <nav aria-label="...">

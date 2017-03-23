@@ -13,12 +13,13 @@ var User = ParseModel.extend({
 },{
   login: function(credentials, callback){
     var url = parse.BASE_API_URL + 'login?' + $.param(credentials);
-
+    parse.initialize();
     $.get(url).then(function(data) {
       var newUser = new User(data);
       User.store(newUser);
       callback(newUser);
     });
+    parse.deinitialize();
   },
   signup: function(creds){
     var newUser = new User(creds);
@@ -29,12 +30,13 @@ var User = ParseModel.extend({
   },
   logout: function(){
     var url = parse.BASE_API_URL + 'logout';
-
+    parse.initialize();
     $.post(url).then(function() {
       localStorage.removeItem('username');
       Backbone.history.navigate('/login', {trigger: true});
     });
-    localStorage.removeItem('username');
+
+    parse.deinitialize();
   },
   store: function(user){
     localStorage.setItem('username', JSON.stringify(user.toJSON()));
