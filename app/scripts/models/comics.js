@@ -88,7 +88,7 @@ var ChangeComic = ParseModel.extend({
   removeFromCollection: function(){
     //Used to remove from the User's Collection
     var userId = User.current().get('objectId');
-
+    console.log('1', this);
     this.set({'collectors' : {
       "__op":"RemoveRelation",
       "objects":[{
@@ -97,17 +97,19 @@ var ChangeComic = ParseModel.extend({
         "objectId":userId
       }]
     }});
+    console.log('2', this);
     var objectId = this.get('id');
 
     var url = parse.BASE_API_URL + 'classes/comics/'+objectId;
-    console.log(url);
 
     parse.initialize();
     $.ajaxSetup({
       'method':"PUT"
     });
 
-    $.ajax(url, this).done(function(){
+    var thisComic = this;
+
+    $.ajax(url, thisComic).done(function(){
       console.log('removed');
     });
 

@@ -181,8 +181,8 @@ class ResultsHeader extends React.Component{
       <div>
         <nav aria-label="...">
           <ul className="pager">
-            <li><a onClick={this.props.prevOffset}>Previous</a></li>
-            <li><a onClick={this.props.nextOffset}>Next</a></li>
+            <li><a href="#top" onClick={this.props.prevOffset}>Previous</a></li>
+            <li><a href="#top" onClick={this.props.nextOffset}>Next</a></li>
           </ul>
         </nav>
       </div>

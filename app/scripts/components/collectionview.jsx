@@ -53,32 +53,35 @@ class DisplayTitles extends React.Component{
     super(props);
   }
   render(){
-    console.log(this.props);
+
     var collection = this.props.collection;
-    console.log('coll',collection);
+
+    collection.comparator = 'issueNumber';
 
     var seriesList = collection.groupBy(function(item){
       var series = item.get('series');
       return series.name;
     });
 
-
-    console.log(_.values(seriesList));
     var comicsIn = _.values(seriesList);
     var titles=_.keys(seriesList).map(function(title, index){
 
       return(
-        <div key={index}>
-          <h4>{title}</h4>
-          <button className="btn"
-            onClick={(e)=>{
-              e.preventDefault();
-              $('.comicsList'+index).slideToggle(200);
-            }}>
-            Show/Hide
-          </button>
-          <div className={"comicsList"+index}>
-            <ComicsInSeries children={comicsIn[index]}/>
+        <div key={index} className="col-md-6">
+          <div className="panel panel-info">
+            <div className="panel-heading">
+              <h4>{title}</h4>
+              <button className="btn btn-info"
+                onClick={(e)=>{
+                  e.preventDefault();
+                  $('.comicsList'+index).slideToggle(200);
+                }}>
+                Show/Hide
+              </button>
+            </div>
+            <div className={"panel-body comicsList"+index}>
+              <ComicsInSeries children={comicsIn[index]}/>
+            </div>
           </div>
         </div>
       )
@@ -108,7 +111,6 @@ class ComicsInSeries extends React.Component{
               e=>{
                 e.preventDefault();
                 var comic = new ChangeComic(item);
-                console.log('clicked', comic);
                 comic.removeFromCollection();
               }
             }>
