@@ -5,7 +5,7 @@ var $ = require('jquery');
 var proxy = {
   // PROXY_API_URL:'https://lycanthrope-proxy.herokuapp.com/',
   //info for localhost proxy
-  PROXY_API_URL:'http://localhost:3000/'
+  PROXY_API_URL:'https://localhost:3000/'
 };
 
 module.exports = proxy;
