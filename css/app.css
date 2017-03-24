@@ -5765,4 +5765,11 @@ button.close {
 
 img {
   max-width: 100%; }
+
+/*
+NAVBAR LAYOUT
+*/
+.avatar-header {
+  max-width: 50px; }
+
 /*# sourceMappingURL=app.css.map */
