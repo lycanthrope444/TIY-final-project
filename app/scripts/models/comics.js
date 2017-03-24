@@ -13,15 +13,15 @@ var ProxyCollection = require('./proxy-models').ProxyCollection;
 
 var Comic = ParseModel.extend({
   urlRoot:function(){
-    var self = this;
-    var objectId;
-    var comicCollection = new ComicCollection();
-    comicCollection.parseWhere('id', self.get('id')).fetch().done(function(){
-      var temp = new Comic();
-      console.log('url root',comicCollection);
-    });
+    // var self = this;
+    // var objectId;
+    // var comicCollection = new ComicCollection();
+    // comicCollection.parseWhere('id', self.get('id')).fetch().done(function(){
+    //   var temp = new Comic();
+    //   console.log('url root',comicCollection);
+    // });
 
-    var url = parse.BASE_API_URL + 'classes/comics/'+objectId;
+    var url = parse.BASE_API_URL + 'classes/comics/';
     console.log(url);
     return url;
   },
