@@ -10,7 +10,6 @@ var profile = require('./components/profile.jsx').ProfileContainer;
 var collection = require('./components/collectionview.jsx').CollectionContainer;
 var wishlist = require('./components/wishlistview.jsx').WishlistContainer;
 var itemView = require('./components/itemview.jsx').ItemContainer;
-var seriesView = require('./components/seriesview.jsx').SeriesContainer;
 var resultsView = require('./components/results.jsx').ResultsContainer;
 
 var AppRouter = Backbone.Router.extend({
@@ -27,8 +26,6 @@ var AppRouter = Backbone.Router.extend({
     'collection':'collection',
     'itemview/:searchtype/:id':'itemView',
     'itemview':'itemView',
-    'series/:id':'seriesView',
-    'series':'seriesView',
     'results':'results',
     'wishlist':'wishlist'
   },
@@ -76,12 +73,6 @@ var AppRouter = Backbone.Router.extend({
         id:id,
         searchType:searchtype
       }),
-      document.getElementById('app')
-    );
-  },
-  seriesView: function(id){
-    ReactDOM.render(
-      React.createElement(seriesView, {id:id}),
       document.getElementById('app')
     );
   },

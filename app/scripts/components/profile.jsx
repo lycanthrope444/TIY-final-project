@@ -94,11 +94,17 @@ class AccountOptions extends React.Component{
     return(
       <div className="col-md-6">
         <h1>Account Options</h1>
-        <ul>
-          <li>Change Email</li>
-          <li>View my Collection</li>
-          <li>Things I'm following</li>
-        </ul>
+        <div>
+          <button className="btn btn-info">
+            <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+          </button>
+          <span>Change Email</span>
+        </div>
+        <div>
+          <button className="btn btn-info">+</button>
+          <span>Change Password</span>
+
+        </div>
       </div>
     )
   }

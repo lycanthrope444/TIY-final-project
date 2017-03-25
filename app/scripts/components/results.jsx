@@ -55,11 +55,12 @@ class ResultsContainer extends React.Component{
           <div key={index}>
             <div className="col-sm-6 col-md-4">
               <div className="thumbnail">
-                <img src ={item.thumbnail.path+'.'+item.thumbnail.extension} alt="https://unsplash.it/200/300" />
-                <div className="caption">
-                  <h3>{item.name || item.title || item.fullName}</h3>
-                  <p>{item.description}</p>
-                  <p>
+                <img className="results-pic"
+                  src ={item.thumbnail.path+'.'+item.thumbnail.extension} />
+                <div className="caption results-caption">
+                  <h3 className="results-title">{item.name || item.title}</h3>
+
+                  <p className="results-buttons">
                     <a className="btn btn-primary" role="button"
                       href={"#itemview/"+self.state.searchType+'/'+item.id}>
                       View/Rate
@@ -189,13 +190,15 @@ class ResultsHeader extends React.Component{
   }
   render(){
     return(
-      <div>
-        <nav aria-label="...">
-          <ul className="pager">
-            <li><a href="#top" onClick={this.props.prevOffset}>Previous</a></li>
-            <li><a href="#top" onClick={this.props.nextOffset}>Next</a></li>
-          </ul>
-        </nav>
+      <div className="row">
+        <div className="col-xs-12">
+          <nav aria-label="...">
+            <ul className="pager">
+              <li><a href="#top" onClick={this.props.prevOffset}>Previous</a></li>
+              <li><a href="#top" onClick={this.props.nextOffset}>Next</a></li>
+            </ul>
+          </nav>
+        </div>
       </div>
     )
   }

@@ -2,6 +2,7 @@ var React = require('react');
 
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
 var Comic = require('../models/comics.js').Comic;
+var WishlistComic = require('../models/comics.js').WishlistComic;
 var proxy = require('../proxy.js');
 var SearchRequest = require('../models/proxy-models.js').SearchRequest;
 
@@ -34,6 +35,7 @@ class ItemContainer extends React.Component{
 
     this.updateCollection=this.updateCollection.bind(this);
     this.updateRating = this.updateRating.bind(this);
+    this.updateWishlist = this.updateWishlist.bind(this);
 
     //If the comic is in the collection pull that data here
 
@@ -49,10 +51,14 @@ class ItemContainer extends React.Component{
     }
   }
   updateCollection(){
-
     var data = this.state.item;
     var comic = new Comic(data);
     comic.addToCollection();
+  }
+  updateWishlist(){
+    var data = this.state.item;
+    var comic = new WishlistComic(data);
+    comic.addToWishlist();
   }
   updateRating(rating){
     var comic = new Comic(this.state.item);
@@ -66,7 +72,8 @@ class ItemContainer extends React.Component{
       <LayoutContainer>
         <div className="col-md-6">
           <ItemInfo desc={this.state.desc} name={this.state.title} />
-          <CollectionInfo updateCollection={this.updateCollection} />
+          <CollectionInfo updateCollection={this.updateCollection}
+            updateWishlist={this.updateWishlist}/>
           <ItemRating userRating={this.state.userRating}
             updateRating ={this.updateRating} />
         </div>
@@ -109,9 +116,13 @@ class CollectionInfo extends React.Component{
   render(){
     return(
       <div>
-        Collection Info Here
-        <button className="btn" onClick={this.updateCollection}>
-          Add to Collection
+        <button className="btn btn-primary" onClick={this.updateCollection}>
+          <span className="glyphicon glyphicon-plus-sign"></span>
+            Collection
+        </button>
+        <button className="btn btn-info" onClick={this.props.updateWishlist}>
+          <span className="glyphicon glyphicon-plus-sign"></span>
+            Wishlist
         </button>
       </div>
     )

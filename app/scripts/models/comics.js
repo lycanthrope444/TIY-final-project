@@ -13,15 +13,12 @@ var ProxyCollection = require('./proxy-models').ProxyCollection;
 
 var Comic = ParseModel.extend({
   urlRoot:function(){
-
-
     var url = parse.BASE_API_URL + 'classes/comics/';
     console.log(url);
     return url;
   },
   getRating: function(){
     //Used to calculate rating
-
   },
   updateRating: function(rating){
     console.log('method called', rating);
@@ -45,8 +42,6 @@ var Comic = ParseModel.extend({
 
 var WishlistComic = ParseModel.extend({
   urlRoot:function(){
-
-
     var url = parse.BASE_API_URL + 'classes/wishlist/';
     console.log(url);
     return url;
@@ -113,17 +108,6 @@ var ChangeComic = ParseModel.extend({
   }
 });
 
-//
-// var Series = ParseModel.extend({
-//   makeFollowed: function(){
-//
-//   }
-// });
-//
-// var SeriesCollection = ParseCollection.extend({
-//   model: Series
-// });
-
 var ComicCollection = ParseCollection.extend({
   model: Comic,
   baseUrl: 'classes/comics'
@@ -144,6 +128,4 @@ module.exports = {
   ChangeComic:ChangeComic,
   WishlistCollection:WishlistCollection,
   WishlistComic:WishlistComic
-  // Series: Series,
-  // SeriesCollection:SeriesCollection
 };

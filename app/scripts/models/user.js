@@ -9,6 +9,9 @@ var User = ParseModel.extend({
 
   urlRoot: function(){
     return parse.BASE_API_URL + 'users';
+  },
+  updateInfo:function(){
+    
   }
 },{
   login: function(credentials, callback){

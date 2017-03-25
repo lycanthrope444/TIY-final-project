@@ -34,8 +34,29 @@ class CollectionContainer extends React.Component{
   render(){
     return(
       <LayoutContainer>
+        <CollectionManager />
         <DisplayTitles collection={this.state.collection}/>
+        <CollectionManager />
       </LayoutContainer>
+    )
+  }
+}
+
+class CollectionManager extends React.Component{
+  render(){
+    return(
+      <div className="row">
+        <div className="col-xs-12">
+          <button className="btn" onClick={
+              (e)=>{
+                e.preventDefault();
+                $('.comicsList').slideToggle(200);
+              }
+            }>
+            Show/Hide All
+          </button>
+        </div>
+      </div>
     )
   }
 }
@@ -62,16 +83,22 @@ class DisplayTitles extends React.Component{
         <div key={index} className="col-md-6">
           <div className="panel panel-info">
             <div className="panel-heading">
-              <h4>{title}</h4>
-              <button className="btn btn-info"
-                onClick={(e)=>{
-                  e.preventDefault();
-                  $('.comicsList'+index).slideToggle(200);
-                }}>
-                Show/Hide
-              </button>
+              <h4>{title}
+                <button className="btn btn-info"
+                  onClick={(e)=>{
+                    e.preventDefault();
+                    $('.comicsList'+index).slideToggle(200);
+                    $('.glyphicon'+index).toggle();
+                  }}>
+                  <span className=
+                    {"glyphicon-down glyphicon glyphicon-menu-down glyphicon"+index}>
+
+                  </span>
+                  <span className={"glyphicon glyphicon-menu-up glyphicon"+index}></span>
+                </button>
+              </h4>
             </div>
-            <div className={"panel-body comicsList"+index}>
+            <div className={"panel-body comicsList comicsList"+index}>
               <ComicsInSeries children={comicsIn[index]}/>
             </div>
           </div>
@@ -106,7 +133,7 @@ class ComicsInSeries extends React.Component{
                 comic.removeFromCollection();
               }
             }>
-            X
+            <span className="glyphicon glyphicon-remove-circle"></span>
           </button>
         </div>
       )
