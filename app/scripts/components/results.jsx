@@ -7,6 +7,7 @@ var SearchBar = require('./searchbar.jsx').SearchBar;
 var SearchRequest = require('../models/proxy-models.js').SearchRequest;
 var Results = require('../models/proxy-models.js').Results;
 var Comic = require('../models/comics.js').Comic;
+var WishlistComic = require('../models/comics.js').WishlistComic;
 var proxy = require('../proxy.js');
 var parse = require('../setup').parse;
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
@@ -72,6 +73,16 @@ class ResultsContainer extends React.Component{
                         console.log('clicked');
                       }}>
                       Collect/Follow
+                    </a>
+                    <a className="btn btn-info" role="button"
+                      data-toggle="tooltip" data-placement="left" title="Tooltip on left"
+                      onClick={(e)=>{
+                        e.preventDefault();
+                        var comic = new WishlistComic(item);
+                        comic.addToWishlist();
+                        console.log('clicked');
+                      }}>
+                      Add to Wishlist
                     </a>
                   </p>
                 </div>

@@ -18,26 +18,18 @@ class CollectionContainer extends React.Component{
     var userId = user.get('objectId');
     var local = JSON.parse(localStorage.getItem('username'));
     var comicCollection = new ComicCollection();
+    comicCollection.whereClause ={};
     var self = this;
     comicCollection.parseWhere('collectors', '_User', userId).fetch().done(function(){
       console.log(comicCollection);
       self.setState({collection:comicCollection});
     });
 
-    this.addToCollection=this.addToCollection.bind(this);
-    this.deleteFromCollection=this.deleteFromCollection.bind(this);
-
     this.state ={
       user:user,
       userId:userId,
       collection:comicCollection
     }
-  }
-  addToCollection(){
-
-  }
-  deleteFromCollection(){
-
   }
   render(){
     return(

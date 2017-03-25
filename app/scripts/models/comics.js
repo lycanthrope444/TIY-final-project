@@ -13,13 +13,7 @@ var ProxyCollection = require('./proxy-models').ProxyCollection;
 
 var Comic = ParseModel.extend({
   urlRoot:function(){
-    // var self = this;
-    // var objectId;
-    // var comicCollection = new ComicCollection();
-    // comicCollection.parseWhere('id', self.get('id')).fetch().done(function(){
-    //   var temp = new Comic();
-    //   console.log('url root',comicCollection);
-    // });
+
 
     var url = parse.BASE_API_URL + 'classes/comics/';
     console.log(url);
@@ -46,35 +40,32 @@ var Comic = ParseModel.extend({
       console.log('add to collection 1');
       console.log(thisComic);
     });
+  }
+});
+
+var WishlistComic = ParseModel.extend({
+  urlRoot:function(){
+
+
+    var url = parse.BASE_API_URL + 'classes/wishlist/';
+    console.log(url);
+    return url;
   },
-  // removeFromCollection: function(){
-  //   //Used to remove from the User's Collection
-  //
-  //   var thisComic = new Comic(this);
-  //   var objectId = User.current().get('objectId');
-  //   var id = this.id;
-  //
-  //   this.set({'collectors' : {
-  //     "__op":"RemoveRelation",
-  //     "objects":[{
-  //       "__type":"Pointer",
-  //       "className":"_User",
-  //       "objectId":objectId
-  //     }]
-  //   }});
-  //
-  //   console.log(parse.BASE_API_URL + 'classes/comics/'+id);
-  //   var url =parse.BASE_API_URL + 'classes/comics/'+id;
-  //   parse.initialize();
-  //   $.ajaxSetup({
-  //     'method':"PUT"
-  //   });
-  //   $.ajax(url, thisComic).done(function(){
-  //     console.log('removed');
-  //
-  //   });
-  //   parse.deinitialize();
-  // }
+  addToWishlist: function(){
+    var thisComic = this;
+    var objectId = User.current().get('objectId');
+
+    thisComic.set({'collectors' : {
+      "__op":"AddRelation",
+      "objects":[
+        {"__type":"Pointer", "className":"_User", "objectId":objectId}
+      ]}
+    });
+    thisComic.save().then(function(){
+      console.log('add to collection 1');
+      console.log(thisComic);
+    });
+  }
 });
 
 var ChangeComic = ParseModel.extend({
@@ -88,6 +79,7 @@ var ChangeComic = ParseModel.extend({
   removeFromCollection: function(){
     //Used to remove from the User's Collection
     var userId = User.current().get('objectId');
+    console.log(userId);
     console.log('1', this);
     this.set({'collectors' : {
       "__op":"RemoveRelation",
@@ -108,8 +100,12 @@ var ChangeComic = ParseModel.extend({
     });
 
     var thisComic = this;
-
-    $.ajax(url, thisComic).done(function(){
+    console.log(thisComic);
+    console.log(url);
+    $.ajax({
+      url:url,
+      thisComic:thisComic
+    }).done(function(){
       console.log('removed');
     });
 
@@ -133,6 +129,11 @@ var ComicCollection = ParseCollection.extend({
   baseUrl: 'classes/comics'
 });
 
+var WishlistCollection = ParseCollection.extend({
+  model: Comic,
+  baseUrl: 'classes/wishlist'
+});
+
 var ProxyComic = ProxyModel.extend({
 
 });
@@ -140,7 +141,9 @@ var ProxyComic = ProxyModel.extend({
 module.exports = {
   Comic:Comic,
   ComicCollection:ComicCollection,
-  ChangeComic:ChangeComic
+  ChangeComic:ChangeComic,
+  WishlistCollection:WishlistCollection,
+  WishlistComic:WishlistComic
   // Series: Series,
   // SeriesCollection:SeriesCollection
 };

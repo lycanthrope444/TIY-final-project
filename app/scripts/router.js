@@ -8,6 +8,7 @@ var landing = require('./components/landing.jsx').LandingContainer;
 var login = require('./components/login.jsx').LoginContainer;
 var profile = require('./components/profile.jsx').ProfileContainer;
 var collection = require('./components/collectionview.jsx').CollectionContainer;
+var wishlist = require('./components/wishlistview.jsx').WishlistContainer;
 var itemView = require('./components/itemview.jsx').ItemContainer;
 var seriesView = require('./components/seriesview.jsx').SeriesContainer;
 var resultsView = require('./components/results.jsx').ResultsContainer;
@@ -28,7 +29,8 @@ var AppRouter = Backbone.Router.extend({
     'itemview':'itemView',
     'series/:id':'seriesView',
     'series':'seriesView',
-    'results':'results'
+    'results':'results',
+    'wishlist':'wishlist'
   },
   execute: function(callback, args, name) {
     var user = User.current()
@@ -86,6 +88,12 @@ var AppRouter = Backbone.Router.extend({
   results:function(){
     ReactDOM.render(
       React.createElement(resultsView),
+      document.getElementById('app')
+    );
+  },
+  wishlist:function(){
+    ReactDOM.render(
+      React.createElement(wishlist),
       document.getElementById('app')
     );
   }
