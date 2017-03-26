@@ -1,7 +1,9 @@
 var React = require('react');
 
+var User = require('../models/user.js').User;
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
 var Comic = require('../models/comics.js').Comic;
+var ComicRating = require('../models/comics.js').ComicRating;
 var WishlistComic = require('../models/comics.js').WishlistComic;
 var proxy = require('../proxy.js');
 var SearchRequest = require('../models/proxy-models.js').SearchRequest;
@@ -12,6 +14,11 @@ class ItemContainer extends React.Component{
     //The proxy server needs to be contacted here to get the ProxyModel
     var searchType = this.props.searchType;
     var searchId = this.props.id;
+
+    this.updateCollection=this.updateCollection.bind(this);
+    this.updateRating = this.updateRating.bind(this);
+    this.updateWishlist = this.updateWishlist.bind(this);
+    this.averageRating = this.averageRating.bind(this);
 
     var NewSearch = SearchRequest.extend({
       urlRoot: function(){
@@ -33,13 +40,7 @@ class ItemContainer extends React.Component{
       });
     });
 
-    this.updateCollection=this.updateCollection.bind(this);
-    this.updateRating = this.updateRating.bind(this);
-    this.updateWishlist = this.updateWishlist.bind(this);
-
-    //If the comic is in the collection pull that data here
-
-    //Rating will be pulled from the data on my server, this is dummy data for now
+    var averageRating = this.averageRating();
 
     this.state ={
       item: null,
@@ -61,10 +62,24 @@ class ItemContainer extends React.Component{
     comic.addToWishlist();
   }
   updateRating(rating){
-    var comic = new Comic(this.state.item);
+    var comicRating ={
+      comicId: this.state.item.id,
+      title: this.state.item.title,
+      rating: rating
+    };
+
+    var userId = User.current().get('objectId');
+
+    var comic = new ComicRating(comicRating);
+
+    comic.setPointer('User', '_User', userId);
+    console.log('comic',comic);
     comic.updateRating(rating);
-    console.log(comic, rating);
     this.setState({userRating:rating});
+    this.publicRating();
+  }
+  averageRating(){
+
   }
   render(){
     console.log(this.state);
@@ -76,13 +91,14 @@ class ItemContainer extends React.Component{
             updateWishlist={this.updateWishlist}/>
           <ItemRating userRating={this.state.userRating}
             updateRating ={this.updateRating} />
+          <AverageRating averageRating={this.state.averageRating} />
+          <DigitalMarketplace />
         </div>
         <div className="col-md-6">
           <ItemPhoto pic={this.state.pic} />
-          <AverageRating averageRating={this.state.averageRating} />
         </div>
         <QuickLinks />
-        <DigitalMarketplace />
+
       </LayoutContainer>
     )
   }
@@ -192,11 +208,11 @@ class DigitalMarketplace extends React.Component{
   render(){
     return(
       <div className="col-xs-12">
-        <h2>Find Merch:</h2>
-        <a>Local Stores</a>
-        <a>Marvel Digital</a>
-        <a>Ebay</a>
-        <a>Amazon</a>
+        <h2>Find Online:</h2>
+        <a href="http://www.comicshoplocator.com/">Local Stores</a>
+        <a href="https://comicstore.marvel.com/">Marvel Digital</a>
+        <a href="http://www.ebay.com/">Ebay</a>
+        <a href="https://www.amazon.com/"><i className="fa fa-amazon" aria-hidden="true"></i></a>
       </div>
     )
   }

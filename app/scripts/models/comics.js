@@ -17,14 +17,7 @@ var Comic = ParseModel.extend({
     console.log(url);
     return url;
   },
-  getRating: function(){
-    //Used to calculate rating
-  },
-  updateRating: function(rating){
-    console.log('method called', rating);
-  },
   addToCollection: function(){
-
     var thisComic = this;
     var objectId = User.current().get('objectId');
     thisComic.set({'collectors' : {
@@ -37,6 +30,22 @@ var Comic = ParseModel.extend({
       console.log('add to collection 1');
       console.log(thisComic);
     });
+  }
+});
+
+var ComicRating = ParseModel.extend({
+  urlRoot:function(){
+    var url = parse.BASE_API_URL + 'classes/ratings/';
+    return url;
+  },
+  updateRating: function(){
+    console.log('rating 1', this);
+    this.save().then(function(){
+      console.log('rating 2');
+    });
+  },
+  getRating:function(){
+
   }
 });
 
@@ -125,6 +134,7 @@ var ProxyComic = ProxyModel.extend({
 module.exports = {
   Comic:Comic,
   ComicCollection:ComicCollection,
+  ComicRating:ComicRating,
   ChangeComic:ChangeComic,
   WishlistCollection:WishlistCollection,
   WishlistComic:WishlistComic

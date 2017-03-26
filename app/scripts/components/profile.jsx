@@ -101,9 +101,10 @@ class AccountOptions extends React.Component{
           <span>Change Email</span>
         </div>
         <div>
-          <button className="btn btn-info">+</button>
+          <button className="btn btn-info">
+            <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+          </button>
           <span>Change Password</span>
-
         </div>
       </div>
     )

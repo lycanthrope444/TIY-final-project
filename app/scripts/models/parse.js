@@ -38,7 +38,7 @@ var ParseModel = Backbone.Model.extend({
     this.set(field, pointerObject);
 
     return this;
-  },
+  }
 });
 
 //Parse Collection - cribbing from notes on 9.1
