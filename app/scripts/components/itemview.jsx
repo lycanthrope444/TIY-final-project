@@ -4,6 +4,7 @@ var User = require('../models/user.js').User;
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
 var Comic = require('../models/comics.js').Comic;
 var ComicRating = require('../models/comics.js').ComicRating;
+var RatingCollection = require('../models/comics.js').RatingCollection;
 var WishlistComic = require('../models/comics.js').WishlistComic;
 var proxy = require('../proxy.js');
 var SearchRequest = require('../models/proxy-models.js').SearchRequest;
@@ -22,10 +23,12 @@ class ItemContainer extends React.Component{
 
     var NewSearch = SearchRequest.extend({
       urlRoot: function(){
-
         return proxy.PROXY_API_URL+searchType+'/'+searchId+'?';
       }
     });
+
+    var ratingsColl = new RatingCollection();
+    var numberId = parseInt(searchId);
 
     var newSearch = new NewSearch();
     var self =this;
@@ -38,6 +41,20 @@ class ItemContainer extends React.Component{
         desc: item.description,
         pic: item.thumbnail.path + "."+item.thumbnail.extension
       });
+
+      ratingsColl.parseWhere('comicId', numberId).fetch().done(function(){
+        console.log('ratings',ratingsColl);
+        var counter = 0;
+        var tally = 0;
+        ratingsColl.forEach(function(item){
+          counter += 1;
+          tally += item.get('rating');
+        });
+        self.setState({
+          averageRating: (tally/counter).toFixed(2)
+        })
+      });
+
     });
 
     var averageRating = this.averageRating();
@@ -76,7 +93,7 @@ class ItemContainer extends React.Component{
     console.log('comic',comic);
     comic.updateRating(rating);
     this.setState({userRating:rating});
-    this.publicRating();
+    this.averageRating();
   }
   averageRating(){
 
@@ -93,11 +110,12 @@ class ItemContainer extends React.Component{
             updateRating ={this.updateRating} />
           <AverageRating averageRating={this.state.averageRating} />
           <DigitalMarketplace />
+          <QuickLinks />
         </div>
         <div className="col-md-6">
           <ItemPhoto pic={this.state.pic} />
         </div>
-        <QuickLinks />
+
 
       </LayoutContainer>
     )
@@ -197,8 +215,8 @@ class AverageRating extends React.Component{
 class QuickLinks extends React.Component{
   render(){
     return(
-      <div className="col-xs-12">
-        <h2>You might also enjoy:</h2>
+      <div>
+        Placeholder
       </div>
     )
   }

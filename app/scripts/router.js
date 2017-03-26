@@ -24,6 +24,7 @@ var AppRouter = Backbone.Router.extend({
     'login':'login',
     'profile':'profile',
     'collection':'collection',
+    'itemview/:searchtype/:id/:focus':'itemView',
     'itemview/:searchtype/:id':'itemView',
     'itemview':'itemView',
     'results':'results',
@@ -67,11 +68,12 @@ var AppRouter = Backbone.Router.extend({
       document.getElementById('app')
     );
   },
-  itemView: function(searchtype, id){
+  itemView: function(searchtype, id, focus){
     ReactDOM.render(
       React.createElement(itemView, {
         id:id,
-        searchType:searchtype
+        searchType:searchtype,
+        focus:focus
       }),
       document.getElementById('app')
     );

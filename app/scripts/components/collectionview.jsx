@@ -122,6 +122,9 @@ class ComicsInSeries extends React.Component{
       return(
         <div key={index}>
           <a href={"#itemview/comics/"+ item.get('id')}>
+            <button className="btn btn-primary">
+              <span className="glyphicon glyphicon-zoom-in"></span>
+            </button>
             {item.get('title')}
           </a>
           <button className="btn btn-danger" data-toggle="tooltip"

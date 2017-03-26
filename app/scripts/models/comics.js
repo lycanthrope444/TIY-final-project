@@ -69,6 +69,9 @@ var WishlistComic = ParseModel.extend({
       console.log('add to collection 1');
       console.log(thisComic);
     });
+  },
+  getRating: function(){
+
   }
 });
 
@@ -127,6 +130,11 @@ var WishlistCollection = ParseCollection.extend({
   baseUrl: 'classes/wishlist'
 });
 
+var RatingCollection = ParseCollection.extend({
+  model: ComicRating,
+  baseUrl: 'classes/ratings'
+});
+
 var ProxyComic = ProxyModel.extend({
 
 });
@@ -135,6 +143,7 @@ module.exports = {
   Comic:Comic,
   ComicCollection:ComicCollection,
   ComicRating:ComicRating,
+  RatingCollection:RatingCollection,
   ChangeComic:ChangeComic,
   WishlistCollection:WishlistCollection,
   WishlistComic:WishlistComic
