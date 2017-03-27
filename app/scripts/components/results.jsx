@@ -107,7 +107,8 @@ class ResultsContainer extends React.Component{
 
                   <p className="results-buttons btn-group">
                     <a className="btn btn-primary" role="button"
-                      href={"#itemview/"+self.state.searchType+'/'+item.id}>
+                      href={((self.state.focus)?"#itemview/"+self.state.focus+'/'+item.id :
+                        "#itemview/"+self.state.searchType+'/'+item.id)}>
                       <span className="glyphicon glyphicon-zoom-in"></span>
                       View
                     </a>
@@ -157,7 +158,10 @@ class ResultsContainer extends React.Component{
   }
   handleSubmit(searchType, searchTerm, searchMod, offset){
     console.log(searchType, searchTerm, searchMod, offset)
-    this.setState({searchTerm: searchTerm});
+    this.setState({
+      searchTerm: searchTerm,
+      focus:''
+    });
     var currOffset=this.state.currentOffset;
     if (offset){
       currOffset=offset;
