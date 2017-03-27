@@ -24,9 +24,9 @@ var AppRouter = Backbone.Router.extend({
     'login':'login',
     'profile':'profile',
     'collection':'collection',
-    'itemview/:searchtype/:id/:focus':'itemView',
     'itemview/:searchtype/:id':'itemView',
     'itemview':'itemView',
+    'results/:searchtype/:id/:focus':'results',
     'results':'results',
     'top':'results',
     'wishlist':'wishlist'
@@ -69,7 +69,7 @@ var AppRouter = Backbone.Router.extend({
       document.getElementById('app')
     );
   },
-  itemView: function(searchtype, id, focus){
+  itemView: function(searchtype, id){
     ReactDOM.render(
       React.createElement(itemView, {
         id:id,
@@ -79,9 +79,13 @@ var AppRouter = Backbone.Router.extend({
       document.getElementById('app')
     );
   },
-  results:function(){
+  results:function(searchtype, id, focus){
     ReactDOM.render(
-      React.createElement(resultsView),
+      React.createElement(resultsView, {
+        id:id,
+        searchType:searchtype,
+        focus:focus
+      }),
       document.getElementById('app')
     );
   },

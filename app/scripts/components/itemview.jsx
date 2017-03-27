@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var React = require('react');
 
 var User = require('../models/user.js').User;
@@ -12,7 +13,6 @@ var SearchRequest = require('../models/proxy-models.js').SearchRequest;
 class ItemContainer extends React.Component{
   constructor(props){
     super(props);
-    //The proxy server needs to be contacted here to get the ProxyModel
     var searchType = this.props.searchType;
     var searchId = this.props.id;
 
@@ -21,16 +21,11 @@ class ItemContainer extends React.Component{
     this.updateWishlist = this.updateWishlist.bind(this);
     this.averageRating = this.averageRating.bind(this);
 
-    var NewSearch = SearchRequest.extend({
-      urlRoot: function(){
-        return proxy.PROXY_API_URL+searchType+'/'+searchId+'?';
-      }
-    });
-
     var ratingsColl = new RatingCollection();
     var numberId = parseInt(searchId);
 
-    var newSearch = new NewSearch();
+    var newSearch = new SearchRequest();
+    newSearch.singleUrl(searchType, searchId);
     var self =this;
     newSearch.sendSearch(function(){
       var searchResults = newSearch.get('data');
@@ -65,7 +60,9 @@ class ItemContainer extends React.Component{
       desc:null,
       pic:null,
       userRating: 3,
-      averageRating: 5
+      averageRating: 5,
+      searchType: searchType,
+      searchId: searchId
     }
   }
   updateCollection(){
@@ -109,8 +106,9 @@ class ItemContainer extends React.Component{
           <ItemRating userRating={this.state.userRating}
             updateRating ={this.updateRating} />
           <AverageRating averageRating={this.state.averageRating} />
+          <QuickLinks searchType={this.state.searchType}
+            searchId={this.state.searchId} />
           <DigitalMarketplace />
-          <QuickLinks />
         </div>
         <div className="col-md-6">
           <ItemPhoto pic={this.state.pic} />
@@ -213,10 +211,40 @@ class AverageRating extends React.Component{
 }
 
 class QuickLinks extends React.Component{
+  constructor(props){
+    super(props);
+
+    var searchType = this.props.searchType;
+    var searchId = this.props.searchId;
+
+    var comp = ['characters', 'events', 'comics', 'series'];
+
+    var linkList = _.reject(comp, function(item, index){
+      return searchType === item;
+    });
+
+    this.state={
+      searchType:searchType,
+      searchId:searchId,
+      linkList:linkList
+    }
+  }
   render(){
+    console.log('links', this.state);
+    var self =this;
+    var links = this.state.linkList.map(function(item, index){
+      return(
+        <div key={"link"+index}>
+          <a href={"#results/"+self.state.searchType+"/"+self.state.searchId+"/"+item}>
+            {item}
+          </a>
+        </div>
+      )
+    });
+
     return(
       <div>
-        Placeholder
+        {links}
       </div>
     )
   }
@@ -225,7 +253,7 @@ class QuickLinks extends React.Component{
 class DigitalMarketplace extends React.Component{
   render(){
     return(
-      <div className="col-xs-12">
+      <div>
         <h2>Find Online:</h2>
         <a href="http://www.comicshoplocator.com/">Local Stores</a>
         <a href="https://comicstore.marvel.com/">Marvel Digital</a>

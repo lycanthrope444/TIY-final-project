@@ -25,6 +25,28 @@ class ResultsContainer extends React.Component{
     this.changeSearchType=this.changeSearchType.bind(this);
     this.changeModType=this.changeModType.bind(this);
 
+    console.log('props constructor',this.props);
+
+    // var initialSearch = new SearchRequest();
+    //
+    // if(this.props.id){
+    //   this.setState({
+    //     searchType:this.props.searchType,
+    //     id: this.props.id,
+    //     focus: this.props.focus
+    //   });
+    //
+    //   initialSearch.singleUrl(this.props.searchType, this.props.id, this.props.focus);
+    //   initialSearch.sendSearch(function(){
+    //     console.log('searching');
+    //   }).done(function(){
+    //     this.setState({
+    //       searchResults:initialSearch
+    //     });
+    //   });
+    //
+    // }
+
     this.state = {
       searchType:'characters',
       searchMod:'name=',
@@ -34,7 +56,30 @@ class ResultsContainer extends React.Component{
       pages: null,
       currPage:1,
       buttonState: 'disabled',
-      searchTerm:''
+      searchTerm:'',
+      id:null,
+      focus:''
+    }
+  }
+  componentWillMount(){
+    var initialSearch = new SearchRequest();
+    var self = this;
+    if(self.props.id){
+      self.setState({
+        searchType:self.props.searchType,
+        id: self.props.id,
+        focus: self.props.focus
+      });
+
+      initialSearch.singleUrl(self.props.searchType, self.props.id, self.props.focus);
+      initialSearch.sendSearch(function(){
+        console.log('searching');
+        var filter = initialSearch.get('data');
+        console.log(filter);
+        self.setState({searchResults:filter.results});
+      });
+
+
     }
   }
   changeSearchType(term){
@@ -161,6 +206,7 @@ class ResultsContainer extends React.Component{
     this.handleSubmit(self.state.searchType, self.state.searchTerm, self.state.searchMod, newOffset);
   }
   render(){
+    console.log('state', this.state);
     return(
       <LayoutContainer>
         <div className ="row">

@@ -16,6 +16,7 @@ var ProxyCollection = Backbone.Collection.extend({
 var SearchRequest = ProxyModel.extend({
   urlMod:'',
   urlRoot:function(){
+    console.log(proxy.PROXY_API_URL + this.get('urlMod'));
     return proxy.PROXY_API_URL + this.get('urlMod');
   },
   sendSearch: function(callback){
@@ -46,7 +47,15 @@ var SearchRequest = ProxyModel.extend({
     var url = searchType+'?'+mod+search+'&offset='+currOffset+'&';
     this.set('urlMod', url);
   },
-
+  singleUrl:function(searchType, searchId, focus){
+    var focusUrl ='';
+    if(focus){
+      focusUrl = '/'+focus;
+    }
+    this.set('urlMod', '');
+    var url = searchType+'/'+searchId+focusUrl+'?';
+    this.set('urlMod', url);
+  }
 });
 
 
