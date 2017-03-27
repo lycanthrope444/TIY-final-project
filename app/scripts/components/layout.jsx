@@ -66,7 +66,9 @@ class NavBarHeader extends React.Component{
       <nav className="navbar navbar-inverse">
         <div className="container-fluid">
           <div className="navbar-header">
-            <img className="marvel-logo" src="https://logorealm.com/wp-content/uploads/2016/07/Marvel-Logo.png"/>
+            <a href="https://www.marvel.com">
+              <img className="marvel-logo" src="https://logorealm.com/wp-content/uploads/2016/07/Marvel-Logo.png"/>
+            </a>
             <a href="#">Home</a>
             <a href="#profile">Profile</a>|
             <a href="#collection">My Collection</a>|
@@ -87,7 +89,7 @@ class NavBarFooter extends React.Component{
     return(
       <div className="container-fluid">
         <div className="row">
-          "Data provided by Marvel. © 2014 Marvel"
+          Data provided by Marvel. © 2014 Marvel. Glyphicons provided by Bootstrap.
         </div>
       </div>
     )

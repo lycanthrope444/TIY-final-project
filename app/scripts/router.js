@@ -28,6 +28,7 @@ var AppRouter = Backbone.Router.extend({
     'itemview/:searchtype/:id':'itemView',
     'itemview':'itemView',
     'results':'results',
+    'top':'results',
     'wishlist':'wishlist'
   },
   execute: function(callback, args, name) {

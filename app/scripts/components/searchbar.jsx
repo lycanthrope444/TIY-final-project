@@ -62,15 +62,16 @@ class SearchBar extends React.Component{
   }
   render(){
     return(
-      <div>
+      <div className="col-md-12">
         <form onSubmit={this.handleSubmit}>
-          <div className="navbar-form navbar-left">
+          <div className="form-group">
             <SearchButton searchType={this.state.searchType} changeSearchType={this.changeSearchType} />
             <FlexButton searchMod={this.state.searchMod} changeModType={this.changeModType} />
             <input className="form-control" placeholder="Search" onChange={this.handleSearch} />
             <input type="submit" className ="btn" value="Search" />
           </div>
         </form>
+        <HelpModal />
       </div>
     )
   }
@@ -123,6 +124,35 @@ class FlexButton extends React.Component{
             otherAction: 'titleStartsWith='
           })}} role="button">Starts With</a></li>
         </ul>
+      </div>
+    )
+  }
+}
+
+class HelpModal extends React.Component{
+  render(){
+    return(
+      <div>
+        <button className="btn btn-default" data-toggle="modal" data-target="#myModal">
+          <i className="fa fa-question-circle" aria-hidden="true"></i>
+        </button>
+        <div className="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 className="modal-title" id="myModalLabel">Search F.A.Q.</h4>
+              </div>
+              <div className="modal-body">
+                Marvel's API does not have a lot a smart search features which can make it difficult to find the titles you are looking for.
+                I've compiled a list of useful tips to help you search here.
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }

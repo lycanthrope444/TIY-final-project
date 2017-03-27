@@ -14,24 +14,45 @@ var ProxyCollection = Backbone.Collection.extend({
 });
 
 var SearchRequest = ProxyModel.extend({
+  urlMod:'',
+  urlRoot:function(){
+    return proxy.PROXY_API_URL + this.get('urlMod');
+  },
   sendSearch: function(callback){
     console.log('sending');
     this.fetch().done(function(){
       callback();
     });
   },
+  modifyUrl:function(searchType, searchTerm, searchMod, offset){
+    var currOffset=null;
+    if(!offset){
+      currOffset=0;
+    } else {
+      currOffset=offset;
+    }
+    console.log(this);
+    this.set('urlMod', '');
+    var search;
+    var mod;
+    if (!searchTerm){
+      search = '';
+      mod = '';
+    } else {
+      search=searchTerm;
+      mod = searchMod;
+    }
+    console.log(searchType+'?'+mod+search+'&offset='+currOffset+'&');
+    var url = searchType+'?'+mod+search+'&offset='+currOffset+'&';
+    this.set('urlMod', url);
+  },
+
 });
 
 
-var Results = ProxyModel.extend({
-  displayResults: function(){
-    Backbone.history.navigate('results', {trigger: true});
-  }
-});
 
 module.exports={
   ProxyModel : ProxyModel,
   ProxyCollection : ProxyCollection,
-  SearchRequest: SearchRequest,
-  Results:Results
+  SearchRequest: SearchRequest
 };

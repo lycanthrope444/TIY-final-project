@@ -63,7 +63,8 @@ class ResultsContainer extends React.Component{
                   <p className="results-buttons btn-group">
                     <a className="btn btn-primary" role="button"
                       href={"#itemview/"+self.state.searchType+'/'+item.id}>
-                      View/Rate
+                      <span className="glyphicon glyphicon-zoom-in"></span>
+                      View
                     </a>
                     <a className="btn btn-default" role="button"
                       data-toggle="tooltip" data-placement="left" title="Tooltip on left"
@@ -73,7 +74,8 @@ class ResultsContainer extends React.Component{
                         comic.addToCollection();
                         console.log('clicked');
                       }}>
-                      Collect/Follow
+                      <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                      Collection
                     </a>
                     <a className="btn btn-info" role="button"
                       data-toggle="tooltip" data-placement="left" title="Tooltip on left"
@@ -83,7 +85,8 @@ class ResultsContainer extends React.Component{
                         comic.addToWishlist();
                         console.log('clicked');
                       }}>
-                      Add to Wishlist
+                      <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                      Wishlist
                     </a>
                   </p>
                 </div>
@@ -108,28 +111,15 @@ class ResultsContainer extends React.Component{
     }
   }
   handleSubmit(searchType, searchTerm, searchMod, offset){
+    console.log(searchType, searchTerm, searchMod, offset)
     this.setState({searchTerm: searchTerm});
     var currOffset=this.state.currentOffset;
     if (offset){
       currOffset=offset;
     }
-    var NewSearch = SearchRequest.extend({
-      urlRoot: function(){
-        var search;
-        var mod;
-        if (!searchTerm){
-          search = '';
-          mod = '';
-        } else {
-          search=searchTerm;
-          mod = searchMod;
-        }
-        console.log(proxy.PROXY_API_URL+searchType+'?'+mod+search+'&offset='+currOffset+'&');
-        return proxy.PROXY_API_URL+searchType+'?'+mod+search+'&offset='+currOffset+'&';
-      }
-    });
 
-    var newSearch = new NewSearch();
+    var newSearch = new SearchRequest();
+    newSearch.modifyUrl(searchType, searchTerm, searchMod, offset);
 
     var self = this;
 
@@ -144,6 +134,7 @@ class ResultsContainer extends React.Component{
 
       self.handleResults();
     });
+
   }
   prevOffset(){
     var self = this;
