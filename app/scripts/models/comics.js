@@ -88,7 +88,7 @@ var ChangeComic = ParseModel.extend({
     var userId = User.current().get('objectId');
     console.log(userId);
     console.log('1', this);
-    this.set({'collectors' : {
+    this.set({"collectors" :{
       "__op":"RemoveRelation",
       "objects":[{
         "__type":"Pointer",
@@ -96,6 +96,7 @@ var ChangeComic = ParseModel.extend({
         "objectId":userId
       }]
     }});
+    this.set({});
     console.log('2', this);
     var objectId = this.get('id');
 
@@ -106,14 +107,14 @@ var ChangeComic = ParseModel.extend({
       'method':"PUT"
     });
 
-    var thisComic = this;
+    var thisComic = this.toJSON();
     console.log(thisComic);
     console.log(url);
     $.ajax({
       url:url,
       thisComic:thisComic
     }).done(function(){
-      console.log('removed');
+      console.log('removed',thisComic);
     });
 
     parse.deinitialize();

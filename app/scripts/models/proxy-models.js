@@ -47,13 +47,17 @@ var SearchRequest = ProxyModel.extend({
     var url = searchType+'?'+mod+search+'&offset='+currOffset+'&';
     this.set('urlMod', url);
   },
-  singleUrl:function(searchType, searchId, focus){
+  singleUrl:function(searchType, searchId, focus, offset){
     var focusUrl ='';
+    var currOffset ='';
     if(focus){
       focusUrl = '/'+focus;
     }
+    if (offset){
+      currOffset = 'offset='+offset+'&';
+    }
     this.set('urlMod', '');
-    var url = searchType+'/'+searchId+focusUrl+'?';
+    var url = searchType+'/'+searchId+focusUrl+'?'+currOffset;
     this.set('urlMod', url);
   }
 });

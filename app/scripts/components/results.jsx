@@ -27,26 +27,6 @@ class ResultsContainer extends React.Component{
 
     console.log('props constructor',this.props);
 
-    // var initialSearch = new SearchRequest();
-    //
-    // if(this.props.id){
-    //   this.setState({
-    //     searchType:this.props.searchType,
-    //     id: this.props.id,
-    //     focus: this.props.focus
-    //   });
-    //
-    //   initialSearch.singleUrl(this.props.searchType, this.props.id, this.props.focus);
-    //   initialSearch.sendSearch(function(){
-    //     console.log('searching');
-    //   }).done(function(){
-    //     this.setState({
-    //       searchResults:initialSearch
-    //     });
-    //   });
-    //
-    // }
-
     this.state = {
       searchType:'characters',
       searchMod:'name=',
@@ -76,10 +56,11 @@ class ResultsContainer extends React.Component{
         console.log('searching');
         var filter = initialSearch.get('data');
         console.log(filter);
-        self.setState({searchResults:filter.results});
+        self.setState({
+          searchResults:filter.results,
+          searchType:self.props.focus
+        });
       });
-
-
     }
   }
   changeSearchType(term){
@@ -199,15 +180,36 @@ class ResultsContainer extends React.Component{
   nextOffset(){
     var self = this;
     var newPage = this.state.currPage + 1;
-    console.log(newPage);
-    console.log('next clicked', self.state.searchType, self.state.searchTerm, self.state.searchMod);
     var newOffset= this.state.currentOffset + 20;
-    this.setState({
-      currentOffset: newOffset,
-      currPage: newPage
-    });
-    console.log(this.state);
-    this.handleSubmit(self.state.searchType, self.state.searchTerm, self.state.searchMod, newOffset);
+    var initialSearch = new SearchRequest();
+
+    if(self.props.id){
+
+      var searchType = self.props.searchType ;
+      var id = self.props.id;
+      var focus = self.props.focus;
+
+      initialSearch.singleUrl(searchType, id, focus, newOffset);
+      initialSearch.sendSearch(function(){
+        console.log('searching');
+        var filter = initialSearch.get('data');
+        console.log(filter);
+        self.setState({
+          searchResults:filter.results,
+          currentOffset:newOffset
+        });
+      });
+    } else {
+      console.log(newPage);
+      console.log('next clicked', self.state.searchType, self.state.searchTerm, self.state.searchMod);
+
+      this.setState({
+        currentOffset: newOffset,
+        currPage: newPage
+      });
+      console.log(this.state);
+      this.handleSubmit(self.state.searchType, self.state.searchTerm, self.state.searchMod, newOffset);
+    }
   }
   render(){
     console.log('state', this.state);
@@ -235,8 +237,16 @@ class ResultsHeader extends React.Component{
         <div className="col-xs-12">
           <nav aria-label="...">
             <ul className="pager">
-              <li><a href="#top" onClick={this.props.prevOffset}>Previous</a></li>
-              <li><a href="#top" onClick={this.props.nextOffset}>Next</a></li>
+              <li><a onClick={(e)=>{
+                  e.preventDefault();
+                  this.props.prevOffset();
+                }}>
+                Previous</a></li>
+              <li><a onClick={(e)=>{
+                  e.preventDefault();
+                  this.props.nextOffset();
+                }}>
+                Next</a></li>
             </ul>
           </nav>
         </div>
