@@ -20,6 +20,10 @@ img {
 NAVBAR LAYOUT
 */
 
+.marvel-logo{
+  max-height: 50px;
+}
+
 .avatar-header{
   max-width:50px;
 }
@@ -43,4 +47,13 @@ RESULTS PAGE
 
 .results-caption{
 
+}
+
+/*
+Collection View
+*/
+
+.inspect-item{
+  list-style: none;
+  color: #FFFFFF;
 }

@@ -60,7 +60,7 @@ class ResultsContainer extends React.Component{
                 <div className="caption results-caption">
                   <h3 className="results-title">{item.name || item.title}</h3>
 
-                  <p className="results-buttons">
+                  <p className="results-buttons btn-group">
                     <a className="btn btn-primary" role="button"
                       href={"#itemview/"+self.state.searchType+'/'+item.id}>
                       View/Rate

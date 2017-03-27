@@ -50,10 +50,18 @@ class CollectionManager extends React.Component{
           <button className="btn" onClick={
               (e)=>{
                 e.preventDefault();
-                $('.comicsList').slideToggle(200);
+                $('.comicsList').slideDown(200);
               }
             }>
-            Show/Hide All
+            Show All
+          </button>
+          <button className="btn" onClick={
+              (e)=>{
+                e.preventDefault();
+                $('.comicsList').slideUp(200);
+              }
+            }>
+            Hide All
           </button>
         </div>
       </div>
@@ -94,7 +102,7 @@ class DisplayTitles extends React.Component{
                     {"glyphicon-down glyphicon glyphicon-menu-down glyphicon"+index}>
 
                   </span>
-                  <span className={"glyphicon glyphicon-menu-up glyphicon"+index}></span>
+                  <span className={"glyphicon-up glyphicon glyphicon-menu-up glyphicon"+index}></span>
                 </button>
               </h4>
             </div>
@@ -121,23 +129,30 @@ class ComicsInSeries extends React.Component{
     var comics = this.props.children.map(function(item, index){
       return(
         <div key={index}>
-          <a href={"#itemview/comics/"+ item.get('id')}>
+          <div className="btn-group">
             <button className="btn btn-primary">
-              <span className="glyphicon glyphicon-zoom-in"></span>
+              <a href={"#itemview/comics/"+ item.get('id')}
+                className="inspect-item">
+                <span className="glyphicon glyphicon-zoom-in"></span>
+              </a>
             </button>
-            {item.get('title')}
-          </a>
-          <button className="btn btn-danger" data-toggle="tooltip"
-            data-placement="left" title="Tooltip on left"
-            onClick={
-              e=>{
-                e.preventDefault();
-                var comic = new ChangeComic(item);
-                comic.removeFromCollection();
-              }
-            }>
-            <span className="glyphicon glyphicon-remove-circle"></span>
-          </button>
+            <button className="btn btn-default">
+              <a href={"#itemview/comics/"+ item.get('id')}>
+                {item.get('title')}
+              </a>
+            </button>
+            <button className="btn btn-danger" data-toggle="tooltip"
+              data-placement="left" title="Tooltip on left"
+              onClick={
+                e=>{
+                  e.preventDefault();
+                  var comic = new ChangeComic(item);
+                  comic.removeFromCollection();
+                }
+              }>
+              <span className="glyphicon glyphicon-remove-circle"></span>
+            </button>
+          </div>
         </div>
       )
     });

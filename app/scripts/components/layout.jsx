@@ -66,7 +66,7 @@ class NavBarHeader extends React.Component{
       <nav className="navbar navbar-inverse">
         <div className="container-fluid">
           <div className="navbar-header">
-            Marvel Logo Placeholder
+            <img className="marvel-logo" src="https://logorealm.com/wp-content/uploads/2016/07/Marvel-Logo.png"/>
             <a href="#">Home</a>
             <a href="#profile">Profile</a>|
             <a href="#collection">My Collection</a>|
