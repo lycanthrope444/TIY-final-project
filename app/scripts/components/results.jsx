@@ -80,7 +80,7 @@ class ResultsContainer extends React.Component{
   }
   handleResults(){
     var self=this;
-    if (this.state.searchResults&&this.state.searchResults.length>1){
+    if (this.state.searchResults&&this.state.searchResults.length>=1){
       var displayedResults = this.state.searchResults.map(function(item, index){
         return(
           <div key={index}>
@@ -353,8 +353,6 @@ class FavoriteBtn extends React.Component{
         data-toggle="tooltip" data-placement="left" title="Tooltip on left"
         onClick={(e)=>{
           e.preventDefault();
-          var comic = new WishlistComic(item);
-          comic.addToWishlist();
           console.log('clicked');
         }}>
         <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>

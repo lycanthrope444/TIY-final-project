@@ -202,9 +202,15 @@ class AverageRating extends React.Component{
     super(props);
   }
   render(){
+    var averageRating = this.props.averageRating;
+    console.log(averageRating);
     return(
       <div>
-        <h3>The community gives this {this.props.averageRating} stars!</h3>
+        <h3>
+          {(averageRating > 0) ? "The community gives this " + averageRating + " stars!"
+          : "Be the first to rate this!"
+        }
+        </h3>
       </div>
     )
   }

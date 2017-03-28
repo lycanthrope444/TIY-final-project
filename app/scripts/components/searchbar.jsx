@@ -149,6 +149,7 @@ class HelpModal extends React.Component{
                 <ul>
                   <li>While extensive, not everything is listed or 100% accurrate.</li>
                   <li>Exact name for comics and series will often not work. I recommend using the "Starts With" button.</li>
+                  <li>Teams of characters are filed under "Characters".</li>
                 </ul>
               </div>
               <div className="modal-footer">
