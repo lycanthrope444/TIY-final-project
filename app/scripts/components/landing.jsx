@@ -47,7 +47,7 @@ class StarterInfo extends React.Component{
             and make a new profile. Feel free to add a profile pic.
           </li>
           <li>
-            Search Marvel's database for your favorite books, heros or villains.
+            Search Marvel's database for your favorite books, heroes or villains.
             Check out the Search F.A.Q. to help you find what you are looking for.
           </li>
           <li>Add comics to your collection.</li>

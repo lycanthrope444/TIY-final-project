@@ -18,19 +18,31 @@ class WishlistContainer extends CollectionContainer{
     var user = User.current();
     var userId = user.get('objectId');
     var local = JSON.parse(localStorage.getItem('username'));
-    var comicCollection = new WishlistCollection();
-    comicCollection.whereClause ={};
+    var wishCollection = new WishlistCollection();
+    wishCollection.whereClause ={};
     var self = this;
-    comicCollection.parseWhere('collectors', '_User', userId).fetch().done(function(){
-      console.log(comicCollection);
-      self.setState({collection:comicCollection});
+    wishCollection.parseWhere('collectors', '_User', userId).fetch().done(function(){
+      console.log(wishCollection);
+      self.setState({collection:wishCollection});
     });
 
     this.state ={
       user:user,
       userId:userId,
-      collection:comicCollection
+      collection:wishCollection
     }
+  }
+  componentWillMount(){
+    var user = User.current();
+    var userId = user.get('objectId');
+    var local = JSON.parse(localStorage.getItem('username'));
+    var wishCollection = new WishlistCollection();
+    wishCollection.whereClause ={};
+    var self = this;
+    wishCollection.parseWhere('collectors', '_User', userId).fetch().done(function(){
+      console.log(wishCollection);
+      self.setState({collection:wishCollection});
+    });
   }
 }
 

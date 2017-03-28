@@ -7,8 +7,6 @@ var LayoutContainer = require('./layout.jsx').LayoutContainer;
 var Comic = require('../models/comics.js').Comic;
 var ChangeComic = require('../models/comics.js').ChangeComic;
 var ComicCollection = require('../models/comics.js').ComicCollection;
-var Series = require('../models/comics.js').Series;
-var SeriesCollection = require('../models/comics.js').SeriesCollection;
 
 class CollectionContainer extends React.Component{
   constructor(props){
@@ -130,17 +128,14 @@ class ComicsInSeries extends React.Component{
       return(
         <div key={index}>
           <div className="btn-group">
-            <button className="btn btn-primary">
-              <a href={"#itemview/comics/"+ item.get('id')}
-                className="inspect-item">
-                <span className="glyphicon glyphicon-zoom-in"></span>
-              </a>
-            </button>
-            <button className="btn btn-default">
-              <a href={"#itemview/comics/"+ item.get('id')}>
-                {item.get('title')}
-              </a>
-            </button>
+            <a href={"#itemview/comics/"+ item.get('id')}
+              className="inspect-item btn btn-primary">
+              <span className="glyphicon glyphicon-zoom-in"></span>
+            </a>
+            <a href={"#itemview/comics/"+ item.get('id')}
+              className="btn btn-default">
+              {item.get('title')}
+            </a>
             <button className="btn btn-danger" data-toggle="tooltip"
               data-placement="left" title="Tooltip on left"
               onClick={

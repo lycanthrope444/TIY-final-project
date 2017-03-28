@@ -75,6 +75,9 @@ class ItemContainer extends React.Component{
     var comic = new WishlistComic(data);
     comic.addToWishlist();
   }
+  addToFavorite(){
+    console.log('fav cliked');
+  }
   updateRating(rating){
     var comicRating ={
       comicId: this.state.item.id,
@@ -102,7 +105,9 @@ class ItemContainer extends React.Component{
         <div className="col-md-6">
           <ItemInfo desc={this.state.desc} name={this.state.title} />
           <CollectionInfo updateCollection={this.updateCollection}
-            updateWishlist={this.updateWishlist}/>
+            updateWishlist={this.updateWishlist}
+            searchType={this.state.searchType}
+            addToFavorite={this.addToFavorite}/>
           <ItemRating userRating={this.state.userRating}
             updateRating ={this.updateRating} />
           <AverageRating averageRating={this.state.averageRating} />
@@ -146,18 +151,30 @@ class CollectionInfo extends React.Component{
     this.props.updateCollection();
   }
   render(){
-    return(
-      <div>
-        <button className="btn btn-primary" onClick={this.updateCollection}>
-          <span className="glyphicon glyphicon-plus-sign"></span>
-            Collection
-        </button>
-        <button className="btn btn-info" onClick={this.props.updateWishlist}>
-          <span className="glyphicon glyphicon-plus-sign"></span>
-            Wishlist
-        </button>
-      </div>
-    )
+    if (this.props.searchType==="comics"){
+      return(
+        <div>
+          <button className="btn btn-primary" onClick={this.updateCollection}>
+            <span className="glyphicon glyphicon-plus-sign"></span>
+              Collection
+          </button>
+          <button className="btn btn-info" onClick={this.props.updateWishlist}>
+            <span className="glyphicon glyphicon-plus-sign"></span>
+              Wishlist
+          </button>
+        </div>
+      )
+    } else {
+      return(
+        <div>
+          <button className="btn btn-info" onClick={this.props.addToFavorite}>
+            <span className="glyphicon glyphicon-plus-sign"></span>
+              Favorite
+          </button>
+        </div>
+      )
+    }
+
   }
 }
 

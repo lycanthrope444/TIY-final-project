@@ -268,8 +268,8 @@ class FeatureButtons extends React.Component{
         <p className="results-buttons btn-group">
           <ViewButton focus={self.props.focus} id={self.props.item.id}
             searchType={self.props.searchType}/>
-          <AddToCollectionBtn name="Collection"/>
-          <AddToWishlistBtn name="Wishlist" />
+          <AddToCollectionBtn name="Collection" item={self.props.item}/>
+          <AddToWishlistBtn name="Wishlist" item={self.props.item}/>
         </p>
       )
     } else {
@@ -277,7 +277,7 @@ class FeatureButtons extends React.Component{
         <p className="results-buttons btn-group">
           <ViewButton focus={self.props.focus} id={self.props.item.id}
             searchType={self.props.searchType}/>
-          <FavoriteBtn name="Favorite"/>
+          <FavoriteBtn name="Favorite" item={self.props.item}/>
         </p>
       )
     }
@@ -311,7 +311,7 @@ class AddToCollectionBtn extends React.Component{
         data-toggle="tooltip" data-placement="left" title="Add to Collection"
         onClick={(e)=>{
           e.preventDefault();
-          var comic = new Comic(item);
+          var comic = new Comic(this.props.item);
           comic.addToCollection();
           console.log('clicked');
         }}>
@@ -332,7 +332,7 @@ class AddToWishlistBtn extends React.Component{
         data-toggle="tooltip" data-placement="left" title="Tooltip on left"
         onClick={(e)=>{
           e.preventDefault();
-          var comic = new WishlistComic(item);
+          var comic = new WishlistComic(this.props.item);
           comic.addToWishlist();
           console.log('clicked');
         }}>
@@ -348,12 +348,15 @@ class FavoriteBtn extends React.Component{
     super(props);
   }
   render(){
+    var self = this;
     return(
       <a className="btn btn-info" role="button"
         data-toggle="tooltip" data-placement="left" title="Tooltip on left"
         onClick={(e)=>{
           e.preventDefault();
+          var fav = new FavoriteModel(this.props.item);
           console.log('clicked');
+          fav.addToFavorite();
         }}>
         <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
         {this.props.name}

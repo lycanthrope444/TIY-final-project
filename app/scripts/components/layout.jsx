@@ -73,6 +73,7 @@ class NavBarHeader extends React.Component{
             <a href="#profile">Profile</a>|
             <a href="#collection">My Collection</a>|
             <a href="#wishlist">Wishlist</a>|
+            <a href="#favorites">Favorites</a>|
             <a href="#login">Login</a>|
             <a href="#results">Search</a>
             <img className="avatar-header" src={this.props.pic} />
