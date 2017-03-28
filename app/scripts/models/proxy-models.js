@@ -57,7 +57,7 @@ var SearchRequest = ProxyModel.extend({
       currOffset = 'offset='+offset+'&';
     }
     this.set('urlMod', '');
-    var url = searchType+'/'+searchId+focusUrl+'?'+currOffset;
+    var url = searchType+'/'+searchId;
     this.set('urlMod', url);
   }
 });
