@@ -8,6 +8,7 @@ var Comic = require('../models/comics.js').Comic;
 var ChangeComic = require('../models/comics.js').ChangeComic;
 var FavoriteCollection = require('../models/favorite.js').FavoriteCollection;
 var CollectionContainer = require('../components/collectionview.jsx').CollectionContainer;
+var CollectionManager = require('../components/collectionview.jsx').CollectionManager;
 
 class FavoriteContainer extends React.Component{
   constructor(props){
@@ -33,11 +34,55 @@ class FavoriteContainer extends React.Component{
   render(){
     return(
       <LayoutContainer>
-
+        <DisplayFavorites collection={this.state.collection}/>
       </LayoutContainer>
     )
   }
 }
 
+class DisplayFavorites extends React.Component{
+  constructor(props){
+    super(props);
+
+  }
+  render(){
+    console.log(this.props);
+    var favList = this.props.collection.map(function(item, index){
+      var searchType ='';
+      if(item.get('series')){
+        searchType='events';
+      } else{
+        searchType='series';
+      }
+      var name = item.get('name');
+      if (name){
+        searchType='characters';
+      }
+      var title = item.get('title');
+      var id = item.get('id');
+
+
+
+      return(
+        <div key={item+index} className="col-sm-6">
+          <div className="panel panel-warning">
+            <div className="panel-heading">
+              <a href={"#itemview/" +searchType +"/" + id}>
+                <h3 className="panel-title">
+                  {name||title}
+                </h3>
+              </a>
+            </div>
+          </div>
+        </div>
+      )
+    });
+    return(
+      <div>
+        {favList}
+      </div>
+    )
+  }
+}
 
 module.exports={FavoriteContainer};

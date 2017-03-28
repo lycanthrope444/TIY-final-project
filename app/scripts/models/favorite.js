@@ -15,6 +15,7 @@ var FavoriteModel = ParseModel.extend({
   },
   addToFavorite: function(){
     var thisItem = this;
+    var holder = thisItem.title||thisItem.name;
     var objectId = User.current().get('objectId');
     thisItem.set({'collectors' : {
       "__op":"AddRelation",
@@ -22,9 +23,10 @@ var FavoriteModel = ParseModel.extend({
         {"__type":"Pointer", "className":"_User", "objectId":objectId}
       ]}
     });
+    thisItem.set('titleName', holder);
     thisItem.save().then(function(){
       console.log('add to collection 1');
-      console.log(thisComic);
+      console.log(thisItem);
     });
   }
 });

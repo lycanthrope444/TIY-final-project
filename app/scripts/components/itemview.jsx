@@ -9,6 +9,7 @@ var RatingCollection = require('../models/comics.js').RatingCollection;
 var WishlistComic = require('../models/comics.js').WishlistComic;
 var proxy = require('../proxy.js');
 var SearchRequest = require('../models/proxy-models.js').SearchRequest;
+var FavoriteModel = require('../models/favorite.js').FavoriteModel;
 
 class ItemContainer extends React.Component{
   constructor(props){
@@ -20,6 +21,7 @@ class ItemContainer extends React.Component{
     this.updateRating = this.updateRating.bind(this);
     this.updateWishlist = this.updateWishlist.bind(this);
     this.averageRating = this.averageRating.bind(this);
+    this.addToFavorite = this.addToFavorite.bind(this);
 
     var ratingsColl = new RatingCollection();
     var numberId = parseInt(searchId);
@@ -76,7 +78,11 @@ class ItemContainer extends React.Component{
     comic.addToWishlist();
   }
   addToFavorite(){
+    console.log('this',this);
+    var self = this;
     console.log('fav cliked');
+    var item = new FavoriteModel(self.state.item);
+    item.addToFavorite();
   }
   updateRating(rating){
     var comicRating ={

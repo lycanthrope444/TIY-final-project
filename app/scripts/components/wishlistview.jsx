@@ -29,7 +29,8 @@ class WishlistContainer extends CollectionContainer{
     this.state ={
       user:user,
       userId:userId,
-      collection:wishCollection
+      collection:wishCollection,
+      panelColor:"success"
     }
   }
   componentWillMount(){

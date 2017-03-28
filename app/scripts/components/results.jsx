@@ -11,8 +11,7 @@ var WishlistComic = require('../models/comics.js').WishlistComic;
 var proxy = require('../proxy.js');
 var parse = require('../setup').parse;
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
-var demoJSON = require('../demodata');
-var demoSeries = require('../demoseries');
+var FavoriteModel = require('../models/favorite.js').FavoriteModel;
 
 class ResultsContainer extends React.Component{
   constructor(props){

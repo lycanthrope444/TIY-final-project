@@ -26,14 +26,16 @@ class CollectionContainer extends React.Component{
     this.state ={
       user:user,
       userId:userId,
-      collection:comicCollection
+      collection:comicCollection,
+      panelColor:"info"
     }
   }
   render(){
     return(
       <LayoutContainer>
         <CollectionManager />
-        <DisplayTitles collection={this.state.collection}/>
+        <DisplayTitles collection={this.state.collection}
+          panelColor={this.state.panelColor}/>
         <CollectionManager />
       </LayoutContainer>
     )
@@ -74,7 +76,7 @@ class DisplayTitles extends React.Component{
   render(){
 
     var collection = this.props.collection;
-
+    var panelColor = this.props.panelColor;
     collection.comparator = 'issueNumber';
 
     var seriesList = collection.groupBy(function(item){
@@ -87,10 +89,10 @@ class DisplayTitles extends React.Component{
 
       return(
         <div key={index} className="col-md-6">
-          <div className="panel panel-info">
+          <div className={"panel panel-" + panelColor }>
             <div className="panel-heading">
               <h4>{title}
-                <button className="btn btn-info"
+                <button className={"btn btn-" + panelColor}
                   onClick={(e)=>{
                     e.preventDefault();
                     $('.comicsList'+index).slideToggle(200);
@@ -159,4 +161,4 @@ class ComicsInSeries extends React.Component{
   }
 }
 
-module.exports = {CollectionContainer};
+module.exports = {CollectionContainer,CollectionManager};
