@@ -1,6 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
+var _ = require('underscore');
 var React = require('react');
 
 var User = require('../models/user.js').User;
@@ -8,8 +9,6 @@ var LayoutContainer = require('./layout.jsx').LayoutContainer;
 var Comic = require('../models/comics.js').Comic;
 var ChangeComic = require('../models/comics.js').ChangeComic;
 var ComicCollection = require('../models/comics.js').ComicCollection;
-var Series = require('../models/comics.js').Series;
-var SeriesCollection = require('../models/comics.js').SeriesCollection;
 
 class CollectionContainer extends React.Component{
   constructor(props){
@@ -19,54 +18,126 @@ class CollectionContainer extends React.Component{
     var userId = user.get('objectId');
     var local = JSON.parse(localStorage.getItem('username'));
     var comicCollection = new ComicCollection();
+    comicCollection.whereClause ={};
     var self = this;
     comicCollection.parseWhere('collectors', '_User', userId).fetch().done(function(){
       console.log(comicCollection);
       self.setState({collection:comicCollection});
     });
 
-    this.addToCollection=this.addToCollection.bind(this);
-    this.deleteFromCollection=this.deleteFromCollection.bind(this);
-
     this.state ={
       user:user,
       userId:userId,
-      collection:comicCollection
+      collection:comicCollection,
+      panelColor:"info"
     }
   }
-  addToCollection(){
-
-  }
-  deleteFromCollection(){
-
-  }
   render(){
-    console.log(this.state);
     return(
       React.createElement(LayoutContainer, null, 
-        React.createElement(MyCollection, {collection: this.state.collection})
+        React.createElement(CollectionManager, null), 
+        React.createElement(DisplayTitles, {collection: this.state.collection, 
+          panelColor: this.state.panelColor}), 
+        React.createElement(CollectionManager, null)
       )
     )
   }
 }
 
-class MyCollection extends React.Component{
-    constructor(props){
-      super(props);
+class CollectionManager extends React.Component{
+  render(){
+    return(
+      React.createElement("div", {className: "row"}, 
+        React.createElement("div", {className: "col-xs-12"}, 
+          React.createElement("button", {className: "btn", onClick: 
+              (e)=>{
+                e.preventDefault();
+                $('.comicsList').slideDown(200);
+              }
+            }, 
+            "Show All"
+          ), 
+          React.createElement("button", {className: "btn", onClick: 
+              (e)=>{
+                e.preventDefault();
+                $('.comicsList').slideUp(200);
+              }
+            }, 
+            "Hide All"
+          )
+        )
+      )
+    )
+  }
+}
 
-      var collection = this.props.collection;
+class DisplayTitles extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
 
-      this.state={
-        collection: collection
-      }
+    var collection = this.props.collection;
+    var panelColor = this.props.panelColor;
+    collection.comparator = 'issueNumber';
 
-    }
-    render(){
-      var collection = this.state.collection;
-      var displayCollection = collection.map(function(item, index){
-        return(
-          React.createElement("div", {key: index}, 
-            React.createElement("a", {href: "#itemview/comics/"+ item.get('id')}, 
+    var seriesList = collection.groupBy(function(item){
+      var series = item.get('series');
+      return series.name;
+    });
+
+    var comicsIn = _.values(seriesList);
+    var titles=_.keys(seriesList).map(function(title, index){
+
+      return(
+        React.createElement("div", {key: index, className: "col-md-6"}, 
+          React.createElement("div", {className: "panel panel-" + panelColor}, 
+            React.createElement("div", {className: "panel-heading"}, 
+              React.createElement("h4", null, title, 
+                React.createElement("button", {className: "btn btn-" + panelColor, 
+                  onClick: (e)=>{
+                    e.preventDefault();
+                    $('.comicsList'+index).slideToggle(200);
+                    $('.glyphicon'+index).toggle();
+                  }}, 
+                  React.createElement("span", {className: 
+"glyphicon-down glyphicon glyphicon-menu-down glyphicon"+index}
+
+                  ), 
+                  React.createElement("span", {className: "glyphicon-up glyphicon glyphicon-menu-up glyphicon"+index})
+                )
+              )
+            ), 
+            React.createElement("div", {className: "panel-body comicsList comicsList"+index}, 
+              React.createElement(ComicsInSeries, {children: comicsIn[index]})
+            )
+          )
+        )
+      )
+    });
+    return(
+      React.createElement("div", null, 
+        titles
+      )
+    )
+  }
+}
+
+class ComicsInSeries extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
+    var comics = this.props.children.map(function(item, index){
+      return(
+        React.createElement("div", {key: index}, 
+          React.createElement("div", {className: "btn-group"}, 
+            React.createElement("a", {href: "#itemview/comics/"+ item.get('id'), 
+              className: "inspect-item btn btn-primary"}, 
+              React.createElement("span", {className: "glyphicon glyphicon-zoom-in"})
+            ), 
+            React.createElement("a", {href: "#itemview/comics/"+ item.get('id'), 
+              className: "btn btn-default"}, 
               item.get('title')
             ), 
             React.createElement("button", {className: "btn btn-danger", "data-toggle": "tooltip", 
@@ -75,50 +146,148 @@ class MyCollection extends React.Component{
                 e=>{
                   e.preventDefault();
                   var comic = new ChangeComic(item);
-                  console.log('clicked', comic);
                   comic.removeFromCollection();
                 }
               }, 
-              "X"
+              React.createElement("span", {className: "glyphicon glyphicon-remove-circle"})
             )
           )
         )
-      });
-
-      return(
-        React.createElement("div", null, 
-          displayCollection
-        )
       )
-    }
+    });
+    return(
+      React.createElement("div", null, 
+        comics
+      )
+    )
+  }
 }
 
-module.exports = {CollectionContainer};
+module.exports = {CollectionContainer,CollectionManager};
 
-},{"../models/comics.js":14,"../models/user.js":17,"./layout.jsx":4,"jquery":49,"react":180}],2:[function(require,module,exports){
+},{"../models/comics.js":13,"../models/user.js":17,"./layout.jsx":5,"jquery":49,"react":180,"underscore":181}],2:[function(require,module,exports){
 "use strict";
+var $ = require('jquery');
+var _ = require('underscore');
 var React = require('react');
 
+var User = require('../models/user.js').User;
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
 var Comic = require('../models/comics.js').Comic;
+var ChangeComic = require('../models/comics.js').ChangeComic;
+var FavoriteCollection = require('../models/favorite.js').FavoriteCollection;
+var CollectionContainer = require('../components/collectionview.jsx').CollectionContainer;
+var CollectionManager = require('../components/collectionview.jsx').CollectionManager;
+
+class FavoriteContainer extends React.Component{
+  constructor(props){
+    super(props);
+
+    var user = User.current();
+    var userId = user.get('objectId');
+    var local = JSON.parse(localStorage.getItem('username'));
+    var favCollection = new FavoriteCollection();
+    favCollection.whereClause ={};
+    var self = this;
+    favCollection.parseWhere('collectors', '_User', userId).fetch().done(function(){
+      console.log(favCollection);
+      self.setState({collection:favCollection});
+    });
+
+    this.state ={
+      user:user,
+      userId:userId,
+      collection:favCollection
+    }
+  }
+  render(){
+    return(
+      React.createElement(LayoutContainer, null, 
+        React.createElement(DisplayFavorites, {collection: this.state.collection})
+      )
+    )
+  }
+}
+
+class DisplayFavorites extends React.Component{
+  constructor(props){
+    super(props);
+
+  }
+  render(){
+    console.log(this.props);
+    var favList = this.props.collection.map(function(item, index){
+      var searchType ='';
+      if(item.get('series')){
+        searchType='events';
+      } else{
+        searchType='series';
+      }
+      var name = item.get('name');
+      if (name){
+        searchType='characters';
+      }
+      var title = item.get('title');
+      var id = item.get('id');
+
+
+
+      return(
+        React.createElement("div", {key: item+index, className: "col-sm-6"}, 
+          React.createElement("div", {className: "panel panel-warning"}, 
+            React.createElement("div", {className: "panel-heading"}, 
+              React.createElement("a", {href: "#itemview/" +searchType +"/" + id}, 
+                React.createElement("h3", {className: "panel-title"}, 
+                  name||title
+                )
+              )
+            )
+          )
+        )
+      )
+    });
+    return(
+      React.createElement("div", null, 
+        favList
+      )
+    )
+  }
+}
+
+module.exports={FavoriteContainer};
+
+},{"../components/collectionview.jsx":1,"../models/comics.js":13,"../models/favorite.js":14,"../models/user.js":17,"./layout.jsx":5,"jquery":49,"react":180,"underscore":181}],3:[function(require,module,exports){
+"use strict";
+var _ = require('underscore');
+var React = require('react');
+
+var User = require('../models/user.js').User;
+var LayoutContainer = require('./layout.jsx').LayoutContainer;
+var Comic = require('../models/comics.js').Comic;
+var ComicRating = require('../models/comics.js').ComicRating;
+var RatingCollection = require('../models/comics.js').RatingCollection;
+var WishlistComic = require('../models/comics.js').WishlistComic;
 var proxy = require('../proxy.js');
 var SearchRequest = require('../models/proxy-models.js').SearchRequest;
+var FavoriteModel = require('../models/favorite.js').FavoriteModel;
 
 class ItemContainer extends React.Component{
   constructor(props){
     super(props);
-    //The proxy server needs to be contacted here to get the ProxyModel
     var searchType = this.props.searchType;
     var searchId = this.props.id;
 
-    var NewSearch = SearchRequest.extend({
-      urlRoot: function(){
+    this.updateCollection=this.updateCollection.bind(this);
+    this.updateRating = this.updateRating.bind(this);
+    this.updateWishlist = this.updateWishlist.bind(this);
+    this.averageRating = this.averageRating.bind(this);
+    this.addToFavorite = this.addToFavorite.bind(this);
 
-        return proxy.PROXY_API_URL+searchType+'/'+searchId+'?';
-      }
-    });
+    var ratingsColl = new RatingCollection();
+    var numberId = parseInt(searchId);
 
-    var newSearch = new NewSearch();
+    var newSearch = new SearchRequest();
+    newSearch.singleUrl(searchType, searchId);
     var self =this;
     newSearch.sendSearch(function(){
       var searchResults = newSearch.get('data');
@@ -129,14 +298,23 @@ class ItemContainer extends React.Component{
         desc: item.description,
         pic: item.thumbnail.path + "."+item.thumbnail.extension
       });
+
+      ratingsColl.parseWhere('comicId', numberId).fetch().done(function(){
+        console.log('ratings',ratingsColl);
+        var counter = 0;
+        var tally = 0;
+        ratingsColl.forEach(function(item){
+          counter += 1;
+          tally += item.get('rating');
+        });
+        self.setState({
+          averageRating: (tally/counter).toFixed(2)
+        })
+      });
+
     });
 
-    this.updateCollection=this.updateCollection.bind(this);
-    this.updateRating = this.updateRating.bind(this);
-
-    //If the comic is in the collection pull that data here
-
-    //Rating will be pulled from the data on my server, this is dummy data for now
+    var averageRating = this.averageRating();
 
     this.state ={
       item: null,
@@ -144,20 +322,47 @@ class ItemContainer extends React.Component{
       desc:null,
       pic:null,
       userRating: 3,
-      averageRating: 5
+      averageRating: 5,
+      searchType: searchType,
+      searchId: searchId
     }
   }
   updateCollection(){
-
     var data = this.state.item;
     var comic = new Comic(data);
     comic.addToCollection();
   }
+  updateWishlist(){
+    var data = this.state.item;
+    var comic = new WishlistComic(data);
+    comic.addToWishlist();
+  }
+  addToFavorite(){
+    console.log('this',this);
+    var self = this;
+    console.log('fav cliked');
+    var item = new FavoriteModel(self.state.item);
+    item.addToFavorite();
+  }
   updateRating(rating){
-    var comic = new Comic(this.state.item);
+    var comicRating ={
+      comicId: this.state.item.id,
+      title: this.state.item.title,
+      rating: rating
+    };
+
+    var userId = User.current().get('objectId');
+
+    var comic = new ComicRating(comicRating);
+
+    comic.setPointer('User', '_User', userId);
+    console.log('comic',comic);
     comic.updateRating(rating);
-    console.log(comic, rating);
     this.setState({userRating:rating});
+    this.averageRating();
+  }
+  averageRating(){
+
   }
   render(){
     console.log(this.state);
@@ -165,16 +370,22 @@ class ItemContainer extends React.Component{
       React.createElement(LayoutContainer, null, 
         React.createElement("div", {className: "col-md-6"}, 
           React.createElement(ItemInfo, {desc: this.state.desc, name: this.state.title}), 
-          React.createElement(CollectionInfo, {updateCollection: this.updateCollection}), 
+          React.createElement(CollectionInfo, {updateCollection: this.updateCollection, 
+            updateWishlist: this.updateWishlist, 
+            searchType: this.state.searchType, 
+            addToFavorite: this.addToFavorite}), 
           React.createElement(ItemRating, {userRating: this.state.userRating, 
-            updateRating: this.updateRating})
+            updateRating: this.updateRating}), 
+          React.createElement(AverageRating, {averageRating: this.state.averageRating}), 
+          React.createElement(QuickLinks, {searchType: this.state.searchType, 
+            searchId: this.state.searchId}), 
+          React.createElement(DigitalMarketplace, null)
         ), 
         React.createElement("div", {className: "col-md-6"}, 
-          React.createElement(ItemPhoto, {pic: this.state.pic}), 
-          React.createElement(AverageRating, {averageRating: this.state.averageRating})
-        ), 
-        React.createElement(QuickLinks, null), 
-        React.createElement(DigitalMarketplace, null)
+          React.createElement(ItemPhoto, {pic: this.state.pic})
+        )
+
+
       )
     )
   }
@@ -206,14 +417,30 @@ class CollectionInfo extends React.Component{
     this.props.updateCollection();
   }
   render(){
-    return(
-      React.createElement("div", null, 
-        "Collection Info Here", 
-        React.createElement("button", {className: "btn", onClick: this.updateCollection}, 
-          "Add to Collection"
+    if (this.props.searchType==="comics"){
+      return(
+        React.createElement("div", null, 
+          React.createElement("button", {className: "btn btn-primary", onClick: this.updateCollection}, 
+            React.createElement("span", {className: "glyphicon glyphicon-plus-sign"}), 
+              "Collection"
+          ), 
+          React.createElement("button", {className: "btn btn-info", onClick: this.props.updateWishlist}, 
+            React.createElement("span", {className: "glyphicon glyphicon-plus-sign"}), 
+              "Wishlist"
+          )
         )
       )
-    )
+    } else {
+      return(
+        React.createElement("div", null, 
+          React.createElement("button", {className: "btn btn-info", onClick: this.props.addToFavorite}, 
+            React.createElement("span", {className: "glyphicon glyphicon-plus-sign"}), 
+              "Favorite"
+          )
+        )
+      )
+    }
+
   }
 }
 
@@ -258,19 +485,55 @@ class AverageRating extends React.Component{
     super(props);
   }
   render(){
+    var averageRating = this.props.averageRating;
+    console.log(averageRating);
     return(
       React.createElement("div", null, 
-        React.createElement("h3", null, "The community gives this ", this.props.averageRating, " stars!")
+        React.createElement("h3", null, 
+          (averageRating > 0) ? "The community gives this " + averageRating + " stars!"
+          : "Be the first to rate this!"
+        
+        )
       )
     )
   }
 }
 
 class QuickLinks extends React.Component{
+  constructor(props){
+    super(props);
+
+    var searchType = this.props.searchType;
+    var searchId = this.props.searchId;
+
+    var comp = ['characters', 'events', 'comics', 'series'];
+
+    var linkList = _.reject(comp, function(item, index){
+      return searchType === item;
+    });
+
+    this.state={
+      searchType:searchType,
+      searchId:searchId,
+      linkList:linkList
+    }
+  }
   render(){
+    console.log('links', this.state);
+    var self =this;
+    var links = this.state.linkList.map(function(item, index){
+      return(
+        React.createElement("div", {key: "link"+index}, 
+          React.createElement("a", {href: "#results/"+self.state.searchType+"/"+self.state.searchId+"/"+item}, 
+            item
+          )
+        )
+      )
+    });
+
     return(
-      React.createElement("div", {className: "col-xs-12"}, 
-        React.createElement("h2", null, "You might also enjoy:")
+      React.createElement("div", null, 
+        links
       )
     )
   }
@@ -279,12 +542,12 @@ class QuickLinks extends React.Component{
 class DigitalMarketplace extends React.Component{
   render(){
     return(
-      React.createElement("div", {className: "col-xs-12"}, 
-        React.createElement("h2", null, "Find Merch:"), 
-        React.createElement("a", null, "Local Stores"), 
-        React.createElement("a", null, "Marvel Digital"), 
-        React.createElement("a", null, "Ebay"), 
-        React.createElement("a", null, "Amazon")
+      React.createElement("div", null, 
+        React.createElement("h2", null, "Find Online:"), 
+        React.createElement("a", {href: "http://www.comicshoplocator.com/"}, "Local Stores"), 
+        React.createElement("a", {href: "https://comicstore.marvel.com/"}, "Marvel Digital"), 
+        React.createElement("a", {href: "http://www.ebay.com/"}, "Ebay"), 
+        React.createElement("a", {href: "https://www.amazon.com/"}, React.createElement("i", {className: "fa fa-amazon", "aria-hidden": "true"}))
       )
     )
   }
@@ -292,7 +555,7 @@ class DigitalMarketplace extends React.Component{
 
 module.exports = {ItemContainer};
 
-},{"../models/comics.js":14,"../models/proxy-models.js":16,"../proxy.js":18,"./layout.jsx":4,"react":180}],3:[function(require,module,exports){
+},{"../models/comics.js":13,"../models/favorite.js":14,"../models/proxy-models.js":16,"../models/user.js":17,"../proxy.js":18,"./layout.jsx":5,"react":180,"underscore":181}],4:[function(require,module,exports){
 "use strict";
 var React = require('react');
 
@@ -343,7 +606,7 @@ class StarterInfo extends React.Component{
             "and make a new profile. Feel free to add a profile pic."
           ), 
           React.createElement("li", null, 
-            "Search Marvel's database for your favorite books, heros or villains." + ' ' +
+            "Search Marvel's database for your favorite books, heroes or villains." + ' ' +
             "Check out the Search F.A.Q. to help you find what you are looking for."
           ), 
           React.createElement("li", null, "Add comics to your collection.")
@@ -356,7 +619,7 @@ class StarterInfo extends React.Component{
 
 module.exports = {LandingContainer};
 
-},{"./layout.jsx":4,"react":180}],4:[function(require,module,exports){
+},{"./layout.jsx":5,"react":180}],5:[function(require,module,exports){
 "use strict";
 var React = require('react');
 
@@ -426,15 +689,16 @@ class NavBarHeader extends React.Component{
       React.createElement("nav", {className: "navbar navbar-inverse"}, 
         React.createElement("div", {className: "container-fluid"}, 
           React.createElement("div", {className: "navbar-header"}, 
-            "Marvel Logo Placeholder", 
+            React.createElement("a", {href: "https://www.marvel.com"}, 
+              React.createElement("img", {className: "marvel-logo", src: "https://logorealm.com/wp-content/uploads/2016/07/Marvel-Logo.png"})
+            ), 
             React.createElement("a", {href: "#"}, "Home"), 
-
-
             React.createElement("a", {href: "#profile"}, "Profile"), "|", 
             React.createElement("a", {href: "#collection"}, "My Collection"), "|", 
+            React.createElement("a", {href: "#wishlist"}, "Wishlist"), "|", 
+            React.createElement("a", {href: "#favorites"}, "Favorites"), "|", 
             React.createElement("a", {href: "#login"}, "Login"), "|", 
-            React.createElement("a", {href: "#results"}, "Search"), "|", 
-            React.createElement("a", {href: "#series"}, "Series-Remove Me"), "|", 
+            React.createElement("a", {href: "#results"}, "Search"), 
             React.createElement("img", {className: "avatar-header", src: this.props.pic}), 
             React.createElement("button", {className: "btn", onClick: this.props.logout}, "Log Out")
           )
@@ -449,7 +713,7 @@ class NavBarFooter extends React.Component{
     return(
       React.createElement("div", {className: "container-fluid"}, 
         React.createElement("div", {className: "row"}, 
-          "\"Data provided by Marvel. © 2014 Marvel\""
+          "Data provided by Marvel. © 2014 Marvel. Glyphicons provided by Bootstrap."
         )
       )
     )
@@ -458,7 +722,7 @@ class NavBarFooter extends React.Component{
 
 module.exports = {LayoutContainer};
 
-},{"../models/avatar.js":13,"../models/user.js":17,"./searchbar.jsx":8,"react":180}],5:[function(require,module,exports){
+},{"../models/avatar.js":12,"../models/user.js":17,"./searchbar.jsx":9,"react":180}],6:[function(require,module,exports){
 "use strict";
 var React = require('react');
 var Backbone = require('backbone');
@@ -553,7 +817,7 @@ class SignupForm extends LoginForm{
 
 module.exports = {LoginContainer};
 
-},{"../models/user.js":17,"./layout.jsx":4,"backbone":21,"react":180}],6:[function(require,module,exports){
+},{"../models/user.js":17,"./layout.jsx":5,"backbone":21,"react":180}],7:[function(require,module,exports){
 "use strict";
 var Backbone = require('backbone');
 var React = require('react');
@@ -651,10 +915,17 @@ class AccountOptions extends React.Component{
     return(
       React.createElement("div", {className: "col-md-6"}, 
         React.createElement("h1", null, "Account Options"), 
-        React.createElement("ul", null, 
-          React.createElement("li", null, "Change Email"), 
-          React.createElement("li", null, "View my Collection"), 
-          React.createElement("li", null, "Things I'm following")
+        React.createElement("div", null, 
+          React.createElement("button", {className: "btn btn-info"}, 
+            React.createElement("span", {className: "glyphicon glyphicon-plus-sign", "aria-hidden": "true"})
+          ), 
+          React.createElement("span", null, "Change Email")
+        ), 
+        React.createElement("div", null, 
+          React.createElement("button", {className: "btn btn-info"}, 
+            React.createElement("span", {className: "glyphicon glyphicon-plus-sign", "aria-hidden": "true"})
+          ), 
+          React.createElement("span", null, "Change Password")
         )
       )
     )
@@ -702,7 +973,7 @@ class AvatarPic extends React.Component{
 }
 module.exports = {ProfileContainer};
 
-},{"../models/avatar.js":13,"../models/parse.js":15,"../models/user.js":17,"../setup.js":20,"./layout.jsx":4,"backbone":21,"react":180}],7:[function(require,module,exports){
+},{"../models/avatar.js":12,"../models/parse.js":15,"../models/user.js":17,"../setup.js":20,"./layout.jsx":5,"backbone":21,"react":180}],8:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var React = require('react');
@@ -713,11 +984,11 @@ var SearchBar = require('./searchbar.jsx').SearchBar;
 var SearchRequest = require('../models/proxy-models.js').SearchRequest;
 var Results = require('../models/proxy-models.js').Results;
 var Comic = require('../models/comics.js').Comic;
+var WishlistComic = require('../models/comics.js').WishlistComic;
 var proxy = require('../proxy.js');
 var parse = require('../setup').parse;
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
-var demoJSON = require('../demodata');
-var demoSeries = require('../demoseries');
+var FavoriteModel = require('../models/favorite.js').FavoriteModel;
 
 class ResultsContainer extends React.Component{
   constructor(props){
@@ -730,6 +1001,8 @@ class ResultsContainer extends React.Component{
     this.changeSearchType=this.changeSearchType.bind(this);
     this.changeModType=this.changeModType.bind(this);
 
+    console.log('props constructor',this.props);
+
     this.state = {
       searchType:'characters',
       searchMod:'name=',
@@ -739,12 +1012,41 @@ class ResultsContainer extends React.Component{
       pages: null,
       currPage:1,
       buttonState: 'disabled',
-      searchTerm:''
+      searchTerm:'',
+      id:null,
+      focus:''
+    }
+  }
+  componentWillMount(){
+    var initialSearch = new SearchRequest();
+    var self = this;
+    if(self.props.id){
+      self.setState({
+        searchType:self.props.searchType,
+        id: self.props.id,
+        focus: self.props.focus
+      });
+      $(document.body).css({'cursor' : 'wait'});
+      initialSearch.singleUrl(self.props.searchType, self.props.id, self.props.focus);
+      initialSearch.sendSearch(function(){
+        console.log('searching');
+        var filter = initialSearch.get('data');
+        console.log(filter);
+        self.setState({
+          searchResults:filter.results,
+          searchType:self.props.focus
+        });
+        $(document.body).css({'cursor' : 'default'});
+      });
     }
   }
   changeSearchType(term){
     console.log('clicked', term);
-    this.setState({searchType:term, currentOffset: 0});
+    this.setState({
+      searchType:term,
+      currentOffset: 0,
+      focus:''
+    });
     console.log(this.state);
   }
   changeModType(modObject){
@@ -754,32 +1056,18 @@ class ResultsContainer extends React.Component{
   }
   handleResults(){
     var self=this;
-    if (this.state.searchResults){
+    if (this.state.searchResults&&this.state.searchResults.length>=1){
       var displayedResults = this.state.searchResults.map(function(item, index){
         return(
           React.createElement("div", {key: index}, 
             React.createElement("div", {className: "col-sm-6 col-md-4"}, 
               React.createElement("div", {className: "thumbnail"}, 
-                React.createElement("img", {src: item.thumbnail.path+'.'+item.thumbnail.extension, alt: "https://unsplash.it/200/300"}), 
-                React.createElement("div", {className: "caption"}, 
-                  React.createElement("h3", null, item.name || item.title || item.fullName), 
-                  React.createElement("p", null, item.description), 
-                  React.createElement("p", null, 
-                    React.createElement("a", {className: "btn btn-primary", role: "button", 
-                      href: "#itemview/"+self.state.searchType+'/'+item.id}, 
-                      "View/Rate"
-                    ), 
-                    React.createElement("a", {className: "btn btn-default", role: "button", 
-                      "data-toggle": "tooltip", "data-placement": "left", title: "Tooltip on left", 
-                      onClick: (e)=>{
-                        e.preventDefault();
-                        var comic = new Comic(item);
-                        comic.addToCollection();
-                        console.log('clicked');
-                      }}, 
-                      "Collect/Follow"
-                    )
-                  )
+                React.createElement("img", {className: "results-pic", 
+                  src: item.thumbnail.path+'.'+item.thumbnail.extension}), 
+                React.createElement("div", {className: "caption results-caption"}, 
+                  React.createElement("h3", {className: "results-title"}, item.name || item.title), 
+                  React.createElement(FeatureButtons, {item: item, searchType: self.state.searchType, 
+                    focus: self.state.focus, id: self.state.id})
                 )
               )
             )
@@ -802,28 +1090,21 @@ class ResultsContainer extends React.Component{
     }
   }
   handleSubmit(searchType, searchTerm, searchMod, offset){
-    this.setState({searchTerm: searchTerm});
+    console.log(searchType, searchTerm, searchMod, offset);
+
+    $(document.body).css({'cursor' : 'wait'});
+
+    this.setState({
+      searchTerm: searchTerm,
+      focus:''
+    });
     var currOffset=this.state.currentOffset;
     if (offset){
       currOffset=offset;
     }
-    var NewSearch = SearchRequest.extend({
-      urlRoot: function(){
-        var search;
-        var mod;
-        if (!searchTerm){
-          search = '';
-          mod = '';
-        } else {
-          search=searchTerm;
-          mod = searchMod;
-        }
-        console.log(proxy.PROXY_API_URL+searchType+'?'+mod+search+'&offset='+currOffset+'&');
-        return proxy.PROXY_API_URL+searchType+'?'+mod+search+'&offset='+currOffset+'&';
-      }
-    });
 
-    var newSearch = new NewSearch();
+    var newSearch = new SearchRequest();
+    newSearch.modifyUrl(searchType, searchTerm, searchMod, offset);
 
     var self = this;
 
@@ -835,35 +1116,81 @@ class ResultsContainer extends React.Component{
         results: searchResults.total,
         pages: Math.ceil(searchResults.total/20)
       });
-
+      $(document.body).css({'cursor' : 'default'});
       self.handleResults();
     });
+
   }
   prevOffset(){
     var self = this;
     var newPage = this.state.currPage - 1;
-    console.log(newPage);
     var newOffset= this.state.currentOffset - 20;
-    this.setState({
-      currentOffset: newOffset,
-      currPage: newPage
-    });
-    this.handleSubmit(self.state.searchType, self.state.searchTerm, self.state.searchMod, newOffset);
+    var initialSearch = new SearchRequest();
+
+    if(self.props.id){
+
+      var searchType = self.props.searchType ;
+      var id = self.props.id;
+      var focus = self.props.focus;
+
+      initialSearch.singleUrl(searchType, id, focus, newOffset);
+      initialSearch.sendSearch(function(){
+        console.log('searching');
+        var filter = initialSearch.get('data');
+        console.log(filter);
+        self.setState({
+          searchResults:filter.results,
+          currentOffset:newOffset
+        });
+      });
+    } else {
+      console.log(newPage);
+      console.log('prev clicked', self.state.searchType, self.state.searchTerm, self.state.searchMod);
+
+      this.setState({
+        currentOffset: newOffset,
+        currPage: newPage
+      });
+      console.log(this.state);
+      this.handleSubmit(self.state.searchType, self.state.searchTerm, self.state.searchMod, newOffset);
+    }
   }
   nextOffset(){
     var self = this;
     var newPage = this.state.currPage + 1;
-    console.log(newPage);
-    console.log('next clicked', self.state.searchType, self.state.searchTerm, self.state.searchMod);
     var newOffset= this.state.currentOffset + 20;
-    this.setState({
-      currentOffset: newOffset,
-      currPage: newPage
-    });
-    console.log(this.state);
-    this.handleSubmit(self.state.searchType, self.state.searchTerm, self.state.searchMod, newOffset);
+    var initialSearch = new SearchRequest();
+
+    if(self.props.id){
+
+      var searchType = self.props.searchType ;
+      var id = self.props.id;
+      var focus = self.props.focus;
+
+      initialSearch.singleUrl(searchType, id, focus, newOffset);
+      initialSearch.sendSearch(function(){
+        console.log('searching');
+        var filter = initialSearch.get('data');
+        console.log(filter);
+        self.setState({
+          searchResults:filter.results,
+          currentOffset:newOffset
+        });
+      });
+    } else {
+      console.log(newPage);
+      console.log('next clicked', self.state.searchType, self.state.searchTerm, self.state.searchMod);
+
+      this.setState({
+        currentOffset: newOffset,
+        currPage: newPage
+      });
+      console.log(this.state);
+      this.handleSubmit(self.state.searchType, self.state.searchTerm, self.state.searchMod, newOffset);
+    }
   }
   render(){
+    console.log('state', this.state);
     return(
       React.createElement(LayoutContainer, null, 
         React.createElement("div", {className: "row"}, 
@@ -884,11 +1211,21 @@ class ResultsHeader extends React.Component{
   }
   render(){
     return(
-      React.createElement("div", null, 
-        React.createElement("nav", {"aria-label": "..."}, 
-          React.createElement("ul", {className: "pager"}, 
-            React.createElement("li", null, React.createElement("a", {onClick: this.props.prevOffset}, "Previous")), 
-            React.createElement("li", null, React.createElement("a", {onClick: this.props.nextOffset}, "Next"))
+      React.createElement("div", {className: "row"}, 
+        React.createElement("div", {className: "col-xs-12"}, 
+          React.createElement("nav", {"aria-label": "..."}, 
+            React.createElement("ul", {className: "pager"}, 
+              React.createElement("li", null, React.createElement("a", {onClick: (e)=>{
+                  e.preventDefault();
+                  this.props.prevOffset();
+                }}, 
+                "Previous")), 
+              React.createElement("li", null, React.createElement("a", {onClick: (e)=>{
+                  e.preventDefault();
+                  this.props.nextOffset();
+                }}, 
+                "Next"))
+            )
           )
         )
       )
@@ -896,9 +1233,117 @@ class ResultsHeader extends React.Component{
   }
 }
 
+class FeatureButtons extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
+    var self = this;
+    if (this.props.searchType === 'comics'){
+      return(
+        React.createElement("p", {className: "results-buttons btn-group"}, 
+          React.createElement(ViewButton, {focus: self.props.focus, id: self.props.item.id, 
+            searchType: self.props.searchType}), 
+          React.createElement(AddToCollectionBtn, {name: "Collection", item: self.props.item}), 
+          React.createElement(AddToWishlistBtn, {name: "Wishlist", item: self.props.item})
+        )
+      )
+    } else {
+      return (
+        React.createElement("p", {className: "results-buttons btn-group"}, 
+          React.createElement(ViewButton, {focus: self.props.focus, id: self.props.item.id, 
+            searchType: self.props.searchType}), 
+          React.createElement(FavoriteBtn, {name: "Favorite", item: self.props.item})
+        )
+      )
+    }
+  }
+}
+
+class ViewButton extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
+    var self = this;
+    return(
+      React.createElement("a", {className: "btn btn-primary", role: "button", 
+        href: ((self.props.focus)?"#itemview/"+self.props.focus+'/'+self.props.id :
+          "#itemview/"+self.props.searchType+'/'+self.props.id)}, 
+        React.createElement("span", {className: "glyphicon glyphicon-zoom-in"}), 
+        "View"
+      )
+    )
+  }
+}
+
+class AddToCollectionBtn extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
+    return(
+      React.createElement("a", {className: "btn btn-default", role: "button", 
+        "data-toggle": "tooltip", "data-placement": "left", title: "Add to Collection", 
+        onClick: (e)=>{
+          e.preventDefault();
+          var comic = new Comic(this.props.item);
+          comic.addToCollection();
+          console.log('clicked');
+        }}, 
+        React.createElement("span", {className: "glyphicon glyphicon-plus-sign", "aria-hidden": "true"}), 
+        this.props.name
+      )
+    )
+  }
+}
+
+class AddToWishlistBtn extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
+    return(
+      React.createElement("a", {className: "btn btn-info", role: "button", 
+        "data-toggle": "tooltip", "data-placement": "left", title: "Tooltip on left", 
+        onClick: (e)=>{
+          e.preventDefault();
+          var comic = new WishlistComic(this.props.item);
+          comic.addToWishlist();
+          console.log('clicked');
+        }}, 
+        React.createElement("span", {className: "glyphicon glyphicon-plus-sign", "aria-hidden": "true"}), 
+        this.props.name
+      )
+    )
+  }
+}
+
+class FavoriteBtn extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
+    var self = this;
+    return(
+      React.createElement("a", {className: "btn btn-info", role: "button", 
+        "data-toggle": "tooltip", "data-placement": "left", title: "Tooltip on left", 
+        onClick: (e)=>{
+          e.preventDefault();
+          var fav = new FavoriteModel(this.props.item);
+          console.log('clicked');
+          fav.addToFavorite();
+        }}, 
+        React.createElement("span", {className: "glyphicon glyphicon-plus-sign", "aria-hidden": "true"}), 
+        this.props.name
+      )
+    )
+  }
+}
+
 module.exports = {ResultsContainer};
 
-},{"../demodata":10,"../demoseries":11,"../models/comics.js":14,"../models/proxy-models.js":16,"../proxy.js":18,"../setup":20,"./layout.jsx":4,"./searchbar.jsx":8,"jquery":49,"react":180}],8:[function(require,module,exports){
+},{"../models/comics.js":13,"../models/favorite.js":14,"../models/proxy-models.js":16,"../proxy.js":18,"../setup":20,"./layout.jsx":5,"./searchbar.jsx":9,"jquery":49,"react":180}],9:[function(require,module,exports){
 "use strict";
 var Backbone = require('backbone');
 var React = require('react');
@@ -964,15 +1409,16 @@ class SearchBar extends React.Component{
   }
   render(){
     return(
-      React.createElement("div", null, 
+      React.createElement("div", {className: "col-md-12"}, 
         React.createElement("form", {onSubmit: this.handleSubmit}, 
-          React.createElement("div", {className: "navbar-form navbar-left"}, 
+          React.createElement("div", {className: "form-group"}, 
             React.createElement(SearchButton, {searchType: this.state.searchType, changeSearchType: this.changeSearchType}), 
             React.createElement(FlexButton, {searchMod: this.state.searchMod, changeModType: this.changeModType}), 
             React.createElement("input", {className: "form-control", placeholder: "Search", onChange: this.handleSearch}), 
             React.createElement("input", {type: "submit", className: "btn", value: "Search"})
           )
-        )
+        ), 
+        React.createElement(HelpModal, null)
       )
     )
   }
@@ -1029,756 +1475,97 @@ class FlexButton extends React.Component{
     )
   }
 }
+
+class HelpModal extends React.Component{
+  render(){
+    return(
+      React.createElement("div", null, 
+        React.createElement("button", {className: "btn btn-default", "data-toggle": "modal", "data-target": "#myModal"}, 
+          React.createElement("i", {className: "fa fa-question-circle", "aria-hidden": "true"})
+        ), 
+        React.createElement("div", {className: "modal fade", id: "myModal", tabIndex: "-1", role: "dialog", "aria-labelledby": "myModalLabel"}, 
+          React.createElement("div", {className: "modal-dialog", role: "document"}, 
+            React.createElement("div", {className: "modal-content"}, 
+              React.createElement("div", {className: "modal-header"}, 
+                React.createElement("button", {type: "button", className: "close", "data-dismiss": "modal", "aria-label": "Close"}, React.createElement("span", {"aria-hidden": "true"}, "×")), 
+                React.createElement("h4", {className: "modal-title", id: "myModalLabel"}, "Search F.A.Q.")
+              ), 
+              React.createElement("div", {className: "modal-body"}, 
+                "Marvel's database does not have a lot a smart search features which can make it difficult to find the titles you are looking for." + ' ' +
+                "I've compiled a list of useful tips to help you search here.", 
+                React.createElement("ul", null, 
+                  React.createElement("li", null, "The database is frequently updated, but newer items are often missing key data, like characters."), 
+                  React.createElement("li", null, "While extensive, not everything is listed or 100% accurrate."), 
+                  React.createElement("li", null, "Exact name for comics and series will often not work. I recommend using the \"Starts With\" button."), 
+                  React.createElement("li", null, "Teams of characters are filed under \"Characters\".")
+                )
+              ), 
+              React.createElement("div", {className: "modal-footer"}, 
+                React.createElement("button", {type: "button", className: "btn btn-default", "data-dismiss": "modal"}, "Close")
+              )
+            )
+          )
+        )
+      )
+    )
+  }
+}
 module.exports = {SearchBar};
 
-},{"../models/proxy-models.js":16,"../proxy.js":18,"backbone":21,"react":180}],9:[function(require,module,exports){
+},{"../models/proxy-models.js":16,"../proxy.js":18,"backbone":21,"react":180}],10:[function(require,module,exports){
 "use strict";
-// var $ = require('jquery');
-// var React = require('react');
-//
-// var LayoutContainer = require('./layout.jsx').LayoutContainer;
-// var Comic = require('../models/comics.js').Comic;
-// var Series = require('../models/comics.js').Series;
-// var SeriesCollection = require('../models/comics.js').SeriesCollection;
-//
-// //Demo Data to structure Components///////////////////////
-// var seriesDemo1 = {
-//   id: 465,
-//   title: 'The Incredible Hulk',
-//   thumbnail: 'https://unsplash.it/200/300',
-//   creators:{},
-//   characters:{},
-//   comics:{
-//     available: 119,
-//     items:[{name:"Hulk Issue 1"}, {name:"Issue 2"},{name:"Issue 3"}]
-//   },
-//   events:{}
-// };
-//
-// var seriesDemo2 = {
-//   id: 466,
-//   title: 'The Incredible Bulk',
-//   thumbnail: 'https://unsplash.it/200/300',
-//   creators:{},
-//   characters:{},
-//   comics:{
-//     available: 100,
-//     items:[{name:"Bulk Issue 1"}, {name:"Issue 2"},{name:"Issue 3"}]
-//   },
-//   events:{}
-// };
-//
-// var seriesCollDemo = new SeriesCollection();
-// seriesCollDemo.add(seriesDemo1);
-// seriesCollDemo.add(seriesDemo2);
-//
-// //
-// //End of demo data ///////////////////////
-//
-//
-// class SeriesContainer extends React.Component{
-//   constructor(props){
-//     super(props);
-//     //This pulls down the user data from parse
-//
-//
-//     // A comparison of the user data and the series data will need to be made
-//
-//     this.selectSeries=this.selectSeries.bind(this);
-//     this.showSeries=this.showSeries.bind(this);
-//
-//     this.state={
-//       seriesList:seriesCollDemo,
-//       selectedSeries: null,
-//       selectedSeriesIssues: null
-//     }
-//   }
-//   selectSeries(id){
-//     this.setState({selectedSeries:id});
-//     $('.seriesList').slideToggle();
-//     var series = this.state.seriesList.find({'id':id});
-//     console.log('component', series);
-//     var issues = series.get('comics');
-//     this.setState({selectedSeriesIssues: issues})
-//   }
-//   showSeries(){
-//     $('.seriesList').slideToggle();
-//   }
-//   addComic(comic){
-//     //Needs to get information on this comic from Parse
-//     var comicToAdd = new Comic();
-//     console.log('add', comic);
-//     comicToAdd.addToCollection();
-//   }
-//   deleteComic(comic){
-//     console.log('delete', comic);
-//     var comicToAdd = new Comic();
-//     comicToAdd.removeFromCollection();
-//   }
-//   render(){
-//     return(
-//       <LayoutContainer>
-//         <button className="btn" onClick={this.showSeries}>Show Followed Series</button>
-//         <SeriesLayout seriesList={this.state.seriesList} selectSeries={this.selectSeries}/>
-//         <ComicLayout comicList={this.state.selectedSeriesIssues} addComic={this.addComic}
-//           deleteComic={this.deleteComic}/>
-//       </LayoutContainer>
-//     )
-//   }
-// }
-//
-// class SeriesLayout extends React.Component{
-//   constructor(props){
-//     super(props);
-//
-//     this.selectSeries = this.selectSeries.bind(this);
-//   }
-//   selectSeries(id){
-//     this.props.selectSeries(id);
-//   }
-//   render(){
-//     var seriesList = this.props.seriesList.map((item, key)=>{
-//       return(
-//         <div className="col-md-4" key={item.get('id')}>
-//           {item.get('title')}
-//           <button className="btn" onClick={(e)=>{
-//               e.preventDefault();
-//               this.selectSeries(item.get('id'))}}>
-//             View Collection</button>
-//           <img src={item.get('thumbnail')} />
-//         </div>
-//       )
-//     });
-//
-//     return(
-//       <div className="col-md-12">
-//         <div className="seriesList">
-//           {seriesList}
-//         </div>
-//       </div>
-//     )
-//   }
-// }
-//
-// class ComicLayout extends React.Component{
-//   constructor(props){
-//     super(props);
-//   }
-//   addComic(comic){
-//     this.props.addComic(comic);
-//   }
-//   deleteComic(comic){
-//     this.props.deleteComic(comic);
-//   }
-//   render(){
-//     console.log(this.props);
-//     var comicList;
-//     if (this.props.comicList){
-//       comicList = this.props.comicList.items.map((item, key)=>{
-//         return(
-//           <div key={key}>
-//             <button className="btn" onClick={(e)=>{
-//                 e.preventDefault();
-//                 this.addComic(item.name);
-//                 }}>
-//               Add</button>
-//             <a href="#itemview">
-//               {item.name}
-//             </a>
-//             <button className="btn" onClick={(e)=>{
-//                 e.preventDefault();
-//                 this.deleteComic(item.name);
-//                 }}>
-//               Delete
-//             </button>
-//           </div>
-//         )
-//       });
-//     }
-//
-//     return(
-//       <div className="comicList">
-//         Comic Section
-//         {comicList}
-//       </div>
-//     )
-//   }
-// }
-//
-// module.exports ={SeriesContainer};
+var $ = require('jquery');
+var _ = require('underscore');
+var React = require('react');
 
-},{}],10:[function(require,module,exports){
-"use strict";
+var User = require('../models/user.js').User;
+var LayoutContainer = require('./layout.jsx').LayoutContainer;
+var Comic = require('../models/comics.js').Comic;
+var ChangeComic = require('../models/comics.js').ChangeComic;
+var ComicCollection = require('../models/comics.js').ComicCollection;
+var WishlistComic = require('../models/comics.js').WishlistComic;
+var WishlistCollection = require('../models/comics.js').WishlistCollection;
+var CollectionContainer = require('./collectionview.jsx').CollectionContainer;
 
-var demoJSON =
-{
-  "id": 43092,
-  "digitalId": 0,
-  "title": "Brilliant (2011) #7",
-  "issueNumber": 7,
-  "variantDescription": "",
-  "description": "From the award-winning creators behind ULTIMATE SPIDER-MAN and AVENGERS ASSEMBLE comes the shocking creator-owned series that gives you something very different than a regular superhero comic and asks the question: How would the world react if a group of brilliant college students actually discovered the secret of superpowers? Well now, the secret is out!",
-  "modified": "2016-05-16T09:04:21-0400",
-  "isbn": "",
-  "upc": "75960607683300711",
-  "diamondCode": "JUN120706",
-  "ean": "",
-  "issn": "",
-  "format": "Comic",
-  "pageCount": 40,
-  "textObjects": [
-    {
-      "type": "issue_solicit_text",
-      "language": "en-us",
-      "text": "From the award-winning creators behind ULTIMATE SPIDER-MAN and AVENGERS ASSEMBLE comes the shocking creator-owned series that gives you something very different than a regular superhero comic and asks the question: How would the world react if a group of brilliant college students actually discovered the secret of superpowers? Well now, the secret is out!"
+class WishlistContainer extends CollectionContainer{
+  constructor(props){
+    super(props);
+
+    var user = User.current();
+    var userId = user.get('objectId');
+    var local = JSON.parse(localStorage.getItem('username'));
+    var wishCollection = new WishlistCollection();
+    wishCollection.whereClause ={};
+    var self = this;
+    wishCollection.parseWhere('collectors', '_User', userId).fetch().done(function(){
+      console.log(wishCollection);
+      self.setState({collection:wishCollection});
+    });
+
+    this.state ={
+      user:user,
+      userId:userId,
+      collection:wishCollection,
+      panelColor:"success"
     }
-  ],
-  "resourceURI": "http://gateway.marvel.com/v1/public/comics/43092",
-  "urls": [
-    {
-      "type": "detail",
-      "url": "http://marvel.com/comics/issue/43092/brilliant_2011_7?utm_campaign=apiRef&utm_source=73d781f8f57972356e08d844d2d317ac"
-    }
-  ],
-  "series": {
-    "resourceURI": "http://gateway.marvel.com/v1/public/series/14803",
-    "name": "Brilliant (2011 - Present)"
-  },
-  "variants": [],
-  "collections": [],
-  "collectedIssues": [],
-  "dates": [
-    {
-      "type": "onsaleDate",
-      "date": "2020-12-31T00:00:00-0500"
-    },
-    {
-      "type": "focDate",
-      "date": "2020-12-17T00:00:00-0500"
-    }
-  ],
-  "prices": [
-    {
-      "type": "printPrice",
-      "price": 3.95
-    }
-  ],
-  "thumbnail": {
-    "path": "http://i.annihil.us/u/prod/marvel/i/mg/b/80/4fb2a4aa018c6",
-    "extension": "jpg"
-  },
-  "images": [
-    {
-      "path": "http://i.annihil.us/u/prod/marvel/i/mg/b/80/4fb2a4aa018c6",
-      "extension": "jpg"
-    }
-  ],
-  "creators": {
-    "available": 1,
-    "collectionURI": "http://gateway.marvel.com/v1/public/comics/43092/creators",
-    "items": [
-      {
-        "resourceURI": "http://gateway.marvel.com/v1/public/creators/4430",
-        "name": "Jeff Youngquist",
-        "role": "editor"
-      }
-    ],
-    "returned": 1
-  },
-  "characters": {
-    "available": 0,
-    "collectionURI": "http://gateway.marvel.com/v1/public/comics/43092/characters",
-    "items": [],
-    "returned": 0
-  },
-  "stories": {
-    "available": 2,
-    "collectionURI": "http://gateway.marvel.com/v1/public/comics/43092/stories",
-    "items": [
-      {
-        "resourceURI": "http://gateway.marvel.com/v1/public/stories/96761",
-        "name": "Cover #96761",
-        "type": "cover"
-      },
-      {
-        "resourceURI": "http://gateway.marvel.com/v1/public/stories/96762",
-        "name": "Interior #96762",
-        "type": "interiorStory"
-      }
-    ],
-    "returned": 2
-  },
-  "events": {
-    "available": 0,
-    "collectionURI": "http://gateway.marvel.com/v1/public/comics/43092/events",
-    "items": [],
-    "returned": 0
   }
-};
+  componentWillMount(){
+    var user = User.current();
+    var userId = user.get('objectId');
+    var local = JSON.parse(localStorage.getItem('username'));
+    var wishCollection = new WishlistCollection();
+    wishCollection.whereClause ={};
+    var self = this;
+    wishCollection.parseWhere('collectors', '_User', userId).fetch().done(function(){
+      console.log(wishCollection);
+      self.setState({collection:wishCollection});
+    });
+  }
+}
 
-module.exports = demoJSON;
+module.exports ={WishlistContainer}
 
-},{}],11:[function(require,module,exports){
-"use strict";
-
-var demoSeries =
-{
-      "id": 1987,
-      "title": "Amazing Spider-Man (1963 - 1998)",
-      "description": "The classic adventures of Spider-Man from the early days up until the 90's! Meet all of Spidey's deadly enemies, from the Green Goblin and Doctor Octopus to Venom and Carnage, plus see Peter Parker fall in love, face tragedy and triumph, and learn that with great power comes great responsibility.",
-      "resourceURI": "http://gateway.marvel.com/v1/public/series/1987",
-      "urls": [
-        {
-          "type": "detail",
-          "url": "http://marvel.com/comics/series/1987/amazing_spider-man_1963_-_1998?utm_campaign=apiRef&utm_source=73d781f8f57972356e08d844d2d317ac"
-        }
-      ],
-      "startYear": 1963,
-      "endYear": 1998,
-      "rating": "",
-      "type": "",
-      "modified": "2013-05-21T13:01:41-0400",
-      "thumbnail": {
-        "path": "http://i.annihil.us/u/prod/marvel/i/mg/6/30/519ba83268a2b",
-        "extension": "jpg"
-      },
-      "creators": {
-        "available": 241,
-        "collectionURI": "http://gateway.marvel.com/v1/public/series/1987/creators",
-        "items": [
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/807",
-            "name": "Comicraft",
-            "role": "letterer"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/2656",
-            "name": "Oakley",
-            "role": "letterer"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/11403",
-            "name": "RSComicraft",
-            "role": "letterer"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/2529",
-            "name": "Liz Agraphiotis",
-            "role": "letterer"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/1865",
-            "name": "Diana Albers",
-            "role": "letterer"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/1937",
-            "name": "Jon Babcock",
-            "role": "letterer"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/10096",
-            "name": "HICKS",
-            "role": "colorist"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/2113",
-            "name": "Joe Agostinelli",
-            "role": "colorist"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/2074",
-            "name": "Don T. Ask",
-            "role": "colorist"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/2330",
-            "name": "Malibu",
-            "role": "other"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/2112",
-            "name": "Larry Alexander",
-            "role": "penciller"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/1167",
-            "name": "Ross Andru",
-            "role": "penciller"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/87",
-            "name": "Mark Bagley",
-            "role": "penciller"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/406",
-            "name": "Mark Beagley",
-            "role": "penciller"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/2041",
-            "name": "Bill Anderson",
-            "role": "inker"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/1836",
-            "name": "Terry Austin",
-            "role": "inker"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/300",
-            "name": "Kyle Baker",
-            "role": "inker"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/2038",
-            "name": "John Beatty",
-            "role": "inker"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/2047",
-            "name": "Craig Anderson",
-            "role": "writer"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/creators/1352",
-            "name": "Mike W. Barr",
-            "role": "writer"
-          }
-        ],
-        "returned": 20
-      },
-      "characters": {
-        "available": 125,
-        "collectionURI": "http://gateway.marvel.com/v1/public/series/1987/characters",
-        "items": [
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1009165",
-            "name": "Avengers"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1009179",
-            "name": "Beetle (Abner Jenkins)"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1011346",
-            "name": "Ben Reilly"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1010782",
-            "name": "Ben Urich"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1009181",
-            "name": "Big Wheel"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1009185",
-            "name": "Black Cat"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1010687",
-            "name": "Black Tarantula"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1009189",
-            "name": "Black Widow"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1010881",
-            "name": "Blacklash"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1010371",
-            "name": "Boomerang"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1009220",
-            "name": "Captain America"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1009225",
-            "name": "Captain Stacy"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1011027",
-            "name": "Captain Universe"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1011052",
-            "name": "Cardiac"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1009227",
-            "name": "Carnage"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1009234",
-            "name": "Chameleon"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1009241",
-            "name": "Cloak"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1009243",
-            "name": "Colossus"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1009244",
-            "name": "Curt Conners"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/characters/1009262",
-            "name": "Daredevil"
-          }
-        ],
-        "returned": 20
-      },
-      "stories": {
-        "available": 1077,
-        "collectionURI": "http://gateway.marvel.com/v1/public/series/1987/stories",
-        "items": [
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13530",
-            "name": "The Stuff Which Dreams are Made!",
-            "type": "cover"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13531",
-            "name": "Where Have All The Heroes Gone?",
-            "type": "interiorStory"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13532",
-            "name": "The Secrets of Peter Parker!",
-            "type": "interiorStory"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13533",
-            "name": "",
-            "type": ""
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13534",
-            "name": "Spider-Man",
-            "type": "interiorStory"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13535",
-            "name": "Spider-Man vs. The Chameleon",
-            "type": "interiorStory"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13536",
-            "name": "",
-            "type": ""
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13537",
-            "name": "The Enforcers!",
-            "type": "interiorStory"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13538",
-            "name": "The Spider Or The Man?",
-            "type": "cover"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13539",
-            "name": "The Spider or the Man?",
-            "type": "interiorStory"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13540",
-            "name": "Cover #13540",
-            "type": "cover"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13541",
-            "name": "A Monster Called...Morbius!",
-            "type": "interiorStory"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13542",
-            "name": "Cover #13542",
-            "type": "cover"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13543",
-            "name": "Vampire At Large!",
-            "type": "interiorStory"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13544",
-            "name": "Cover #13544",
-            "type": "cover"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13545",
-            "name": "Walk The Savage Land!",
-            "type": "interiorStory"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13546",
-            "name": "Cover #13546",
-            "type": "cover"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13547",
-            "name": "The Beauty and the Brute!",
-            "type": "interiorStory"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13548",
-            "name": "Cover #13548",
-            "type": "cover"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/stories/13549",
-            "name": "The Spider Slayer!",
-            "type": "interiorStory"
-          }
-        ],
-        "returned": 20
-      },
-      "comics": {
-        "available": 441,
-        "collectionURI": "http://gateway.marvel.com/v1/public/series/1987/comics",
-        "items": [
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6482",
-            "name": "Amazing Spider-Man (1963) #1"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6593",
-            "name": "Amazing Spider-Man (1963) #2"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6704",
-            "name": "Amazing Spider-Man (1963) #3"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6815",
-            "name": "Amazing Spider-Man (1963) #4"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6868",
-            "name": "Amazing Spider-Man (1963) #5"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6879",
-            "name": "Amazing Spider-Man (1963) #6"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6890",
-            "name": "Amazing Spider-Man (1963) #7"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6901",
-            "name": "Amazing Spider-Man (1963) #8"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6912",
-            "name": "Amazing Spider-Man (1963) #9"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6483",
-            "name": "Amazing Spider-Man (1963) #10"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6494",
-            "name": "Amazing Spider-Man (1963) #11"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6505",
-            "name": "Amazing Spider-Man (1963) #12"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6516",
-            "name": "Amazing Spider-Man (1963) #13"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6527",
-            "name": "Amazing Spider-Man (1963) #14"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6538",
-            "name": "Amazing Spider-Man (1963) #15"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6549",
-            "name": "Amazing Spider-Man (1963) #16"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6560",
-            "name": "Amazing Spider-Man (1963) #17"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6571",
-            "name": "Amazing Spider-Man (1963) #18"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6582",
-            "name": "Amazing Spider-Man (1963) #19"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/comics/6594",
-            "name": "Amazing Spider-Man (1963) #20"
-          }
-        ],
-        "returned": 20
-      },
-      "events": {
-        "available": 7,
-        "collectionURI": "http://gateway.marvel.com/v1/public/series/1987/events",
-        "items": [
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/events/116",
-            "name": "Acts of Vengeance!"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/events/252",
-            "name": "Inferno"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/events/258",
-            "name": "Kraven's Last Hunt"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/events/151",
-            "name": "Maximum Carnage"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/events/154",
-            "name": "Onslaught"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/events/270",
-            "name": "Secret Wars"
-          },
-          {
-            "resourceURI": "http://gateway.marvel.com/v1/public/events/271",
-            "name": "Secret Wars II"
-          }
-        ],
-        "returned": 7
-      },
-      "next": {
-        "resourceURI": "http://gateway.marvel.com/v1/public/series/454",
-        "name": "Amazing Spider-Man (1999 - 2013)"
-      },
-      "previous": {
-        "resourceURI": "http://gateway.marvel.com/v1/public/series/2987",
-        "name": "Amazing Fantasy (1962)"
-      }
-    };
-
-
-module.exports = demoSeries;
-
-},{}],12:[function(require,module,exports){
+},{"../models/comics.js":13,"../models/user.js":17,"./collectionview.jsx":1,"./layout.jsx":5,"jquery":49,"react":180,"underscore":181}],11:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var Backbone = require('backbone');
@@ -1789,7 +1576,7 @@ $(function(){
   Backbone.history.start();
 });
 
-},{"./router":19,"backbone":21,"jquery":49}],13:[function(require,module,exports){
+},{"./router":19,"backbone":21,"jquery":49}],12:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var Backbone = require('backbone');
@@ -1814,7 +1601,7 @@ module.exports ={
   AvatarCollection:AvatarCollection
 };
 
-},{"../setup":20,"./parse":15,"backbone":21,"jquery":49}],14:[function(require,module,exports){
+},{"../setup":20,"./parse":15,"backbone":21,"jquery":49}],13:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var Backbone = require('backbone');
@@ -1831,27 +1618,11 @@ var ProxyCollection = require('./proxy-models').ProxyCollection;
 
 var Comic = ParseModel.extend({
   urlRoot:function(){
-    var self = this;
-    var objectId;
-    var comicCollection = new ComicCollection();
-    comicCollection.parseWhere('id', self.get('id')).fetch().done(function(){
-      var temp = new Comic();
-      console.log('url root',comicCollection);
-    });
-
-    var url = parse.BASE_API_URL + 'classes/comics/'+objectId;
+    var url = parse.BASE_API_URL + 'classes/comics/';
     console.log(url);
     return url;
   },
-  getRating: function(){
-    //Used to calculate rating
-
-  },
-  updateRating: function(rating){
-    console.log('method called', rating);
-  },
   addToCollection: function(){
-
     var thisComic = this;
     var objectId = User.current().get('objectId');
     thisComic.set({'collectors' : {
@@ -1864,35 +1635,49 @@ var Comic = ParseModel.extend({
       console.log('add to collection 1');
       console.log(thisComic);
     });
+  }
+});
+
+var ComicRating = ParseModel.extend({
+  urlRoot:function(){
+    var url = parse.BASE_API_URL + 'classes/ratings/';
+    return url;
   },
-  // removeFromCollection: function(){
-  //   //Used to remove from the User's Collection
-  //
-  //   var thisComic = new Comic(this);
-  //   var objectId = User.current().get('objectId');
-  //   var id = this.id;
-  //
-  //   this.set({'collectors' : {
-  //     "__op":"RemoveRelation",
-  //     "objects":[{
-  //       "__type":"Pointer",
-  //       "className":"_User",
-  //       "objectId":objectId
-  //     }]
-  //   }});
-  //
-  //   console.log(parse.BASE_API_URL + 'classes/comics/'+id);
-  //   var url =parse.BASE_API_URL + 'classes/comics/'+id;
-  //   parse.initialize();
-  //   $.ajaxSetup({
-  //     'method':"PUT"
-  //   });
-  //   $.ajax(url, thisComic).done(function(){
-  //     console.log('removed');
-  //
-  //   });
-  //   parse.deinitialize();
-  // }
+  updateRating: function(){
+    console.log('rating 1', this);
+    this.save().then(function(){
+      console.log('rating 2');
+    });
+  },
+  getRating:function(){
+
+  }
+});
+
+var WishlistComic = ParseModel.extend({
+  urlRoot:function(){
+    var url = parse.BASE_API_URL + 'classes/wishlist/';
+    console.log(url);
+    return url;
+  },
+  addToWishlist: function(){
+    var thisComic = this;
+    var objectId = User.current().get('objectId');
+
+    thisComic.set({'collectors' : {
+      "__op":"AddRelation",
+      "objects":[
+        {"__type":"Pointer", "className":"_User", "objectId":objectId}
+      ]}
+    });
+    thisComic.save().then(function(){
+      console.log('add to collection 1');
+      console.log(thisComic);
+    });
+  },
+  getRating: function(){
+
+  }
 });
 
 var ChangeComic = ParseModel.extend({
@@ -1906,8 +1691,9 @@ var ChangeComic = ParseModel.extend({
   removeFromCollection: function(){
     //Used to remove from the User's Collection
     var userId = User.current().get('objectId');
-
-    this.set({'collectors' : {
+    console.log(userId);
+    console.log('1', this);
+    this.set({"collectors" :{
       "__op":"RemoveRelation",
       "objects":[{
         "__type":"Pointer",
@@ -1915,38 +1701,44 @@ var ChangeComic = ParseModel.extend({
         "objectId":userId
       }]
     }});
+    this.set({});
+    console.log('2', this);
     var objectId = this.get('id');
 
     var url = parse.BASE_API_URL + 'classes/comics/'+objectId;
-    console.log(url);
 
     parse.initialize();
     $.ajaxSetup({
       'method':"PUT"
     });
 
-    $.ajax(url, this).done(function(){
-      console.log('removed');
+    var thisComic = this.toJSON();
+    console.log(thisComic);
+    console.log(url);
+    $.ajax({
+      url:url,
+      thisComic:thisComic
+    }).done(function(){
+      console.log('removed',thisComic);
     });
 
     parse.deinitialize();
   }
 });
 
-//
-// var Series = ParseModel.extend({
-//   makeFollowed: function(){
-//
-//   }
-// });
-//
-// var SeriesCollection = ParseCollection.extend({
-//   model: Series
-// });
-
 var ComicCollection = ParseCollection.extend({
   model: Comic,
   baseUrl: 'classes/comics'
+});
+
+var WishlistCollection = ParseCollection.extend({
+  model: Comic,
+  baseUrl: 'classes/wishlist'
+});
+
+var RatingCollection = ParseCollection.extend({
+  model: ComicRating,
+  baseUrl: 'classes/ratings'
 });
 
 var ProxyComic = ProxyModel.extend({
@@ -1956,9 +1748,86 @@ var ProxyComic = ProxyModel.extend({
 module.exports = {
   Comic:Comic,
   ComicCollection:ComicCollection,
-  ChangeComic:ChangeComic
-  // Series: Series,
-  // SeriesCollection:SeriesCollection
+  ComicRating:ComicRating,
+  RatingCollection:RatingCollection,
+  ChangeComic:ChangeComic,
+  WishlistCollection:WishlistCollection,
+  WishlistComic:WishlistComic
+};
+
+},{"../setup":20,"./parse":15,"./proxy-models":16,"./user":17,"backbone":21,"jquery":49}],14:[function(require,module,exports){
+"use strict";
+var $ = require('jquery');
+var Backbone = require('backbone');
+
+var parse = require('../setup').parse;
+
+var User = require('./user').User;
+var ParseModel = require('./parse').ParseModel;
+var ParseCollection = require('./parse').ParseCollection;
+var ProxyModel = require('./proxy-models').ProxyModel;
+var ProxyCollection = require('./proxy-models').ProxyCollection;
+
+var FavoriteModel = ParseModel.extend({
+  urlRoot: function(){
+    return parse.BASE_API_URL+'classes/favorites';
+  },
+  addToFavorite: function(){
+    var thisItem = this;
+    var holder = thisItem.title||thisItem.name;
+    var objectId = User.current().get('objectId');
+    thisItem.set({'collectors' : {
+      "__op":"AddRelation",
+      "objects":[
+        {"__type":"Pointer", "className":"_User", "objectId":objectId}
+      ]}
+    });
+    thisItem.set('titleName', holder);
+    thisItem.save().then(function(){
+      console.log('add to collection 1');
+      console.log(thisItem);
+    });
+  }
+});
+
+var FavoriteCollection = ParseCollection.extend({
+  baseUrl:'classes/favorites',
+  model: FavoriteModel
+});
+
+// var FavoriteCharacter = FavoriteModel.extend({
+//
+// });
+//
+// var FavoriteSeries = FavoriteModel.extend({
+//
+// });
+//
+// var FavoriteEvent = FavoriteModel.extend({
+//
+// });
+//
+// var FavCharCollection = ParseCollection.extend({
+//
+// });
+//
+// var FavSeriesCollection = ParseCollection.extend({
+//
+// });
+//
+// var FavEventCollection = ParseCollection.extend({
+//
+// });
+
+module.exports = {
+  // FavoriteCharacter:FavoriteCharacter,
+  FavoriteCollection:FavoriteCollection,
+  FavoriteModel:FavoriteModel
+  // FavoriteSeries:FavoriteSeries,
+  // FavoriteEvent:FavoriteEvent,
+  // FavCharCollection:FavCharCollection,
+  // FavSeriesCollection:FavSeriesCollection,
+  // FavEventCollection:FavEventCollection
 };
 
 },{"../setup":20,"./parse":15,"./proxy-models":16,"./user":17,"backbone":21,"jquery":49}],15:[function(require,module,exports){
@@ -2003,7 +1872,7 @@ var ParseModel = Backbone.Model.extend({
     this.set(field, pointerObject);
 
     return this;
-  },
+  }
 });
 
 //Parse Collection - cribbing from notes on 9.1
@@ -2085,26 +1954,60 @@ var ProxyCollection = Backbone.Collection.extend({
 });
 
 var SearchRequest = ProxyModel.extend({
+  urlMod:'',
+  urlRoot:function(){
+    console.log(proxy.PROXY_API_URL + this.get('urlMod'));
+    return proxy.PROXY_API_URL + this.get('urlMod');
+  },
   sendSearch: function(callback){
     console.log('sending');
     this.fetch().done(function(){
       callback();
     });
   },
-});
-
-
-var Results = ProxyModel.extend({
-  displayResults: function(){
-    Backbone.history.navigate('results', {trigger: true});
+  modifyUrl:function(searchType, searchTerm, searchMod, offset){
+    var currOffset=null;
+    if(!offset){
+      currOffset=0;
+    } else {
+      currOffset=offset;
+    }
+    console.log(this);
+    this.set('urlMod', '');
+    var search;
+    var mod;
+    if (!searchTerm){
+      search = '';
+      mod = '';
+    } else {
+      search=searchTerm;
+      mod = searchMod;
+    }
+    console.log(searchType+'?'+mod+search+'&offset='+currOffset+'&');
+    var url = searchType+'?'+mod+search+'&offset='+currOffset+'&';
+    this.set('urlMod', url);
+  },
+  singleUrl:function(searchType, searchId, focus, offset){
+    var focusUrl ='';
+    var currOffset ='';
+    if(focus){
+      focusUrl = '/'+focus;
+    }
+    if (offset){
+      currOffset = 'offset='+offset+'&';
+    }
+    this.set('urlMod', '');
+    var url = searchType+'/'+searchId+focusUrl+'?'+currOffset;
+    this.set('urlMod', url);
   }
 });
+
+
 
 module.exports={
   ProxyModel : ProxyModel,
   ProxyCollection : ProxyCollection,
-  SearchRequest: SearchRequest,
-  Results:Results
+  SearchRequest: SearchRequest
 };
 
 },{"../proxy":18,"backbone":21,"jquery":49}],17:[function(require,module,exports){
@@ -2120,6 +2023,9 @@ var User = ParseModel.extend({
 
   urlRoot: function(){
     return parse.BASE_API_URL + 'users';
+  },
+  updateInfo:function(){
+    
   }
 },{
   login: function(credentials, callback){
@@ -2182,9 +2088,9 @@ var $ = require('jquery');
 // Info to connect to the proxy server
 // Proxy server is used to secure the apikey data
 var proxy = {
-  PROXY_API_URL:'https://lycanthrope-proxy.herokuapp.com/',
+  // PROXY_API_URL:'https://lycanthrope-proxy.herokuapp.com/',
   //info for localhost proxy
-  // PROXY_API_URL:'http://localhost:3000/'
+  PROXY_API_URL:'http://localhost:3000/'
 };
 
 module.exports = proxy;
@@ -2201,9 +2107,10 @@ var landing = require('./components/landing.jsx').LandingContainer;
 var login = require('./components/login.jsx').LoginContainer;
 var profile = require('./components/profile.jsx').ProfileContainer;
 var collection = require('./components/collectionview.jsx').CollectionContainer;
+var wishlist = require('./components/wishlistview.jsx').WishlistContainer;
 var itemView = require('./components/itemview.jsx').ItemContainer;
-var seriesView = require('./components/seriesview.jsx').SeriesContainer;
 var resultsView = require('./components/results.jsx').ResultsContainer;
+var favorites = require('./components/favoriteview.jsx').FavoriteContainer;
 
 var AppRouter = Backbone.Router.extend({
   initialize:function(){
@@ -2219,9 +2126,11 @@ var AppRouter = Backbone.Router.extend({
     'collection':'collection',
     'itemview/:searchtype/:id':'itemView',
     'itemview':'itemView',
-    'series/:id':'seriesView',
-    'series':'seriesView',
-    'results':'results'
+    'results/:searchtype/:id/:focus':'results',
+    'results':'results',
+    'top':'results',
+    'wishlist':'wishlist',
+    'favorites':'favorites'
   },
   execute: function(callback, args, name) {
     var user = User.current()
@@ -2265,20 +2174,31 @@ var AppRouter = Backbone.Router.extend({
     ReactDOM.render(
       React.createElement(itemView, {
         id:id,
-        searchType:searchtype
+        searchType:searchtype,
+        focus:focus
       }),
       document.getElementById('app')
     );
   },
-  seriesView: function(id){
+  results:function(searchtype, id, focus){
     ReactDOM.render(
-      React.createElement(seriesView, {id:id}),
+      React.createElement(resultsView, {
+        id:id,
+        searchType:searchtype,
+        focus:focus
+      }),
       document.getElementById('app')
     );
   },
-  results:function(){
+  wishlist:function(){
     ReactDOM.render(
-      React.createElement(resultsView),
+      React.createElement(wishlist),
+      document.getElementById('app')
+    );
+  },
+  favorites:function(){
+    ReactDOM.render(
+      React.createElement(favorites),
       document.getElementById('app')
     );
   }
@@ -2288,7 +2208,7 @@ var appRouter = new AppRouter();
 
 module.exports = appRouter;
 
-},{"./components/collectionview.jsx":1,"./components/itemview.jsx":2,"./components/landing.jsx":3,"./components/login.jsx":5,"./components/profile.jsx":6,"./components/results.jsx":7,"./components/seriesview.jsx":9,"./models/user":17,"./setup":20,"backbone":21,"react":180,"react-dom":51}],20:[function(require,module,exports){
+},{"./components/collectionview.jsx":1,"./components/favoriteview.jsx":2,"./components/itemview.jsx":3,"./components/landing.jsx":4,"./components/login.jsx":6,"./components/profile.jsx":7,"./components/results.jsx":8,"./components/wishlistview.jsx":10,"./models/user":17,"./setup":20,"backbone":21,"react":180,"react-dom":51}],20:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var Backbone = require('backbone');
@@ -34744,4 +34664,4 @@ module.exports = require('./lib/React');
   }
 }.call(this));
 
-},{}]},{},[12]);
+},{}]},{},[11]);

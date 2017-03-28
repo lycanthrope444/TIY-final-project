@@ -5769,6 +5769,31 @@ img {
 /*
 NAVBAR LAYOUT
 */
+.marvel-logo {
+  max-height: 50px; }
+
 .avatar-header {
   max-width: 50px; }
+
+/*
+RESULTS PAGE
+*/
+.results-pic {
+  min-height: 270px;
+  max-height: 270px; }
+
+.glyphicon-down {
+  display: none; }
+
+.results-title {
+  max-height: 26px;
+  overflow: scroll; }
+
+/*
+Collection View
+*/
+.inspect-item {
+  list-style: none;
+  color: #FFFFFF; }
+
 /*# sourceMappingURL=app.css.map */
