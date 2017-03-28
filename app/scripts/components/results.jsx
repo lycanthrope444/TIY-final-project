@@ -50,7 +50,7 @@ class ResultsContainer extends React.Component{
         id: self.props.id,
         focus: self.props.focus
       });
-
+      $(document.body).css({'cursor' : 'wait'});
       initialSearch.singleUrl(self.props.searchType, self.props.id, self.props.focus);
       initialSearch.sendSearch(function(){
         console.log('searching');
@@ -60,12 +60,17 @@ class ResultsContainer extends React.Component{
           searchResults:filter.results,
           searchType:self.props.focus
         });
+        $(document.body).css({'cursor' : 'default'});
       });
     }
   }
   changeSearchType(term){
     console.log('clicked', term);
-    this.setState({searchType:term, currentOffset: 0});
+    this.setState({
+      searchType:term,
+      currentOffset: 0,
+      focus:''
+    });
     console.log(this.state);
   }
   changeModType(modObject){
@@ -75,7 +80,7 @@ class ResultsContainer extends React.Component{
   }
   handleResults(){
     var self=this;
-    if (this.state.searchResults){
+    if (this.state.searchResults&&this.state.searchResults.length>1){
       var displayedResults = this.state.searchResults.map(function(item, index){
         return(
           <div key={index}>
@@ -85,37 +90,8 @@ class ResultsContainer extends React.Component{
                   src ={item.thumbnail.path+'.'+item.thumbnail.extension} />
                 <div className="caption results-caption">
                   <h3 className="results-title">{item.name || item.title}</h3>
-
-                  <p className="results-buttons btn-group">
-                    <a className="btn btn-primary" role="button"
-                      href={((self.state.focus)?"#itemview/"+self.state.focus+'/'+item.id :
-                        "#itemview/"+self.state.searchType+'/'+item.id)}>
-                      <span className="glyphicon glyphicon-zoom-in"></span>
-                      View
-                    </a>
-                    <a className="btn btn-default" role="button"
-                      data-toggle="tooltip" data-placement="left" title="Tooltip on left"
-                      onClick={(e)=>{
-                        e.preventDefault();
-                        var comic = new Comic(item);
-                        comic.addToCollection();
-                        console.log('clicked');
-                      }}>
-                      <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                      Collection
-                    </a>
-                    <a className="btn btn-info" role="button"
-                      data-toggle="tooltip" data-placement="left" title="Tooltip on left"
-                      onClick={(e)=>{
-                        e.preventDefault();
-                        var comic = new WishlistComic(item);
-                        comic.addToWishlist();
-                        console.log('clicked');
-                      }}>
-                      <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                      Wishlist
-                    </a>
-                  </p>
+                  <FeatureButtons item={item} searchType={self.state.searchType}
+                    focus={self.state.focus} id={self.state.id}/>
                 </div>
               </div>
             </div>
@@ -138,7 +114,10 @@ class ResultsContainer extends React.Component{
     }
   }
   handleSubmit(searchType, searchTerm, searchMod, offset){
-    console.log(searchType, searchTerm, searchMod, offset)
+    console.log(searchType, searchTerm, searchMod, offset);
+
+    $(document.body).css({'cursor' : 'wait'});
+
     this.setState({
       searchTerm: searchTerm,
       focus:''
@@ -161,7 +140,7 @@ class ResultsContainer extends React.Component{
         results: searchResults.total,
         pages: Math.ceil(searchResults.total/20)
       });
-
+      $(document.body).css({'cursor' : 'default'});
       self.handleResults();
     });
 
@@ -169,13 +148,36 @@ class ResultsContainer extends React.Component{
   prevOffset(){
     var self = this;
     var newPage = this.state.currPage - 1;
-    console.log(newPage);
     var newOffset= this.state.currentOffset - 20;
-    this.setState({
-      currentOffset: newOffset,
-      currPage: newPage
-    });
-    this.handleSubmit(self.state.searchType, self.state.searchTerm, self.state.searchMod, newOffset);
+    var initialSearch = new SearchRequest();
+
+    if(self.props.id){
+
+      var searchType = self.props.searchType ;
+      var id = self.props.id;
+      var focus = self.props.focus;
+
+      initialSearch.singleUrl(searchType, id, focus, newOffset);
+      initialSearch.sendSearch(function(){
+        console.log('searching');
+        var filter = initialSearch.get('data');
+        console.log(filter);
+        self.setState({
+          searchResults:filter.results,
+          currentOffset:newOffset
+        });
+      });
+    } else {
+      console.log(newPage);
+      console.log('prev clicked', self.state.searchType, self.state.searchTerm, self.state.searchMod);
+
+      this.setState({
+        currentOffset: newOffset,
+        currPage: newPage
+      });
+      console.log(this.state);
+      this.handleSubmit(self.state.searchType, self.state.searchTerm, self.state.searchMod, newOffset);
+    }
   }
   nextOffset(){
     var self = this;
@@ -251,6 +253,113 @@ class ResultsHeader extends React.Component{
           </nav>
         </div>
       </div>
+    )
+  }
+}
+
+class FeatureButtons extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
+    var self = this;
+    if (this.props.searchType === 'comics'){
+      return(
+        <p className="results-buttons btn-group">
+          <ViewButton focus={self.props.focus} id={self.props.item.id}
+            searchType={self.props.searchType}/>
+          <AddToCollectionBtn name="Collection"/>
+          <AddToWishlistBtn name="Wishlist" />
+        </p>
+      )
+    } else {
+      return (
+        <p className="results-buttons btn-group">
+          <ViewButton focus={self.props.focus} id={self.props.item.id}
+            searchType={self.props.searchType}/>
+          <FavoriteBtn name="Favorite"/>
+        </p>
+      )
+    }
+  }
+}
+
+class ViewButton extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
+    var self = this;
+    return(
+      <a className="btn btn-primary" role="button"
+        href={((self.props.focus)?"#itemview/"+self.props.focus+'/'+self.props.id :
+          "#itemview/"+self.props.searchType+'/'+self.props.id)}>
+        <span className="glyphicon glyphicon-zoom-in"></span>
+        View
+      </a>
+    )
+  }
+}
+
+class AddToCollectionBtn extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
+    return(
+      <a className="btn btn-default" role="button"
+        data-toggle="tooltip" data-placement="left" title="Add to Collection"
+        onClick={(e)=>{
+          e.preventDefault();
+          var comic = new Comic(item);
+          comic.addToCollection();
+          console.log('clicked');
+        }}>
+        <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+        {this.props.name}
+      </a>
+    )
+  }
+}
+
+class AddToWishlistBtn extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
+    return(
+      <a className="btn btn-info" role="button"
+        data-toggle="tooltip" data-placement="left" title="Tooltip on left"
+        onClick={(e)=>{
+          e.preventDefault();
+          var comic = new WishlistComic(item);
+          comic.addToWishlist();
+          console.log('clicked');
+        }}>
+        <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+        {this.props.name}
+      </a>
+    )
+  }
+}
+
+class FavoriteBtn extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
+    return(
+      <a className="btn btn-info" role="button"
+        data-toggle="tooltip" data-placement="left" title="Tooltip on left"
+        onClick={(e)=>{
+          e.preventDefault();
+          var comic = new WishlistComic(item);
+          comic.addToWishlist();
+          console.log('clicked');
+        }}>
+        <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+        {this.props.name}
+      </a>
     )
   }
 }

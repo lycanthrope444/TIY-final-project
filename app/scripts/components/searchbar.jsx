@@ -144,8 +144,12 @@ class HelpModal extends React.Component{
                 <h4 className="modal-title" id="myModalLabel">Search F.A.Q.</h4>
               </div>
               <div className="modal-body">
-                Marvel's API does not have a lot a smart search features which can make it difficult to find the titles you are looking for.
+                Marvel's database does not have a lot a smart search features which can make it difficult to find the titles you are looking for.
                 I've compiled a list of useful tips to help you search here.
+                <ul>
+                  <li>While extensive, not everything is listed or 100% accurrate.</li>
+                  <li>Exact name for comics and series will often not work. I recommend using the "Starts With" button.</li>
+                </ul>
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
