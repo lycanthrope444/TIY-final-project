@@ -2090,7 +2090,8 @@ var $ = require('jquery');
 var proxy = {
   // PROXY_API_URL:'https://lycanthrope-proxy.herokuapp.com/',
   //info for localhost proxy
-  PROXY_API_URL:'http://localhost:3000/'
+  // PROXY_API_URL:'http://localhost:3000/'
+  PROXY_API_URL:'https://secure-ravine-45387.herokuapp.com/'
 };
 
 module.exports = proxy;
