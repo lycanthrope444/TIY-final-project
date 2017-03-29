@@ -5,7 +5,7 @@ $icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
 //Color Pallette
 $marvel-red: #f0141e;
 $dark-blue: #183059;
-$light-blue: #276fbf;
+$light-blue: #46bbf2;
 $off-white: #f6f4f3;
 $off-black: #0d1321;
 
@@ -62,6 +62,12 @@ LANDING PAGE
 }
 
 .login-container{
+  background-color: $light-blue;
+
+}
+
+.sign-up-container{
+  background-color: $light-blue;
   display: none;
 }
 

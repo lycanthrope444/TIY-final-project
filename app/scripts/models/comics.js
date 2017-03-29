@@ -104,7 +104,7 @@ var ChangeComic = ParseModel.extend({
 
     parse.initialize();
     $.ajaxSetup({
-      'method':"PUT"
+      'method':"DELETE"
     });
 
     var thisComic = this.toJSON();

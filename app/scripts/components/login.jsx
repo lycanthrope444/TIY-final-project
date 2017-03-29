@@ -31,12 +31,12 @@ class LoginContainer extends React.Component{
     return(
       <div className="row">
         <div className="col-xs-12">
-          <div className="sign-up-container well">
+          <div className="login-container well">
             <LoginForm action={this.loginUser} submitBtn="Login" />
           </div>
         </div>
         <div className="col-xs-12">
-          <div className="login-container well">
+          <div className="sign-up-container well">
             <SignupForm action={this.createUser} submitBtn="Signup"/>
           </div>
         </div>
