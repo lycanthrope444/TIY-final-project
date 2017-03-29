@@ -34,6 +34,8 @@ class WishlistContainer extends CollectionContainer{
     }
   }
   componentWillMount(){
+    //Setting state here to prevent bug where the Regular Collection overwrites
+    //the wishlist collection
     var user = User.current();
     var userId = user.get('objectId');
     var local = JSON.parse(localStorage.getItem('username'));

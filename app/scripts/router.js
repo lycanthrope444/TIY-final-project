@@ -12,6 +12,7 @@ var wishlist = require('./components/wishlistview.jsx').WishlistContainer;
 var itemView = require('./components/itemview.jsx').ItemContainer;
 var resultsView = require('./components/results.jsx').ResultsContainer;
 var favorites = require('./components/favoriteview.jsx').FavoriteContainer;
+var about = require('./components/aboutview.jsx').AboutContainer;
 
 var AppRouter = Backbone.Router.extend({
   initialize:function(){
@@ -30,7 +31,8 @@ var AppRouter = Backbone.Router.extend({
     'results':'results',
     'top':'results',
     'wishlist':'wishlist',
-    'favorites':'favorites'
+    'favorites':'favorites',
+    'about':'about'
   },
   execute: function(callback, args, name) {
     var user = User.current()
@@ -93,6 +95,12 @@ var AppRouter = Backbone.Router.extend({
   favorites:function(){
     ReactDOM.render(
       React.createElement(favorites),
+      document.getElementById('app')
+    );
+  },
+  about: function(){
+    ReactDOM.render(
+      React.createElement(about),
       document.getElementById('app')
     );
   }

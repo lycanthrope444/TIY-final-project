@@ -24,7 +24,7 @@ class StarterInfo extends React.Component{
     return(
       <div>
         <div className="welcome-banner">
-          
+
           <h1>Welcome to Hero Finder!</h1>
         </div>
 
@@ -37,16 +37,22 @@ class StarterInfo extends React.Component{
           Signing up is easy. Just follow these steps to begin tracking your
           collection right away!
         </p>
-        <div className="instuctions">
-          <div className="instruction-box">
-            Sign up or login below to make or manage a profile. Feel free to add a profile pic.
+        <div className="row">
+          <div className="col-sm-4">
+            <div className="instruction-box ins-box-1">
+              Sign up or login below to make or manage a profile. Feel free to add a profile pic.
+            </div>
           </div>
-          <div className="instruction-box">
-            Search Marvel's database for your favorite books, heroes or villains.
-            Check out the Search F.A.Q. to help you find what you are looking for.
+          <div className="col-sm-4">
+            <div className="instruction-box ins-box-2">
+              Search Marvel's database for your favorite books, heroes or villains.
+              Check out the Search F.A.Q. to help you find what you are looking for.
+            </div>
           </div>
-          <div className="instruction-box">
-            Add comics to your collection or wishlist and track your favorite characters, series and events!
+          <div className="col-sm-4">
+            <div className="instruction-box ins-box-3">
+              Add comics to your collection or wishlist and track your favorite characters, series and events!
+            </div>
           </div>
         </div>
 

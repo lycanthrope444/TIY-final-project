@@ -89,7 +89,10 @@ class NavBarFooter extends React.Component{
   render(){
     return(
       <div className="container-fluid">
-        Data provided by Marvel. © 2014 Marvel. Glyphicons provided by Bootstrap.
+        Data provided by Marvel. © 2014 Marvel.
+        <a href="#about">
+          Terms of Use
+        </a>
       </div>
     )
   }

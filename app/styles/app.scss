@@ -9,6 +9,8 @@ $light-blue: #46bbf2;
 $off-white: #f6f4f3;
 $off-black: #0d1321;
 
+$dark-gray: #3a3a3a;
+
 // Import Bootstrap
 @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
 
@@ -57,13 +59,17 @@ LANDING PAGE
 //   max-height: .5vh;
 // }
 
+.instruction-box{
+  height: 75px;
+  padding-left: 25px;
+}
+
 .login-btns{
   padding-left: 25vw;
 }
 
 .login-container{
   background-color: $light-blue;
-
 }
 
 .sign-up-container{
