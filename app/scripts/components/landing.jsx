@@ -69,8 +69,8 @@ class LoginButons extends React.Component{
   render(){
     return(
       <div>
-        <div className="login-btns">
-          <button className="btn" onClick={
+        <div className="btn-group login-btns">
+          <button className="btn btn-spacer-rt btn-interact" onClick={
               (e)=>{
                 e.preventDefault();
                 $('.login-container').slideDown();
@@ -79,7 +79,7 @@ class LoginButons extends React.Component{
             }>
             Login
           </button>
-          <button className="btn" onClick={
+          <button className="btn btn-spacer-lft btn-interact" onClick={
               (e)=>{
                 e.preventDefault();
                 $('.sign-up-container').slideDown();

@@ -1,6 +1,7 @@
 var $ = require('jquery');
 var _ = require('underscore');
 var React = require('react');
+var Backbone = require('backbone');
 
 var User = require('../models/user.js').User;
 var LayoutContainer = require('./layout.jsx').LayoutContainer;
@@ -48,7 +49,7 @@ class CollectionManager extends React.Component{
       <div className="row">
         <div className="col-xs-12">
           <div className="coll-btn-spacer btn-group">
-            <button className="btn btn-interact" onClick={
+            <button className="btn btn-interact btn-spacer-rt" onClick={
                 (e)=>{
                   e.preventDefault();
                   $('.comicsList').slideDown(200);
@@ -56,7 +57,7 @@ class CollectionManager extends React.Component{
               }>
               Show All
             </button>
-            <button className="btn btn-interact" onClick={
+            <button className="btn btn-interact btn-spacer-lft" onClick={
                 (e)=>{
                   e.preventDefault();
                   $('.comicsList').slideUp(200);

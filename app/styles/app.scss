@@ -9,6 +9,7 @@ $venetian: #C51119;
 $dark-blue: #183059;
 $deep-blue: #2D4268;
 $gray-blue: #425577;
+$slate: #6C7B95;
 
 $off-white: #f6f4f3;
 $dark-gray: #333333;
@@ -141,24 +142,41 @@ RESULTS PAGE
 Collection View
 */
 
+.glyphicon-up{
+  color: $off-white;
+}
+
+.glyphicon-down{
+  color: $off-white;
+}
+
 .heading-collection >span{
   color: $off-white;
 }
 
 .panel-collection{
-  background-color: $gray-blue;
-}
-
-.panel-body{
-  background-color: white;
+  background-color: $slate;
 }
 
 .btn-collection{
   background-color: $deep-blue;
 }
 
+.btn-spacer-rt{
+  border-right: 1px solid $dark-gray
+}
+
+.btn-spacer-lft{
+  border-left: 1px solid $dark-gray
+}
+
+.panel-body{
+  background-color: white;
+}
+
 .coll-btn-spacer{
   padding-left: 40%;
+  margin-bottom: 25px;
 }
 
 .inspect-item{

@@ -64,18 +64,23 @@ class NavBarHeader extends React.Component{
       <nav className="navbar navbar-inverse navbar-color">
         <div className="container-fluid">
           <div className="navbar-header navbar-color">
-            <a href="https://www.marvel.com">
-              <img className="marvel-logo" src="https://logorealm.com/wp-content/uploads/2016/07/Marvel-Logo.png"/>
-            </a>
-            <a href="#">
-              <i className="fa fa-home home-nav" aria-hidden="true"></i>|
-            </a>
 
-            <a href="#profile">Profile</a>|
-            <a href="#collection">My Collection</a>|
+            <a href="#">
+              <i className="fa fa-home home-nav" aria-hidden="true"></i>
+              Home
+            </a>|
+
+            <a href="#profile">
+              <i className="fa fa-user-circle" aria-hidden="true"></i>
+              Profile
+            </a>|
+            <a href="#collection">Collection</a>|
             <a href="#wishlist">Wishlist</a>|
             <a href="#favorites">Favorites</a>|
-            <a href="#results">Search</a>
+            <a href="#results">
+              <i className="fa fa-search home-nav" aria-hidden="true"></i>
+              Search
+            </a>
             <img className="avatar-header" src={this.props.pic} />
             <button className="btn btn-interact" onClick={this.props.logout}>Log Out</button>
           </div>
@@ -89,7 +94,12 @@ class NavBarFooter extends React.Component{
   render(){
     return(
       <div className="container-fluid">
-        Data provided by Marvel. © 2014 Marvel.
+
+        Data provided by 
+        <a href="https://www.marvel.com">
+          <img className="marvel-logo" src="https://logorealm.com/wp-content/uploads/2016/07/Marvel-Logo.png"/>
+        </a>
+        © 2014 Marvel.
         <a href="#about">
           Terms of Use
         </a>
