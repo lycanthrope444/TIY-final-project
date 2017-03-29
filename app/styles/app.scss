@@ -2,6 +2,13 @@
 // Bootstrap Variables
 $icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
 
+//Color Pallette
+$marvel-red: #f0141e;
+$dark-blue: #183059;
+$light-blue: #276fbf;
+$off-white: #f6f4f3;
+$off-black: #0d1321;
+
 // Import Bootstrap
 @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
 
@@ -16,9 +23,17 @@ img {
   max-width: 100%;
 }
 
+body{
+  background-color: $off-white;
+}
+
 /*
 NAVBAR LAYOUT
 */
+
+.home-nav{
+  font-size: 24px;
+}
 
 .marvel-logo{
   max-height: 50px;
@@ -26,6 +41,28 @@ NAVBAR LAYOUT
 
 .avatar-header{
   max-width:50px;
+}
+
+.btn-logout{
+  background-color: $marvel-red;
+  color:white;
+}
+
+
+/*
+LANDING PAGE
+*/
+
+// #landing-carousel{
+//   max-height: .5vh;
+// }
+
+.login-btns{
+  padding-left: 25vw;
+}
+
+.login-container{
+  display: none;
 }
 
 /*

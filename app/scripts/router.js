@@ -22,7 +22,6 @@ var AppRouter = Backbone.Router.extend({
   routes : {
     '':'index',
     'index': 'index',
-    'login':'login',
     'profile':'profile',
     'collection':'collection',
     'itemview/:searchtype/:id':'itemView',
@@ -35,13 +34,13 @@ var AppRouter = Backbone.Router.extend({
   },
   execute: function(callback, args, name) {
     var user = User.current()
-    if (!user && name != 'login') {
-      this.navigate('', {trigger: true});
+    if (!user && name != 'index') {
+      this.navigate('/', {trigger: true});
       return false;
     }
 
     if(user && name == 'login'){
-      this.navigate('/login', {trigger: true});
+      this.navigate('', {trigger: true});
       return false;
     }
 
@@ -50,12 +49,6 @@ var AppRouter = Backbone.Router.extend({
   index: function(){
     ReactDOM.render(
       React.createElement(landing),
-      document.getElementById('app')
-    );
-  },
-  login: function(){
-    ReactDOM.render(
-      React.createElement(login),
       document.getElementById('app')
     );
   },

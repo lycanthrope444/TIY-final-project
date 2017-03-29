@@ -47,9 +47,7 @@ class LayoutContainer extends React.Component{
         <NavBarHeader username={this.state.username} logout={this.logout}
           pic={this.state.pic}/>
           <div className="container">
-            <div className="row">
-              {this.props.children}
-            </div>
+            {this.props.children}
           </div>
         <NavBarFooter />
       </div>
@@ -69,15 +67,17 @@ class NavBarHeader extends React.Component{
             <a href="https://www.marvel.com">
               <img className="marvel-logo" src="https://logorealm.com/wp-content/uploads/2016/07/Marvel-Logo.png"/>
             </a>
-            <a href="#">Home</a>
+            <a href="#">
+              <i className="fa fa-home home-nav" aria-hidden="true"></i>
+            </a>
+
             <a href="#profile">Profile</a>|
             <a href="#collection">My Collection</a>|
             <a href="#wishlist">Wishlist</a>|
             <a href="#favorites">Favorites</a>|
-            <a href="#login">Login</a>|
             <a href="#results">Search</a>
             <img className="avatar-header" src={this.props.pic} />
-            <button className="btn" onClick={this.props.logout}>Log Out</button>
+            <button className="btn btn-logout" onClick={this.props.logout}>Log Out</button>
           </div>
         </div>
       </nav>
@@ -89,9 +89,7 @@ class NavBarFooter extends React.Component{
   render(){
     return(
       <div className="container-fluid">
-        <div className="row">
-          Data provided by Marvel. © 2014 Marvel. Glyphicons provided by Bootstrap.
-        </div>
+        Data provided by Marvel. © 2014 Marvel. Glyphicons provided by Bootstrap.
       </div>
     )
   }

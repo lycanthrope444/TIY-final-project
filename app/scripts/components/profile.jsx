@@ -95,17 +95,18 @@ class AccountOptions extends React.Component{
       <div className="col-md-6">
         <h1>Account Options</h1>
         <div>
-          <button className="btn btn-info">
+          <button className="btn btn-info" data-toggle="modal" data-target="#myModal" type="button">
             <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
           </button>
           <span>Change Email</span>
         </div>
         <div>
-          <button className="btn btn-info">
+          <button className="btn btn-info" data-toggle="modal" data-target="#myModal" type="button">
             <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
           </button>
           <span>Change Password</span>
         </div>
+        <ComingSoon />
       </div>
     )
   }
@@ -149,5 +150,32 @@ class AvatarPic extends React.Component{
       </div>
     )
   }
+}
+
+class ComingSoon extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
+    return(
+      <div className="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 className="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div className="modal-body">
+              These features are coming soon!
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
 }
 module.exports = {ProfileContainer};

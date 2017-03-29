@@ -11,7 +11,7 @@ var User = ParseModel.extend({
     return parse.BASE_API_URL + 'users';
   },
   updateInfo:function(){
-    
+
   }
 },{
   login: function(credentials, callback){
@@ -36,7 +36,7 @@ var User = ParseModel.extend({
     parse.initialize();
     $.post(url).then(function() {
       localStorage.removeItem('username');
-      Backbone.history.navigate('/login', {trigger: true});
+      Backbone.history.navigate('/index', {trigger: true});
     });
 
     parse.deinitialize();

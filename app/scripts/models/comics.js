@@ -96,7 +96,7 @@ var ChangeComic = ParseModel.extend({
         "objectId":userId
       }]
     }});
-    this.set({});
+    // User.unset('ACL');
     console.log('2', this);
     var objectId = this.get('id');
 

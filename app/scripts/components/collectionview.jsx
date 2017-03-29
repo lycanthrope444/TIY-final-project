@@ -107,7 +107,8 @@ class DisplayTitles extends React.Component{
               </h4>
             </div>
             <div className={"panel-body comicsList comicsList"+index}>
-              <ComicsInSeries children={comicsIn[index]}/>
+              <ComicsInSeries children={comicsIn[index]}
+                panelColor={panelColor}/>
             </div>
           </div>
         </div>
@@ -126,12 +127,13 @@ class ComicsInSeries extends React.Component{
     super(props);
   }
   render(){
+    var panelColor = this.props.panelColor;
     var comics = this.props.children.map(function(item, index){
       return(
         <div key={index}>
           <div className="btn-group">
             <a href={"#itemview/comics/"+ item.get('id')}
-              className="inspect-item btn btn-primary">
+              className={"inspect-item btn btn-" + panelColor}>
               <span className="glyphicon glyphicon-zoom-in"></span>
             </a>
             <a href={"#itemview/comics/"+ item.get('id')}

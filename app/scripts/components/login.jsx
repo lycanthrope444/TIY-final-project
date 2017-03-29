@@ -29,14 +29,18 @@ class LoginContainer extends React.Component{
   }
   render(){
     return(
-      <LayoutContainer>
-        <div className="col-md-6">
-          <LoginForm action={this.loginUser} submitBtn="Login" />
+      <div className="row">
+        <div className="col-xs-12">
+          <div className="sign-up-container well">
+            <LoginForm action={this.loginUser} submitBtn="Login" />
+          </div>
         </div>
-        <div className="col-md-6">
-          <SignupForm action={this.createUser} submitBtn="Signup"/>
+        <div className="col-xs-12">
+          <div className="login-container well">
+            <SignupForm action={this.createUser} submitBtn="Signup"/>
+          </div>
         </div>
-      </LayoutContainer>
+      </div>
     )
   }
 }
