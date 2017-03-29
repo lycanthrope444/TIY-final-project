@@ -61,14 +61,14 @@ class NavBarHeader extends React.Component{
   }
   render(){
     return(
-      <nav className="navbar navbar-inverse">
+      <nav className="navbar navbar-inverse navbar-color">
         <div className="container-fluid">
-          <div className="navbar-header">
+          <div className="navbar-header navbar-color">
             <a href="https://www.marvel.com">
               <img className="marvel-logo" src="https://logorealm.com/wp-content/uploads/2016/07/Marvel-Logo.png"/>
             </a>
             <a href="#">
-              <i className="fa fa-home home-nav" aria-hidden="true"></i>
+              <i className="fa fa-home home-nav" aria-hidden="true"></i>|
             </a>
 
             <a href="#profile">Profile</a>|
@@ -77,7 +77,7 @@ class NavBarHeader extends React.Component{
             <a href="#favorites">Favorites</a>|
             <a href="#results">Search</a>
             <img className="avatar-header" src={this.props.pic} />
-            <button className="btn btn-logout" onClick={this.props.logout}>Log Out</button>
+            <button className="btn btn-interact" onClick={this.props.logout}>Log Out</button>
           </div>
         </div>
       </nav>

@@ -71,6 +71,7 @@ class LoginForm extends React.Component{
   render(){
     return(
       <form onSubmit={this.handleSubmit}>
+        <h3>{this.props.submitBtn}</h3>
         <div className ="form-group">
           <label htmlFor ="username-login" >Username</label>
           <input className = "form-control" onChange={this.handleUserLogin}
@@ -83,7 +84,7 @@ class LoginForm extends React.Component{
             id="password-login" placeholder="Password" type="password"
           />
         </div>
-        <input type="submit" className="btn" value={this.props.submitBtn} />
+        <input type="submit" className="btn btn-interact" value={this.props.submitBtn} />
       </form>
     )
   }

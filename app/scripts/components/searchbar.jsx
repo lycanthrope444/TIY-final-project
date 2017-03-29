@@ -63,12 +63,13 @@ class SearchBar extends React.Component{
   render(){
     return(
       <div className="col-md-12">
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit} className="form-inline">
           <div className="form-group">
             <SearchButton searchType={this.state.searchType} changeSearchType={this.changeSearchType} />
             <FlexButton searchMod={this.state.searchMod} changeModType={this.changeModType} />
             <input className="form-control" placeholder="Search" onChange={this.handleSearch} />
             <input type="submit" className ="btn" value="Search" />
+
           </div>
         </form>
         <HelpModal />

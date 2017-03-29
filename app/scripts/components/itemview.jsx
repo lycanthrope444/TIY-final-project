@@ -264,7 +264,8 @@ class QuickLinks extends React.Component{
     var links = this.state.linkList.map(function(item, index){
       return(
         <div key={"link"+index}>
-          <a href={"#results/"+self.state.searchType+"/"+self.state.searchId+"/"+item}>
+          <a className = "btn btn-interact"
+            href={"#results/"+self.state.searchType+"/"+self.state.searchId+"/"+item}>
             {item}
           </a>
         </div>

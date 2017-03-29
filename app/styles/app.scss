@@ -4,12 +4,14 @@ $icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
 
 //Color Pallette
 $marvel-red: #f0141e;
-$dark-blue: #183059;
-$light-blue: #46bbf2;
-$off-white: #f6f4f3;
-$off-black: #0d1321;
+$venetian: #C51119;
 
-$dark-gray: #3a3a3a;
+$dark-blue: #183059;
+$deep-blue: #2D4268;
+$gray-blue: #425577;
+
+$off-white: #f6f4f3;
+$dark-gray: #333333;
 
 // Import Bootstrap
 @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
@@ -29,9 +31,44 @@ body{
   background-color: $off-white;
 }
 
+.btn-marvel{
+  background-color: $marvel-red;
+  color:white;
+}
+
+.btn-interact{
+  background-color: $venetian;
+  color:white;
+}
+
+.wishlist{
+
+}
+
+.wishlist-btn{
+
+}
+
+.favorite{
+
+}
+
+.favorite-btn{
+
+}
+
 /*
 NAVBAR LAYOUT
 */
+
+.navbar-color{
+  background-color: $dark-blue;
+  color: $off-white;
+}
+
+.navbar-color > a {
+  color: $off-white;
+}
 
 .home-nav{
   font-size: 24px;
@@ -69,11 +106,13 @@ LANDING PAGE
 }
 
 .login-container{
-  background-color: $light-blue;
+  background-color: $dark-blue;
+  color: $off-white;
 }
 
 .sign-up-container{
-  background-color: $light-blue;
+  background-color: $dark-blue;
+  color: $off-white;
   display: none;
 }
 
@@ -101,6 +140,26 @@ RESULTS PAGE
 /*
 Collection View
 */
+
+.heading-collection >span{
+  color: $off-white;
+}
+
+.panel-collection{
+  background-color: $gray-blue;
+}
+
+.panel-body{
+  background-color: white;
+}
+
+.btn-collection{
+  background-color: $deep-blue;
+}
+
+.coll-btn-spacer{
+  padding-left: 40%;
+}
 
 .inspect-item{
   list-style: none;

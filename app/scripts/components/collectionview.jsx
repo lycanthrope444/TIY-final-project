@@ -27,7 +27,7 @@ class CollectionContainer extends React.Component{
       user:user,
       userId:userId,
       collection:comicCollection,
-      panelColor:"info"
+      panelColor:"collection"
     }
   }
   render(){
@@ -47,22 +47,24 @@ class CollectionManager extends React.Component{
     return(
       <div className="row">
         <div className="col-xs-12">
-          <button className="btn" onClick={
-              (e)=>{
-                e.preventDefault();
-                $('.comicsList').slideDown(200);
-              }
-            }>
-            Show All
-          </button>
-          <button className="btn" onClick={
-              (e)=>{
-                e.preventDefault();
-                $('.comicsList').slideUp(200);
-              }
-            }>
-            Hide All
-          </button>
+          <div className="coll-btn-spacer btn-group">
+            <button className="btn btn-interact" onClick={
+                (e)=>{
+                  e.preventDefault();
+                  $('.comicsList').slideDown(200);
+                }
+              }>
+              Show All
+            </button>
+            <button className="btn btn-interact" onClick={
+                (e)=>{
+                  e.preventDefault();
+                  $('.comicsList').slideUp(200);
+                }
+              }>
+              Hide All
+            </button>
+          </div>
         </div>
       </div>
     )
@@ -90,8 +92,9 @@ class DisplayTitles extends React.Component{
       return(
         <div key={index} className="col-md-6">
           <div className={"panel panel-" + panelColor }>
-            <div className="panel-heading">
-              <h4>{title}
+            <div className="panel-heading heading">
+              <h4 className={"heading-" + panelColor}>
+                {title}
                 <button className={"btn btn-" + panelColor}
                   onClick={(e)=>{
                     e.preventDefault();
