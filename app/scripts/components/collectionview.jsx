@@ -97,7 +97,6 @@ class DisplayTitles extends React.Component{
           <div className={"panel panel-" + panelColor }>
             <div className="panel-heading heading">
               <h4 className={"heading-" + panelColor}>
-                {title}
                 <button className={"btn btn-" + panelColor}
                   onClick={(e)=>{
                     e.preventDefault();
@@ -110,6 +109,7 @@ class DisplayTitles extends React.Component{
                   </span>
                   <span className={"glyphicon-up glyphicon glyphicon-menu-up glyphicon"+index}></span>
                 </button>
+                {title}
               </h4>
             </div>
             <div className={"panel-body comicsList comicsList"+index}>

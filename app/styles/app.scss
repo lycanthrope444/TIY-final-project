@@ -5,6 +5,7 @@ $icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
 //Color Pallette
 $marvel-red: #f0141e;
 $venetian: #C51119;
+$deepred:#58080B;
 
 $dark-blue: #183059;
 $deep-blue: #2D4268;
@@ -98,6 +99,7 @@ FOOTER STYLES
 .footer-control{
   background-color: $slate;
   min-height: 15vh;
+  padding-top: 10px;
 }
 
 .legal{
@@ -159,6 +161,10 @@ LANDING PAGE
   font-size: 40px;
   font-style: oblique;
   margin-right: 5px;
+}
+
+.landing-p{
+  text-align: center;
 }
 
 /*
@@ -231,11 +237,11 @@ Collection View
 }
 
 .btn-spacer-rt{
-  border-right: 1px solid $dark-gray
+  border-right: 1px solid $deepred;
 }
 
 .btn-spacer-lft{
-  border-left: 1px solid $dark-gray
+  border-left: 1px solid $deepred;
 }
 
 .panel-body{
