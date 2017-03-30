@@ -124,8 +124,6 @@ class ItemContainer extends React.Component{
         <div className="col-md-6">
           <ItemPhoto pic={this.state.pic} />
         </div>
-
-
       </LayoutContainer>
     )
   }
@@ -138,7 +136,7 @@ class ItemInfo extends React.Component{
   render(){
     return(
       <div>
-        <h1>{this.props.name}</h1>
+        <h1 className="itemview-title">{this.props.name}</h1>
         <p>{this.props.desc}</p>
 
       </div>
@@ -191,17 +189,36 @@ class ItemRating extends React.Component{
   render(){
     return(
       <div>
-        Rate this item
         <div className="btn-group">
           <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {this.props.userRating} <span className="caret"></span>
+            Rate This <span className="caret"></span>
           </button>
           <ul className="dropdown-menu">
-            <li><a onClick={()=>{this.props.updateRating(5)}} role="button">5 Stars</a></li>
-            <li><a onClick={()=>{this.props.updateRating(4)}} role="button">4 Stars</a></li>
-            <li><a onClick={()=>{this.props.updateRating(3)}} role="button">3 Stars</a></li>
-            <li><a onClick={()=>{this.props.updateRating(2)}} role="button">2 Stars</a></li>
-            <li><a onClick={()=>{this.props.updateRating(1)}} role="button">1 Stars</a></li>
+            <li><a onClick={()=>{this.props.updateRating(5)}} role="button">
+              <i className="fa fa-star" aria-hidden="true"></i>
+              <i className="fa fa-star" aria-hidden="true"></i>
+              <i className="fa fa-star" aria-hidden="true"></i>
+              <i className="fa fa-star" aria-hidden="true"></i>
+              <i className="fa fa-star" aria-hidden="true"></i>
+            </a></li>
+            <li><a onClick={()=>{this.props.updateRating(4)}} role="button">
+              <i className="fa fa-star" aria-hidden="true"></i>
+              <i className="fa fa-star" aria-hidden="true"></i>
+              <i className="fa fa-star" aria-hidden="true"></i>
+              <i className="fa fa-star" aria-hidden="true"></i>
+            </a></li>
+            <li><a onClick={()=>{this.props.updateRating(3)}} role="button">
+              <i className="fa fa-star" aria-hidden="true"></i>
+              <i className="fa fa-star" aria-hidden="true"></i>
+              <i className="fa fa-star" aria-hidden="true"></i>
+            </a></li>
+            <li><a onClick={()=>{this.props.updateRating(2)}} role="button">
+              <i className="fa fa-star" aria-hidden="true"></i>
+              <i className="fa fa-star" aria-hidden="true"></i>
+            </a></li>
+            <li><a onClick={()=>{this.props.updateRating(1)}} role="button">
+              <i className="fa fa-star" aria-hidden="true"></i>
+            </a></li>
           </ul>
         </div>
       </div>
@@ -263,17 +280,15 @@ class QuickLinks extends React.Component{
     var self =this;
     var links = this.state.linkList.map(function(item, index){
       return(
-        <div key={"link"+index}>
-          <a className = "btn btn-interact"
-            href={"#results/"+self.state.searchType+"/"+self.state.searchId+"/"+item}>
-            {item}
-          </a>
-        </div>
+        <a className = "btn btn-interact btn-spacer-lft btn-spacer-rt" key={"link"+index}
+          href={"#results/"+self.state.searchType+"/"+self.state.searchId+"/"+item}>
+          {item}
+        </a>
       )
     });
 
     return(
-      <div>
+      <div className="btn-group" role="group">
         {links}
       </div>
     )
@@ -285,10 +300,20 @@ class DigitalMarketplace extends React.Component{
     return(
       <div>
         <h2>Find Online:</h2>
-        <a href="http://www.comicshoplocator.com/">Local Stores</a>
-        <a href="https://comicstore.marvel.com/">Marvel Digital</a>
-        <a href="http://www.ebay.com/">Ebay</a>
-        <a href="https://www.amazon.com/"><i className="fa fa-amazon" aria-hidden="true"></i></a>
+        <div className="btn-group">
+          <a className="btn btn-links btn-spacer-rt" href="http://www.comicshoplocator.com/">
+            Shop Local!
+          </a>
+          <a className="btn btn-links btn-spacer-rt btn-spacer-lft" href="https://comicstore.marvel.com/">
+            Marvel Digital
+          </a>
+          <a className="btn btn-links btn-spacer-rt btn-spacer-lft" href="http://www.ebay.com/">
+            Ebay
+          </a>
+          <a className="btn btn-links btn-spacer-lft" href="https://www.amazon.com/">
+            <i className="fa fa-amazon" aria-hidden="true"></i>
+          </a>
+        </div>
       </div>
     )
   }

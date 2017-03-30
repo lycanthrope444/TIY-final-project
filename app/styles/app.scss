@@ -65,6 +65,7 @@ NAVBAR LAYOUT
 .navbar-color{
   background-color: $dark-blue;
   color: $off-white;
+  margin: 5px;
 }
 
 .navbar-color > a {
@@ -80,6 +81,7 @@ NAVBAR LAYOUT
 }
 
 .avatar-header{
+  margin-left: 5px;
   max-width:50px;
 }
 
@@ -103,7 +105,7 @@ LANDING PAGE
 }
 
 .login-btns{
-  padding-left: 25vw;
+  padding-left: 35%;
 }
 
 .login-container{
@@ -134,9 +136,15 @@ RESULTS PAGE
   overflow: scroll;
 }
 
+.results-spacer{
+  min-height: 50vh;
+}
+
 .results-caption{
 
 }
+
+
 
 /*
 Collection View
@@ -182,4 +190,18 @@ Collection View
 .inspect-item{
   list-style: none;
   color: #FFFFFF;
+}
+
+
+/*
+Item Views
+*/
+
+.itemview-title{
+  text-align: center;
+}
+
+.btn-links{
+  background-color: $slate;
+  color: $off-white;
 }

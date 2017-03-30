@@ -65,14 +65,17 @@ class SearchBar extends React.Component{
       <div className="col-md-12">
         <form onSubmit={this.handleSubmit} className="form-inline">
           <div className="form-group">
+            <button className="btn btn-default" data-toggle="modal"
+              onClick={(e)=>{e.preventDefault();} } data-target="#myModal">
+              <i className="fa fa-question-circle" aria-hidden="true"></i>
+            </button>
+            <HelpModal />
             <SearchButton searchType={this.state.searchType} changeSearchType={this.changeSearchType} />
             <FlexButton searchMod={this.state.searchMod} changeModType={this.changeModType} />
             <input className="form-control" placeholder="Search" onChange={this.handleSearch} />
-            <input type="submit" className ="btn" value="Search" />
-
+            <input type="submit" className ="btn btn-interact" value="Search" />
           </div>
         </form>
-        <HelpModal />
       </div>
     )
   }
@@ -111,7 +114,8 @@ class FlexButton extends React.Component{
       <div className="btn-group">
         <button type="button" className="btn btn-default dropdown-toggle"
           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          {this.props.searchMod.title} <span className="caret"></span>
+          {this.props.searchMod.title}
+          <span className="caret"></span>
         </button>
         <ul className="dropdown-menu">
           <li><a onClick={()=>{this.props.changeModType({
@@ -133,10 +137,6 @@ class FlexButton extends React.Component{
 class HelpModal extends React.Component{
   render(){
     return(
-      <div>
-        <button className="btn btn-default" data-toggle="modal" data-target="#myModal">
-          <i className="fa fa-question-circle" aria-hidden="true"></i>
-        </button>
         <div className="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
@@ -160,7 +160,6 @@ class HelpModal extends React.Component{
             </div>
           </div>
         </div>
-      </div>
     )
   }
 }

@@ -108,7 +108,9 @@ class ResultsContainer extends React.Component{
       )
     }else{
       return(
-        <div></div>
+        <div className="results-spacer">
+
+        </div>
       )
     }
   }
@@ -217,9 +219,11 @@ class ResultsContainer extends React.Component{
     return(
       <LayoutContainer>
         <div className ="row">
-          <SearchBar changeSearchType={this.changeSearchType}
-            changeModType = {this.changeModType}
-            handleSubmit={this.handleSubmit} searchType={this.state.searchType}/>
+          <div>
+            <SearchBar changeSearchType={this.changeSearchType}
+              changeModType = {this.changeModType}
+              handleSubmit={this.handleSubmit} searchType={this.state.searchType}/>
+          </div>
         </div>
         {this.handleResults()}
 
