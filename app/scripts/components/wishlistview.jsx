@@ -30,7 +30,8 @@ class WishlistContainer extends CollectionContainer{
       user:user,
       userId:userId,
       collection:wishCollection,
-      panelColor:"success"
+      panelColor:"wishlist",
+      title:"Wishlist Manager"
     }
   }
   componentWillMount(){

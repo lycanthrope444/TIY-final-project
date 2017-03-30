@@ -28,12 +28,14 @@ class CollectionContainer extends React.Component{
       user:user,
       userId:userId,
       collection:comicCollection,
-      panelColor:"collection"
+      panelColor:"collection",
+      title:"Collection Manager"
     }
   }
   render(){
     return(
       <LayoutContainer>
+        <h1 className="manager-title">{this.state.title}</h1>
         <CollectionManager />
         <DisplayTitles collection={this.state.collection}
           panelColor={this.state.panelColor}/>

@@ -148,6 +148,7 @@ class HelpModal extends React.Component{
                 Marvel's database does not have a lot a smart search features which can make it difficult to find the titles you are looking for.
                 I've compiled a list of useful tips to help you search here.
                 <ul>
+                  <li>If you are looking to browse, you can simply select the topic you want and hit "search".</li>
                   <li>The database is frequently updated, but newer items are often missing key data, like characters.</li>
                   <li>While extensive, not everything is listed or 100% accurrate.</li>
                   <li>Exact name for comics and series will often not work. I recommend using the "Starts With" button.</li>

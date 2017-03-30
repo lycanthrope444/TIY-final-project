@@ -77,10 +77,12 @@ class ProfileContainer extends React.Component{
   render(){
     return(
       <LayoutContainer username={this.state.username}>
-        <AccountOptions />
-        <AvatarPic image={this.state.image} preview={this.state.preview}
-          handleImageChange={this.handleImageChange}
-          handleSubmit={this.handleSubmit} preview={this.state.preview} />
+        <div className="profile-spacer">
+          <AccountOptions />
+          <AvatarPic image={this.state.image} preview={this.state.preview}
+            handleImageChange={this.handleImageChange}
+            handleSubmit={this.handleSubmit} preview={this.state.preview} />
+        </div>
       </LayoutContainer>
     )
   }
@@ -94,18 +96,18 @@ class AccountOptions extends React.Component{
     return(
       <div className="col-md-6">
         <h1>Account Options</h1>
-        <div>
-          <button className="btn btn-info" data-toggle="modal" data-target="#myModal" type="button">
+        <p>
+          <button className="btn btn-interact" data-toggle="modal" data-target="#myModal" type="button">
             <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
           </button>
           <span>Change Email</span>
-        </div>
-        <div>
-          <button className="btn btn-info" data-toggle="modal" data-target="#myModal" type="button">
+        </p>
+        <p>
+          <button className="btn btn-interact" data-toggle="modal" data-target="#myModal" type="button">
             <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
           </button>
           <span>Change Password</span>
-        </div>
+        </p>
         <ComingSoon />
       </div>
     )

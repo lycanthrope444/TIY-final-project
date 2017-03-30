@@ -28,13 +28,18 @@ class FavoriteContainer extends React.Component{
     this.state ={
       user:user,
       userId:userId,
-      collection:favCollection
+      collection:favCollection,
+      title: "Favorites"
     }
   }
   render(){
     return(
       <LayoutContainer>
-        <DisplayFavorites collection={this.state.collection}/>
+        <h1 className="manager-title">Favorites</h1>
+        <div className="favorite-spacer">
+          <DisplayFavorites collection={this.state.collection}/>
+        </div>
+
       </LayoutContainer>
     )
   }
@@ -68,7 +73,7 @@ class DisplayFavorites extends React.Component{
           <div className="panel panel-warning">
             <div className="panel-heading">
               <a href={"#itemview/" +searchType +"/" + id}>
-                <h3 className="panel-title">
+                <h3 className="panel-title favorite-header">
                   {name||title}
                 </h3>
               </a>

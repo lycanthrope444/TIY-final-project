@@ -110,15 +110,20 @@ class NavBarFooter extends React.Component{
   render(){
     return(
       <div className="container-fluid">
-
-        Data provided by
-        <a href="https://www.marvel.com">
-          <img className="marvel-logo" src="https://logorealm.com/wp-content/uploads/2016/07/Marvel-Logo.png"/>
-        </a>
-        © 2014 Marvel.
-        <a href="#about">
-          Terms of Use
-        </a>
+        <div className="row">
+          <div className="footer-control">
+            Data provided by
+            <a href="https://www.marvel.com">
+              <img className="marvel-logo" src="https://logorealm.com/wp-content/uploads/2016/07/Marvel-Logo.png"/>
+            </a>
+            © 2014 Marvel.
+            <div className="legal">
+              <a href="#about">
+                Terms of Use
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }

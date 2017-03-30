@@ -14,6 +14,14 @@ $slate: #6C7B95;
 $off-white: #f6f4f3;
 $dark-gray: #333333;
 
+$darkgreen: #29422F;
+$duskygreen: #4A7856;
+$lighter-green: #7B9C84;
+
+$light-yellow: #FCF8E3;
+$yellow: #F0AD4E;
+$yellow-gray: #737168;
+
 // Import Bootstrap
 @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
 
@@ -40,14 +48,6 @@ body{
 .btn-interact{
   background-color: $venetian;
   color:white;
-}
-
-.wishlist{
-
-}
-
-.wishlist-btn{
-
 }
 
 .favorite{
@@ -83,6 +83,7 @@ NAVBAR LAYOUT
 .avatar-header{
   margin-left: 5px;
   max-width:50px;
+  border-radius: 25%;
 }
 
 .btn-logout{
@@ -90,17 +91,34 @@ NAVBAR LAYOUT
   color:white;
 }
 
+/*
+FOOTER STYLES
+*/
+
+.footer-control{
+  background-color: $slate;
+  min-height: 15vh;
+}
+
+.legal{
+  display: inline-block;
+  text-align: right;
+}
+
+.legal > a{
+  color: $off-white
+}
 
 /*
 LANDING PAGE
 */
 
-// #landing-carousel{
-//   max-height: .5vh;
-// }
+.welcome-banner{
+  text-align: center;
+}
 
 .instruction-box{
-  height: 75px;
+  min-height: 75px;
   padding-left: 25px;
 }
 
@@ -117,6 +135,38 @@ LANDING PAGE
   background-color: $dark-blue;
   color: $off-white;
   display: none;
+}
+
+.ins-box-1:before {
+  content: '1';
+  float: left;
+  font-size: 40px;
+  font-style: oblique;
+  margin-right: 5px;
+}
+
+.ins-box-2:before {
+  content: '2';
+  float: left;
+  font-size: 40px;
+  font-style: oblique;
+  margin-right: 5px;
+}
+
+.ins-box-3:before {
+  content: '3';
+  float: left;
+  font-size: 40px;
+  font-style: oblique;
+  margin-right: 5px;
+}
+
+/*
+PROFILE PAGE
+*/
+
+.profile-spacer{
+  min-height: 75vh;
 }
 
 /*
@@ -144,11 +194,19 @@ RESULTS PAGE
 
 }
 
+.results-panel{
+  border-color: #333;
+}
+
 
 
 /*
 Collection View
 */
+
+.manager-title{
+  text-align: center;
+}
 
 .glyphicon-up{
   color: $off-white;
@@ -164,10 +222,12 @@ Collection View
 
 .panel-collection{
   background-color: $slate;
+  border-color: $dark-blue;
 }
 
 .btn-collection{
   background-color: $deep-blue;
+  color: $off-white;
 }
 
 .btn-spacer-rt{
@@ -192,6 +252,40 @@ Collection View
   color: #FFFFFF;
 }
 
+/*
+Wishlist View
+*/
+
+.heading-wishlist{
+  color: $darkgreen;
+}
+
+.panel-wishlist{
+  background-color: $lighter-green;
+  border-color: $duskygreen;
+}
+
+.btn-wishlist{
+  background-color: $duskygreen;
+  color: $off-white;
+}
+
+/*
+Favorite View
+*/
+
+.favorite-header{
+  color: $yellow-gray;
+}
+
+.favorite-spacer{
+  min-height: 60vh;
+}
+
+.btn-favorite{
+  color: $off-white;
+  background-color: $yellow
+}
 
 /*
 Item Views

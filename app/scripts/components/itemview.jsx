@@ -108,21 +108,25 @@ class ItemContainer extends React.Component{
     console.log(this.state);
     return(
       <LayoutContainer>
-        <div className="col-md-6">
-          <ItemInfo desc={this.state.desc} name={this.state.title} />
-          <CollectionInfo updateCollection={this.updateCollection}
-            updateWishlist={this.updateWishlist}
-            searchType={this.state.searchType}
-            addToFavorite={this.addToFavorite}/>
-          <ItemRating userRating={this.state.userRating}
-            updateRating ={this.updateRating} />
-          <AverageRating averageRating={this.state.averageRating} />
-          <QuickLinks searchType={this.state.searchType}
-            searchId={this.state.searchId} />
-          <DigitalMarketplace />
-        </div>
-        <div className="col-md-6">
-          <ItemPhoto pic={this.state.pic} />
+        <div className="row">
+          <div className="item-spacer">
+            <div className="col-md-6">
+              <ItemInfo desc={this.state.desc} name={this.state.title} />
+              <CollectionInfo updateCollection={this.updateCollection}
+                updateWishlist={this.updateWishlist}
+                searchType={this.state.searchType}
+                addToFavorite={this.addToFavorite}/>
+              <ItemRating userRating={this.state.userRating}
+                updateRating ={this.updateRating} />
+              <AverageRating averageRating={this.state.averageRating} />
+              <QuickLinks searchType={this.state.searchType}
+                searchId={this.state.searchId} />
+              <DigitalMarketplace />
+            </div>
+            <div className="col-md-6">
+              <ItemPhoto pic={this.state.pic} />
+            </div>
+          </div>
         </div>
       </LayoutContainer>
     )
@@ -157,25 +161,23 @@ class CollectionInfo extends React.Component{
   render(){
     if (this.props.searchType==="comics"){
       return(
-        <div>
-          <button className="btn btn-primary" onClick={this.updateCollection}>
-            <span className="glyphicon glyphicon-plus-sign"></span>
-              Collection
-          </button>
-          <button className="btn btn-info" onClick={this.props.updateWishlist}>
-            <span className="glyphicon glyphicon-plus-sign"></span>
-              Wishlist
-          </button>
-        </div>
+          <div className="btn-group">
+            <button className="btn btn-collection btn-spacer-rt" onClick={this.updateCollection}>
+              <span className="glyphicon glyphicon-plus-sign"></span>
+                Collection
+            </button>
+            <button className="btn btn-wishlist btn-spacer-lft" onClick={this.props.updateWishlist}>
+              <span className="glyphicon glyphicon-plus-sign"></span>
+                Wishlist
+            </button>
+          </div>
       )
     } else {
       return(
-        <div>
-          <button className="btn btn-info" onClick={this.props.addToFavorite}>
+          <button className="btn btn-favorite" onClick={this.props.addToFavorite}>
             <span className="glyphicon glyphicon-plus-sign"></span>
               Favorite
           </button>
-        </div>
       )
     }
 
@@ -188,39 +190,37 @@ class ItemRating extends React.Component{
   }
   render(){
     return(
-      <div>
-        <div className="btn-group">
-          <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Rate This <span className="caret"></span>
-          </button>
-          <ul className="dropdown-menu">
-            <li><a onClick={()=>{this.props.updateRating(5)}} role="button">
-              <i className="fa fa-star" aria-hidden="true"></i>
-              <i className="fa fa-star" aria-hidden="true"></i>
-              <i className="fa fa-star" aria-hidden="true"></i>
-              <i className="fa fa-star" aria-hidden="true"></i>
-              <i className="fa fa-star" aria-hidden="true"></i>
-            </a></li>
-            <li><a onClick={()=>{this.props.updateRating(4)}} role="button">
-              <i className="fa fa-star" aria-hidden="true"></i>
-              <i className="fa fa-star" aria-hidden="true"></i>
-              <i className="fa fa-star" aria-hidden="true"></i>
-              <i className="fa fa-star" aria-hidden="true"></i>
-            </a></li>
-            <li><a onClick={()=>{this.props.updateRating(3)}} role="button">
-              <i className="fa fa-star" aria-hidden="true"></i>
-              <i className="fa fa-star" aria-hidden="true"></i>
-              <i className="fa fa-star" aria-hidden="true"></i>
-            </a></li>
-            <li><a onClick={()=>{this.props.updateRating(2)}} role="button">
-              <i className="fa fa-star" aria-hidden="true"></i>
-              <i className="fa fa-star" aria-hidden="true"></i>
-            </a></li>
-            <li><a onClick={()=>{this.props.updateRating(1)}} role="button">
-              <i className="fa fa-star" aria-hidden="true"></i>
-            </a></li>
-          </ul>
-        </div>
+      <div className="btn-group">
+        <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Rate This <span className="caret"></span>
+        </button>
+        <ul className="dropdown-menu">
+          <li><a onClick={()=>{this.props.updateRating(5)}} role="button">
+            <i className="fa fa-star" aria-hidden="true"></i>
+            <i className="fa fa-star" aria-hidden="true"></i>
+            <i className="fa fa-star" aria-hidden="true"></i>
+            <i className="fa fa-star" aria-hidden="true"></i>
+            <i className="fa fa-star" aria-hidden="true"></i>
+          </a></li>
+          <li><a onClick={()=>{this.props.updateRating(4)}} role="button">
+            <i className="fa fa-star" aria-hidden="true"></i>
+            <i className="fa fa-star" aria-hidden="true"></i>
+            <i className="fa fa-star" aria-hidden="true"></i>
+            <i className="fa fa-star" aria-hidden="true"></i>
+          </a></li>
+          <li><a onClick={()=>{this.props.updateRating(3)}} role="button">
+            <i className="fa fa-star" aria-hidden="true"></i>
+            <i className="fa fa-star" aria-hidden="true"></i>
+            <i className="fa fa-star" aria-hidden="true"></i>
+          </a></li>
+          <li><a onClick={()=>{this.props.updateRating(2)}} role="button">
+            <i className="fa fa-star" aria-hidden="true"></i>
+            <i className="fa fa-star" aria-hidden="true"></i>
+          </a></li>
+          <li><a onClick={()=>{this.props.updateRating(1)}} role="button">
+            <i className="fa fa-star" aria-hidden="true"></i>
+          </a></li>
+        </ul>
       </div>
     )
   }
@@ -308,7 +308,7 @@ class DigitalMarketplace extends React.Component{
             Marvel Digital
           </a>
           <a className="btn btn-links btn-spacer-rt btn-spacer-lft" href="http://www.ebay.com/">
-            Ebay
+            eBay
           </a>
           <a className="btn btn-links btn-spacer-lft" href="https://www.amazon.com/">
             <i className="fa fa-amazon" aria-hidden="true"></i>

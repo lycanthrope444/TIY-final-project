@@ -27,16 +27,24 @@ class StarterInfo extends React.Component{
 
           <h1>Welcome to Hero Finder!</h1>
         </div>
+        <div className="row">
+          <div className="col-sm-6">
+            <p>
+              Hero Finder lets you search for your favorite Marvel
+              characters or series and add those comics to your collection. Rate
+              your favorite books and see what the rest of the community thinks!
+            </p>
+          </div>
+          <div className="col-sm-6">
+            <p>
+              Signing up is easy. Just follow these steps to begin tracking your
+              collection right away!
+            </p>
+          </div>
+        </div>
 
-        <p>
-          Hero Finder lets you search for your favorite Marvel
-          characters or series and add those comics to your collection. Rate
-          your favorite books and see what the rest of the community thinks!
-        </p>
-        <p>
-          Signing up is easy. Just follow these steps to begin tracking your
-          collection right away!
-        </p>
+
+
         <div className="row">
           <div className="col-sm-4">
             <div className="instruction-box ins-box-1">
@@ -55,8 +63,11 @@ class StarterInfo extends React.Component{
             </div>
           </div>
         </div>
-
-        <p>And that's it! Let us know how you feel about the app! Excelsior! </p>
+        <div className="row">
+          <div className="col-xs-12">
+            <p>And that's it! Let us know how you feel about the app! Excelsior! </p>
+          </div>
+        </div>
       </div>
     )
   }

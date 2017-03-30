@@ -84,7 +84,7 @@ class ResultsContainer extends React.Component{
         return(
           <div key={index}>
             <div className="col-sm-6 col-md-4">
-              <div className="thumbnail">
+              <div className="thumbnail results-panel">
                 <img className="results-pic"
                   src ={item.thumbnail.path+'.'+item.thumbnail.extension} />
                 <div className="caption results-caption">
@@ -268,20 +268,20 @@ class FeatureButtons extends React.Component{
     var self = this;
     if (this.props.searchType === 'comics'){
       return(
-        <p className="results-buttons btn-group">
+        <div className="results-buttons btn-group">
           <ViewButton focus={self.props.focus} id={self.props.item.id}
             searchType={self.props.searchType}/>
           <AddToCollectionBtn name="Collection" item={self.props.item}/>
           <AddToWishlistBtn name="Wishlist" item={self.props.item}/>
-        </p>
+        </div>
       )
     } else {
       return (
-        <p className="results-buttons btn-group">
+        <div className="results-buttons btn-group">
           <ViewButton focus={self.props.focus} id={self.props.item.id}
             searchType={self.props.searchType}/>
           <FavoriteBtn name="Favorite" item={self.props.item}/>
-        </p>
+        </div>
       )
     }
   }
@@ -294,7 +294,7 @@ class ViewButton extends React.Component{
   render(){
     var self = this;
     return(
-      <a className="btn btn-primary" role="button"
+      <a className="btn btn-interact btn-spacer-rt" role="button"
         href={((self.props.focus)?"#itemview/"+self.props.focus+'/'+self.props.id :
           "#itemview/"+self.props.searchType+'/'+self.props.id)}>
         <span className="glyphicon glyphicon-zoom-in"></span>
@@ -310,7 +310,7 @@ class AddToCollectionBtn extends React.Component{
   }
   render(){
     return(
-      <a className="btn btn-default" role="button"
+      <a className="btn btn-collection btn-spacer-rt btn-spacer-lft" role="button"
         data-toggle="tooltip" data-placement="left" title="Add to Collection"
         onClick={(e)=>{
           e.preventDefault();
@@ -331,7 +331,7 @@ class AddToWishlistBtn extends React.Component{
   }
   render(){
     return(
-      <a className="btn btn-info" role="button"
+      <a className="btn btn-wishlist btn-spacer-lft" role="button"
         data-toggle="tooltip" data-placement="left" title="Tooltip on left"
         onClick={(e)=>{
           e.preventDefault();
@@ -353,7 +353,7 @@ class FavoriteBtn extends React.Component{
   render(){
     var self = this;
     return(
-      <a className="btn btn-info" role="button"
+      <a className="btn btn-favorite btn-spacer-lft" role="button"
         data-toggle="tooltip" data-placement="left" title="Tooltip on left"
         onClick={(e)=>{
           e.preventDefault();
