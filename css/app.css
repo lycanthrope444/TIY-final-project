@@ -5797,6 +5797,7 @@ NAVBAR LAYOUT
 .avatar-header {
   margin-left: 5px;
   max-width: 50px;
+  max-height: 35px;
   border-radius: 25%; }
 
 .btn-logout {
